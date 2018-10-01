@@ -15,6 +15,18 @@ class Transaction extends AbstractEntity
 {
 
     /**
+     * @var Collection|Ledger[]
+     * @ORM\ManyToOne(targetEntity="Ledger", inversedBy="transactions")
+     */
+    private $ledger;
+
+    /**
+     * @var Collection|People
+     * @ORM\ManyToMany(targetEntity="Person", inversedBy="transactions")
+     */
+    private $people;
+
+    /**
      * Returns a string representation of this entity.
      *
      * @return string

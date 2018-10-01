@@ -15,6 +15,12 @@ class Notary extends AbstractEntity
 {
 
     /**
+     * @var Collection|Ledger[]
+     * @ORM\OneToMany(targetEntity="Ledger", mappedBy="notary")
+     */
+    private $ledgers;
+
+    /**
      * Returns a string representation of this entity.
      *
      * @return string

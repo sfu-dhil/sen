@@ -15,6 +15,18 @@ class Ledger extends AbstractEntity
 {
 
     /**
+     * @var Notary
+     * @ORM\ManyToOne(targetEntity="Notary", inversedBy="ledgers")
+     */
+    private $notary;
+
+    /**
+     * @var Collection|Transaction[]
+     * @ORM\OneToMany(targetEntity="Transaction", mappedBy="ledger")
+     */
+    private $transactions;
+
+    /**
      * Returns a string representation of this entity.
      *
      * @return string

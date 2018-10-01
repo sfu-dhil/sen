@@ -15,6 +15,24 @@ class Event extends AbstractEntity
 {
 
     /**
+     * @var Collection|Person[]
+     * @ORM\ManyToMany(targetEntity="Person", inversedBy="events")
+     */
+    private $participants;
+
+    /**
+     * @var Collection|Witness[]
+     * @ORM\OneToMany(targetEntity="Witness", mappedBy="event")
+     */
+    private $witnesses;
+
+    /**
+     * @var Location
+     * @ORM\ManyToOne(targetEntity="Location", inversedBy="events")
+     */
+    private $location;
+
+    /**
      * Returns a string representation of this entity.
      *
      * @return string

@@ -15,6 +15,18 @@ class Witness extends AbstractEntity
 {
 
     /**
+     * @var Person
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="witnesses")
+     */
+    private $person;
+
+    /**
+     * @var Event
+     * @ORM\ManyToOne(targetEntity="Event", inversedBy="witnesses")
+     */
+    private $event;
+
+    /**
      * Returns a string representation of this entity.
      *
      * @return string

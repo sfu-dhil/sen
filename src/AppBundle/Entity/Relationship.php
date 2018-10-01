@@ -15,6 +15,12 @@ class Relationship extends AbstractEntity
 {
 
     /**
+     * @var Collection|Person[]
+     * @ORM\ManyToMany(targetEntity="Person", mappedBy="relationships")
+     */
+    private $people;
+
+    /**
      * Returns a string representation of this entity.
      *
      * @return string
