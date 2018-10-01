@@ -15,6 +15,12 @@ class Event extends AbstractEntity
 {
 
     /**
+     * @var EventCategory
+     * @ORM\ManyToOne(targetEntity="EventCategory", inversedBy="events")
+     */
+    private $category;
+
+    /**
      * @var Collection|Person[]
      * @ORM\ManyToMany(targetEntity="Person", inversedBy="events")
      */

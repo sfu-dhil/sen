@@ -15,6 +15,12 @@ class Witness extends AbstractEntity
 {
 
     /**
+     * @var Collection|WitnessCategory[]
+     * @ORM\ManyToOne(targetEntity="WitnessCategory", inversedBy="witnesses")
+     */
+    private $category;
+
+    /**
      * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="witnesses")
      */

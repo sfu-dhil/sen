@@ -15,6 +15,12 @@ class Person extends AbstractEntity
 {
 
     /**
+     * @var Race
+     * @ORM\ManyToOne(targetEntity="Race", inversedBy="people")
+     */
+    private $race;
+
+    /**
      * @var Collection|Transaction[]
      * @ORM\ManyToMany(targetEntity="Transaction", mappedBy="people")
      */

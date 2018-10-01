@@ -15,6 +15,12 @@ class Relationship extends AbstractEntity
 {
 
     /**
+     * @var RelationshipCategory
+     * @ORM\ManyToOne(targetEntity="RelationshipCategory", inversedBy="relationships")
+     */
+    private $category;
+
+    /**
      * @var Collection|Person[]
      * @ORM\ManyToMany(targetEntity="Person", mappedBy="relationships")
      */

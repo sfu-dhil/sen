@@ -15,6 +15,12 @@ class Location extends AbstractEntity
 {
 
     /**
+     * @var LocationCategory
+     * @ORM\ManyToOne(targetEntity="LocationCategory", inversedBy="locations")
+     */
+    private $category;
+
+    /**
      * @var Collection|Event[]
      * @ORM\OneToMany(targetEntity="Event", mappedBy="location")
      */

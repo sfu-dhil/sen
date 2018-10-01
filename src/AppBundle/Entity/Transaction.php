@@ -15,6 +15,12 @@ class Transaction extends AbstractEntity
 {
 
     /**
+     * @var Collection|TransactionCategory[]
+     * @ORM\ManyToOne(targetEntity="TransactionCategory", inversedBy="transactions")
+     */
+    private $category;
+
+    /**
      * @var Collection|Ledger[]
      * @ORM\ManyToOne(targetEntity="Ledger", inversedBy="transactions")
      */
