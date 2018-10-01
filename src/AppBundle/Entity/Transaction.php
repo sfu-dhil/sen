@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
 
@@ -27,7 +28,7 @@ class Transaction extends AbstractEntity
     private $ledger;
 
     /**
-     * @var Collection|People
+     * @var Collection|Person[]
      * @ORM\ManyToMany(targetEntity="Person", inversedBy="transactions")
      */
     private $people;
@@ -39,5 +40,89 @@ class Transaction extends AbstractEntity
      */
     public function __toString() {
         return get_class($this) . "#" . $this->getId();
+    }
+
+    /**
+     * Set category.
+     *
+     * @param TransactionCategory|null $category
+     *
+     * @return Transaction
+     */
+    public function setCategory(TransactionCategory $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category.
+     *
+     * @return TransactionCategory|null
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set ledger.
+     *
+     * @param Ledger|null $ledger
+     *
+     * @return Transaction
+     */
+    public function setLedger(Ledger $ledger = null)
+    {
+        $this->ledger = $ledger;
+
+        return $this;
+    }
+
+    /**
+     * Get ledger.
+     *
+     * @return Ledger|null
+     */
+    public function getLedger()
+    {
+        return $this->ledger;
+    }
+
+    /**
+     * Add person.
+     *
+     * @param Person $person
+     *
+     * @return Transaction
+     */
+    public function addPerson(Person $person)
+    {
+        $this->people[] = $person;
+
+        return $this;
+    }
+
+    /**
+     * Remove person.
+     *
+     * @param Person $person
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removePerson(Person $person)
+    {
+        return $this->people->removeElement($person);
+    }
+
+    /**
+     * Get people.
+     *
+     * @return Collection
+     */
+    public function getPeople()
+    {
+        return $this->people;
     }
 }

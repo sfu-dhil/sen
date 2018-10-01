@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Nines\UtilBundle\Entity\AbstractTerm;
 
 /**
  * RelationshipCategory
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="relationship_category")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\RelationshipCategoryRepository")
  */
-class RelationshipCategory extends \Nines\UtilBundle\Entity\AbstractTerm
+class RelationshipCategory extends AbstractTerm
 {
 
     /**
@@ -19,4 +21,40 @@ class RelationshipCategory extends \Nines\UtilBundle\Entity\AbstractTerm
      */
     private $relationships;
 
+
+    /**
+     * Add relationship.
+     *
+     * @param Relationship $relationship
+     *
+     * @return RelationshipCategory
+     */
+    public function addRelationship(Relationship $relationship)
+    {
+        $this->relationships[] = $relationship;
+
+        return $this;
+    }
+
+    /**
+     * Remove relationship.
+     *
+     * @param Relationship $relationship
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeRelationship(Relationship $relationship)
+    {
+        return $this->relationships->removeElement($relationship);
+    }
+
+    /**
+     * Get relationships.
+     *
+     * @return Collection
+     */
+    public function getRelationships()
+    {
+        return $this->relationships;
+    }
 }

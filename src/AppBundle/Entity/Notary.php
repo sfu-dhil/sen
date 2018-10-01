@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
 
@@ -27,5 +28,41 @@ class Notary extends AbstractEntity
      */
     public function __toString() {
         return get_class($this) . "#" . $this->getId();
+    }
+
+    /**
+     * Add ledger.
+     *
+     * @param Ledger $ledger
+     *
+     * @return Notary
+     */
+    public function addLedger(Ledger $ledger)
+    {
+        $this->ledgers[] = $ledger;
+
+        return $this;
+    }
+
+    /**
+     * Remove ledger.
+     *
+     * @param Ledger $ledger
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeLedger(Ledger $ledger)
+    {
+        return $this->ledgers->removeElement($ledger);
+    }
+
+    /**
+     * Get ledgers.
+     *
+     * @return Collection
+     */
+    public function getLedgers()
+    {
+        return $this->ledgers;
     }
 }

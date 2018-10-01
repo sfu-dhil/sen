@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Nines\UtilBundle\Entity\AbstractTerm;
 
 /**
  * LocationCategory
@@ -10,12 +12,48 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="location_category")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\LocationCategoryRepository")
  */
-class LocationCategory extends \Nines\UtilBundle\Entity\AbstractTerm
+class LocationCategory extends AbstractTerm
 {
     /**
      * @var Collection|Location[]
      * @ORM\OneToMany(targetEntity="Location", mappedBy="category")
      */
     private $locations;
-    
+
+
+    /**
+     * Add location.
+     *
+     * @param Location $location
+     *
+     * @return LocationCategory
+     */
+    public function addLocation(Location $location)
+    {
+        $this->locations[] = $location;
+
+        return $this;
+    }
+
+    /**
+     * Remove location.
+     *
+     * @param Location $location
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeLocation(Location $location)
+    {
+        return $this->locations->removeElement($location);
+    }
+
+    /**
+     * Get locations.
+     *
+     * @return Collection
+     */
+    public function getLocations()
+    {
+        return $this->locations;
+    }
 }
