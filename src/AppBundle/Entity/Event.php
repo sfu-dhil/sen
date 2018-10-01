@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
@@ -39,6 +40,12 @@ class Event extends AbstractEntity
      */
     private $location;
 
+    public function __construct() {
+        parent::__construct();
+        $this->participants = new ArrayCollection();
+        $this->witnesses = new ArrayCollection();
+    }
+
     /**
      * Returns a string representation of this entity.
      *
@@ -55,8 +62,7 @@ class Event extends AbstractEntity
      *
      * @return Event
      */
-    public function setCategory(EventCategory $category = null)
-    {
+    public function setCategory(EventCategory $category = null) {
         $this->category = $category;
 
         return $this;
@@ -67,8 +73,7 @@ class Event extends AbstractEntity
      *
      * @return EventCategory|null
      */
-    public function getCategory()
-    {
+    public function getCategory() {
         return $this->category;
     }
 
@@ -79,8 +84,7 @@ class Event extends AbstractEntity
      *
      * @return Event
      */
-    public function addParticipant(Person $participant)
-    {
+    public function addParticipant(Person $participant) {
         $this->participants[] = $participant;
 
         return $this;
@@ -93,8 +97,7 @@ class Event extends AbstractEntity
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeParticipant(Person $participant)
-    {
+    public function removeParticipant(Person $participant) {
         return $this->participants->removeElement($participant);
     }
 
@@ -103,8 +106,7 @@ class Event extends AbstractEntity
      *
      * @return Collection
      */
-    public function getParticipants()
-    {
+    public function getParticipants() {
         return $this->participants;
     }
 
@@ -115,8 +117,7 @@ class Event extends AbstractEntity
      *
      * @return Event
      */
-    public function addWitness(Witness $witness)
-    {
+    public function addWitness(Witness $witness) {
         $this->witnesses[] = $witness;
 
         return $this;
@@ -129,8 +130,7 @@ class Event extends AbstractEntity
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeWitness(Witness $witness)
-    {
+    public function removeWitness(Witness $witness) {
         return $this->witnesses->removeElement($witness);
     }
 
@@ -139,8 +139,7 @@ class Event extends AbstractEntity
      *
      * @return Collection
      */
-    public function getWitnesses()
-    {
+    public function getWitnesses() {
         return $this->witnesses;
     }
 
@@ -151,8 +150,7 @@ class Event extends AbstractEntity
      *
      * @return Event
      */
-    public function setLocation(Location $location = null)
-    {
+    public function setLocation(Location $location = null) {
         $this->location = $location;
 
         return $this;
@@ -163,8 +161,7 @@ class Event extends AbstractEntity
      *
      * @return Location|null
      */
-    public function getLocation()
-    {
+    public function getLocation() {
         return $this->location;
     }
 }

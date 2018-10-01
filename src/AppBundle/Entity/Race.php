@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractTerm;
@@ -14,11 +15,17 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  */
 class Race extends AbstractTerm
 {
+
     /**
      * @var Collection|Person[]
      * @ORM\OneToMany(targetEntity="Person", mappedBy="race")
      */
     private $people;
+
+    public function __construct() {
+        parent::__construct();
+        $this->people = new ArrayCollection();
+    }
 
     /**
      * Add person.

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
@@ -20,6 +21,11 @@ class Notary extends AbstractEntity
      * @ORM\OneToMany(targetEntity="Ledger", mappedBy="notary")
      */
     private $ledgers;
+
+    public function __construct() {
+        parent::__construct();
+        $this->ledgers = new ArrayCollection();
+    }
 
     /**
      * Returns a string representation of this entity.

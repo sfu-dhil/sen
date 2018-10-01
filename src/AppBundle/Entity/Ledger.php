@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
@@ -27,6 +28,11 @@ class Ledger extends AbstractEntity
      */
     private $transactions;
 
+    public function __construct() {
+        parent::__construct();
+        $this->transactions = new ArrayCollection();
+    }
+
     /**
      * Returns a string representation of this entity.
      *
@@ -43,8 +49,7 @@ class Ledger extends AbstractEntity
      *
      * @return Ledger
      */
-    public function setNotary(Notary $notary = null)
-    {
+    public function setNotary(Notary $notary = null) {
         $this->notary = $notary;
 
         return $this;
@@ -55,8 +60,7 @@ class Ledger extends AbstractEntity
      *
      * @return Notary|null
      */
-    public function getNotary()
-    {
+    public function getNotary() {
         return $this->notary;
     }
 
@@ -67,8 +71,7 @@ class Ledger extends AbstractEntity
      *
      * @return Ledger
      */
-    public function addTransaction(Transaction $transaction)
-    {
+    public function addTransaction(Transaction $transaction) {
         $this->transactions[] = $transaction;
 
         return $this;
@@ -81,8 +84,7 @@ class Ledger extends AbstractEntity
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeTransaction(Transaction $transaction)
-    {
+    public function removeTransaction(Transaction $transaction) {
         return $this->transactions->removeElement($transaction);
     }
 
@@ -91,8 +93,7 @@ class Ledger extends AbstractEntity
      *
      * @return Collection
      */
-    public function getTransactions()
-    {
+    public function getTransactions() {
         return $this->transactions;
     }
 }

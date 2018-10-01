@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractTerm;
@@ -14,12 +15,17 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  */
 class EventCategory extends AbstractTerm
 {
+
     /**
      * @var Collection|Event[]
      * @ORM\OneToMany(targetEntity="Event", mappedBy="category")
      */
     private $events;
 
+    public function __construct() {
+        parent::__construct();
+        $this->events = new ArrayCollection();
+    }
 
     /**
      * Add event.
@@ -28,8 +34,7 @@ class EventCategory extends AbstractTerm
      *
      * @return EventCategory
      */
-    public function addEvent(Event $event)
-    {
+    public function addEvent(Event $event) {
         $this->events[] = $event;
 
         return $this;
@@ -42,8 +47,7 @@ class EventCategory extends AbstractTerm
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeEvent(Event $event)
-    {
+    public function removeEvent(Event $event) {
         return $this->events->removeElement($event);
     }
 
@@ -52,8 +56,7 @@ class EventCategory extends AbstractTerm
      *
      * @return Collection
      */
-    public function getEvents()
-    {
+    public function getEvents() {
         return $this->events;
     }
 }

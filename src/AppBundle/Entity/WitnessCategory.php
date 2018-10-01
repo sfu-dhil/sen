@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractTerm;
@@ -20,6 +21,11 @@ class WitnessCategory extends AbstractTerm
      * @ORM\OneToMany(targetEntity="Witness", mappedBy="category")
      */
     private $witnesses;
+
+    public function __construct() {
+        parent::__construct();
+        $this->witnesses = new ArrayCollection();
+    }
 
 
     /**

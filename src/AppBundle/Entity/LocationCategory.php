@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractTerm;
@@ -14,12 +15,17 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  */
 class LocationCategory extends AbstractTerm
 {
+
     /**
      * @var Collection|Location[]
      * @ORM\OneToMany(targetEntity="Location", mappedBy="category")
      */
     private $locations;
 
+    public function __construct() {
+        parent::__construct();
+        $this->locations = new ArrayCollection();
+    }
 
     /**
      * Add location.

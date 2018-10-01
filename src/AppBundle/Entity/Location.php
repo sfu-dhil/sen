@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
@@ -26,6 +27,11 @@ class Location extends AbstractEntity
      * @ORM\OneToMany(targetEntity="Event", mappedBy="location")
      */
     private $events;
+
+    public function __construct() {
+        parent::__construct();
+        $this->events = new ArrayCollection();
+    }
 
     /**
      * Returns a string representation of this entity.

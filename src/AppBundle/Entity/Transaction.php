@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
@@ -32,6 +33,11 @@ class Transaction extends AbstractEntity
      * @ORM\ManyToMany(targetEntity="Person", inversedBy="transactions")
      */
     private $people;
+
+    public function __construct() {
+        parent::__construct();
+        $this->people = new ArrayCollection();
+    }
 
     /**
      * Returns a string representation of this entity.

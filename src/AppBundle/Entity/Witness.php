@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
 
@@ -16,7 +15,7 @@ class Witness extends AbstractEntity
 {
 
     /**
-     * @var Collection|WitnessCategory[]
+     * @var WitnessCategory
      * @ORM\ManyToOne(targetEntity="WitnessCategory", inversedBy="witnesses")
      */
     private $category;
@@ -32,6 +31,10 @@ class Witness extends AbstractEntity
      * @ORM\ManyToOne(targetEntity="Event", inversedBy="witnesses")
      */
     private $event;
+
+    public function __construct() {
+        parent::__construct();
+    }
 
     /**
      * Returns a string representation of this entity.

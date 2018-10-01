@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractTerm;
@@ -14,11 +15,17 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  */
 class TransactionCategory extends AbstractTerm
 {
+
     /**
      * @var Collection|Transaction[]
      * @ORM\OneToMany(targetEntity="Transaction", mappedBy="category")
      */
     private $transactions;
+
+    public function __construct() {
+        parent::__construct();
+        $this->transactions = new ArrayCollection();
+    }
 
     /**
      * Add transaction.

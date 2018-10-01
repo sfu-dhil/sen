@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractTerm;
@@ -21,6 +22,10 @@ class RelationshipCategory extends AbstractTerm
      */
     private $relationships;
 
+    public function __construct() {
+        parent::__construct();
+        $this->relationships = new ArrayCollection();
+    }
 
     /**
      * Add relationship.

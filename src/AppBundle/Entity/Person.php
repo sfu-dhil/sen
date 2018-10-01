@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
@@ -44,6 +45,15 @@ class Person extends AbstractEntity
      * @ORM\ManyToMany(targetEntity="Event", mappedBy="participants")
      */
     private $events;
+
+    public function __construct() {
+        parent::__construct();
+        $this->transactions = new ArrayCollection();
+        $this->relationships = new ArrayCollection();
+        $this->witnesses = new ArrayCollection();
+        $this->events = new ArrayCollection();
+    }
+
 
     /**
      * Returns a string representation of this entity.
