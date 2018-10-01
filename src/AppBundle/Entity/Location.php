@@ -11,10 +11,15 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * @ORM\Table(name="location")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\LocationRepository")
  */
-class Location extends AbstractEntity {
+class Location extends AbstractEntity
+{
 
+    /**
+     * Returns a string representation of this entity.
+     *
+     * @return string
+     */
     public function __toString() {
-
+        return get_class($this) . "#" . $this->getId();
     }
-
 }

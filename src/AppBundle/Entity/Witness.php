@@ -11,10 +11,15 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * @ORM\Table(name="witness")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\WitnessRepository")
  */
-class Witness extends AbstractEntity {
+class Witness extends AbstractEntity
+{
 
+    /**
+     * Returns a string representation of this entity.
+     *
+     * @return string
+     */
     public function __toString() {
-
+        return get_class($this) . "#" . $this->getId();
     }
-
 }

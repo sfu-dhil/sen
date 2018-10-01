@@ -12,7 +12,8 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 /**
  * Menu builder for the navigation and search menus.
  */
-class Builder implements ContainerAwareInterface {
+class Builder implements ContainerAwareInterface
+{
 
     use ContainerAwareTrait;
 
@@ -36,6 +37,10 @@ class Builder implements ContainerAwareInterface {
 
     /**
      * Build the menu builder.
+     *
+     * @param FactoryInterface $factory
+     * @param AuthorizationCheckerInterface $authChecker
+     * @param TokenStorageInterface $tokenStorage
      */
     public function __construct(FactoryInterface $factory, AuthorizationCheckerInterface $authChecker, TokenStorageInterface $tokenStorage) {
         $this->factory = $factory;
@@ -43,6 +48,12 @@ class Builder implements ContainerAwareInterface {
         $this->tokenStorage = $tokenStorage;
     }
 
+    /**
+     * Check if the current user has the given role.
+     *
+     * @param string $role
+     * @return boolean
+     */
     private function hasRole($role) {
         if (!$this->tokenStorage->getToken()) {
             return false;
@@ -53,11 +64,9 @@ class Builder implements ContainerAwareInterface {
     /**
      * Build the navigation menu and return it.
      *
-     * @param FactoryInterface $factory
-     * @param array $options
      * @return ItemInterface
      */
-    public function mainMenu(array $options) {
+    public function mainMenu() {
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttributes(array(
             'class' => 'nav navbar-nav',
@@ -91,5 +100,4 @@ class Builder implements ContainerAwareInterface {
 
         return $menu;
     }
-
 }

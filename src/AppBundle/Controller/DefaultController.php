@@ -6,9 +6,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class DefaultController extends Controller {
+/**
+ * Default controller.
+ *
+ * Handles the home page.
+ */
+class DefaultController extends Controller
+{
 
     /**
+     * Home page action.
+     *
      * @Route("/", name="homepage")
      * @Template()
      */
@@ -18,5 +26,4 @@ class DefaultController extends Controller {
             'base_dir' => realpath($this->getParameter('kernel.project_dir')) . DIRECTORY_SEPARATOR,
         ];
     }
-
 }
