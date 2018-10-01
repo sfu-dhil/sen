@@ -1,30 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
+<!-- https://phpunit.de/manual/7.3/en/appendixes.configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.3/phpunit.xsd"
          backupGlobals="false"
-         colors="true"
-         bootstrap="vendor/autoload.php"
->
+         backupStaticAttributes="false"
+         cacheTokens="false"
+         processIsolation="true"
+         stopOnError="false"
+         stopOnFailure="false"
+         colors="false"
+         defaultTestSuite="app"
+         bootstrap="var/bootstrap.php.cache">
     <php>
         <ini name="error_reporting" value="-1" />
         <server name="KERNEL_CLASS" value="AppKernel" />
+        <server name="KERNEL_DIR" value="app/" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+        <testsuite name="app">
+            <directory>src/AppBundle/Tests</directory>
+        </testsuite>
+        <testsuite name="nines">
+            <directory>src/Nines/*/Tests</directory>
+        </testsuite>
+        <testsuite name="full">
+            <directory>src/AppBundle/Tests</directory>
+            <directory>src/Nines/*/Tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>src</directory>
+            <directory>src/AppBundle</directory>
             <exclude>
-                <directory>src/*Bundle/Resources</directory>
-                <directory>src/*/*Bundle/Resources</directory>
-                <directory>src/*/Bundle/*Bundle/Resources</directory>
+                <directory>src/AppBundle/DataFixtures</directory>
+                <directory>src/AppBundle/Resources</directory>
+                <directory>src/AppBundle/Tests</directory>
             </exclude>
         </whitelist>
     </filter>
