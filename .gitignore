@@ -17,4 +17,5 @@
 /web/bundles/
 /.idea
 /web/bower
-/nbproject/private/
+/nbproject
+
