@@ -4,25 +4,25 @@ body > .container {
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  background-color: #f5f5f5;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
 }
 
 .footer > .container {
-  padding-right: 15px;
-  padding-left: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
 /* Custom app styles */
@@ -130,7 +130,7 @@ div.collection-complex > div:not(:last-child) {
 div.embedded-form {
     border: 1px solid lightgrey;
     padding-top: 15px;
-    padding-right: 15px;    
+    padding-right: 15px;
 }
 
 /* Select2 typeaheads are a bit short. */
