@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Witness List{% endblock %}
+
+{% block pageheader %}
+    <h1>Witness List</h1>
+    <p class="count">
+        Displaying {{ witnesses|length }} witnesses of {{ witnesses.getTotalItemCount }} total.
+    </p>
+ {% endblock %} 
+
+{% block body %}
+
+    <div class='btn-toolbar pull-right'>
+        <div class='btn-group'>
+                        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('witness_new') }}" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus"></span> New
+            </a>
+            {% endif %}
+                        <a href="{{ path('witness_search') }}" class="btn btn-default">
+                <span class="glyphicon glyphicon-search"></span> Search
+            </a>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-condensed table-hover table-striped">
+        <thead>
+            <tr>
+                </tr>
+        </thead>
+        <tbody>
+        {% for witness in witnesses %}
+            <tr>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(witnesses) }}
+    </div>
+
+{% endblock %}
