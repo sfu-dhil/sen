@@ -17,6 +17,20 @@ class Ledger extends AbstractEntity
 {
 
     /**
+     *
+     * @var string
+     * @ORM\Column(type="string", length=24, nullable=false)
+     */
+    private $volume;
+
+    /**
+     *
+     * @var integer
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    private $year;
+
+    /**
      * @var Notary
      * @ORM\ManyToOne(targetEntity="Notary", inversedBy="ledgers")
      */
@@ -95,5 +109,53 @@ class Ledger extends AbstractEntity
      */
     public function getTransactions() {
         return $this->transactions;
+    }
+
+    /**
+     * Set volume.
+     *
+     * @param string $volume
+     *
+     * @return Ledger
+     */
+    public function setVolume($volume)
+    {
+        $this->volume = $volume;
+
+        return $this;
+    }
+
+    /**
+     * Get volume.
+     *
+     * @return string
+     */
+    public function getVolume()
+    {
+        return $this->volume;
+    }
+
+    /**
+     * Set year.
+     *
+     * @param int $year
+     *
+     * @return Ledger
+     */
+    public function setYear($year)
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    /**
+     * Get year.
+     *
+     * @return int
+     */
+    public function getYear()
+    {
+        return $this->year;
     }
 }

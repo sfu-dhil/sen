@@ -17,6 +17,13 @@ class Notary extends AbstractEntity
 {
 
     /**
+     *
+     * @var string
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private $name;
+
+    /**
      * @var Collection|Ledger[]
      * @ORM\OneToMany(targetEntity="Ledger", mappedBy="notary")
      */
@@ -70,5 +77,29 @@ class Notary extends AbstractEntity
     public function getLedgers()
     {
         return $this->ledgers;
+    }
+
+    /**
+     * Set name.
+     *
+     * @param string $name
+     *
+     * @return Notary
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

@@ -17,6 +17,18 @@ class Event extends AbstractEntity
 {
 
     /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $writtenDate;
+
+    /**
+     * @var DateTime
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $date;
+
+    /**
      * @var EventCategory
      * @ORM\ManyToOne(targetEntity="EventCategory", inversedBy="events")
      */
@@ -163,5 +175,53 @@ class Event extends AbstractEntity
      */
     public function getLocation() {
         return $this->location;
+    }
+
+    /**
+     * Set writtenDate.
+     *
+     * @param string|null $writtenDate
+     *
+     * @return Event
+     */
+    public function setWrittenDate($writtenDate = null)
+    {
+        $this->writtenDate = $writtenDate;
+
+        return $this;
+    }
+
+    /**
+     * Get writtenDate.
+     *
+     * @return string|null
+     */
+    public function getWrittenDate()
+    {
+        return $this->writtenDate;
+    }
+
+    /**
+     * Set date.
+     *
+     * @param \DateTime|null $date
+     *
+     * @return Event
+     */
+    public function setDate($date = null)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date.
+     *
+     * @return \DateTime|null
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
@@ -17,6 +16,36 @@ class Transaction extends AbstractEntity
 {
 
     /**
+     * @var Person
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="firstPartyTransactions")
+     */
+    private $firstParty;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    private $firstPartyNote;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    private $conjunction;
+
+    /**
+     * @var Person
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="secondPartyTransactions")
+     */
+    private $secondParty;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    private $secondPartyNote;
+
+    /**
      * @var Collection|TransactionCategory[]
      * @ORM\ManyToOne(targetEntity="TransactionCategory", inversedBy="transactions")
      */
@@ -28,15 +57,8 @@ class Transaction extends AbstractEntity
      */
     private $ledger;
 
-    /**
-     * @var Collection|Person[]
-     * @ORM\ManyToMany(targetEntity="Person", inversedBy="transactions")
-     */
-    private $people;
-
     public function __construct() {
         parent::__construct();
-        $this->people = new ArrayCollection();
     }
 
     /**
@@ -96,39 +118,124 @@ class Transaction extends AbstractEntity
         return $this->ledger;
     }
 
+
     /**
-     * Add person.
+     * Set firstPartyNote.
      *
-     * @param Person $person
+     * @param string $firstPartyNote
      *
      * @return Transaction
      */
-    public function addPerson(Person $person)
+    public function setFirstPartyNote($firstPartyNote)
     {
-        $this->people[] = $person;
+        $this->firstPartyNote = $firstPartyNote;
 
         return $this;
     }
 
     /**
-     * Remove person.
+     * Get firstPartyNote.
      *
-     * @param Person $person
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return string
      */
-    public function removePerson(Person $person)
+    public function getFirstPartyNote()
     {
-        return $this->people->removeElement($person);
+        return $this->firstPartyNote;
     }
 
     /**
-     * Get people.
+     * Set conjunction.
      *
-     * @return Collection
+     * @param string $conjunction
+     *
+     * @return Transaction
      */
-    public function getPeople()
+    public function setConjunction($conjunction)
     {
-        return $this->people;
+        $this->conjunction = $conjunction;
+
+        return $this;
+    }
+
+    /**
+     * Get conjunction.
+     *
+     * @return string
+     */
+    public function getConjunction()
+    {
+        return $this->conjunction;
+    }
+
+    /**
+     * Set secondPartyNote.
+     *
+     * @param string $secondPartyNote
+     *
+     * @return Transaction
+     */
+    public function setSecondPartyNote($secondPartyNote)
+    {
+        $this->secondPartyNote = $secondPartyNote;
+
+        return $this;
+    }
+
+    /**
+     * Get secondPartyNote.
+     *
+     * @return string
+     */
+    public function getSecondPartyNote()
+    {
+        return $this->secondPartyNote;
+    }
+
+    /**
+     * Set firstParty.
+     *
+     * @param Person|null $firstParty
+     *
+     * @return Transaction
+     */
+    public function setFirstParty(Person $firstParty = null)
+    {
+        $this->firstParty = $firstParty;
+
+        return $this;
+    }
+
+    /**
+     * Get firstParty.
+     *
+     * @return Person|null
+     */
+    public function getFirstParty()
+    {
+        return $this->firstParty;
+    }
+
+    /**
+     * Set secondParty.
+     *
+     * @param Person|null $secondParty
+     *
+     * @return Transaction
+     */
+    public function setSecondParty(Person $secondParty = null)
+    {
+        $this->secondParty = $secondParty;
+
+        return $this;
+    }
+
+    /**
+     * Get secondParty.
+     *
+     * @return Person|null
+     */
+    public function getSecondParty()
+    {
+        return $this->secondParty;
     }
 }
