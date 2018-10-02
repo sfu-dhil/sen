@@ -33,6 +33,8 @@ class LoadEventCategory extends Fixture {
         $manumission->setDescription('Manumission, or affranchisement, is the act of an owner freeing his or her slaves.');
         $manager->persist($manumission);
         $this->setReference('eventcategory.2', $manumission);
+
+        $manager->flush();
     }
 
 }

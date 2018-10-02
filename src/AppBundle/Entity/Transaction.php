@@ -12,8 +12,28 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * @ORM\Table(name="transaction")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TransactionRepository")
  */
-class Transaction extends AbstractEntity
-{
+class Transaction extends AbstractEntity {
+
+    /**
+     * @var integer
+     * @ORM\Column(type="date", nullable=false)
+     *
+     */
+    private $date;
+
+    /**
+     * @var integer
+     * @ORM\Column(type="integer", nullable=false)
+     *
+     */
+    private $page;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     *
+     */
+    private $notes;
 
     /**
      * @var Person
@@ -77,8 +97,7 @@ class Transaction extends AbstractEntity
      *
      * @return Transaction
      */
-    public function setCategory(TransactionCategory $category = null)
-    {
+    public function setCategory(TransactionCategory $category = null) {
         $this->category = $category;
 
         return $this;
@@ -89,8 +108,7 @@ class Transaction extends AbstractEntity
      *
      * @return TransactionCategory|null
      */
-    public function getCategory()
-    {
+    public function getCategory() {
         return $this->category;
     }
 
@@ -101,8 +119,7 @@ class Transaction extends AbstractEntity
      *
      * @return Transaction
      */
-    public function setLedger(Ledger $ledger = null)
-    {
+    public function setLedger(Ledger $ledger = null) {
         $this->ledger = $ledger;
 
         return $this;
@@ -113,11 +130,9 @@ class Transaction extends AbstractEntity
      *
      * @return Ledger|null
      */
-    public function getLedger()
-    {
+    public function getLedger() {
         return $this->ledger;
     }
-
 
     /**
      * Set firstPartyNote.
@@ -126,8 +141,7 @@ class Transaction extends AbstractEntity
      *
      * @return Transaction
      */
-    public function setFirstPartyNote($firstPartyNote)
-    {
+    public function setFirstPartyNote($firstPartyNote) {
         $this->firstPartyNote = $firstPartyNote;
 
         return $this;
@@ -138,8 +152,7 @@ class Transaction extends AbstractEntity
      *
      * @return string
      */
-    public function getFirstPartyNote()
-    {
+    public function getFirstPartyNote() {
         return $this->firstPartyNote;
     }
 
@@ -150,8 +163,7 @@ class Transaction extends AbstractEntity
      *
      * @return Transaction
      */
-    public function setConjunction($conjunction)
-    {
+    public function setConjunction($conjunction) {
         $this->conjunction = $conjunction;
 
         return $this;
@@ -162,8 +174,7 @@ class Transaction extends AbstractEntity
      *
      * @return string
      */
-    public function getConjunction()
-    {
+    public function getConjunction() {
         return $this->conjunction;
     }
 
@@ -174,8 +185,7 @@ class Transaction extends AbstractEntity
      *
      * @return Transaction
      */
-    public function setSecondPartyNote($secondPartyNote)
-    {
+    public function setSecondPartyNote($secondPartyNote) {
         $this->secondPartyNote = $secondPartyNote;
 
         return $this;
@@ -186,8 +196,7 @@ class Transaction extends AbstractEntity
      *
      * @return string
      */
-    public function getSecondPartyNote()
-    {
+    public function getSecondPartyNote() {
         return $this->secondPartyNote;
     }
 
@@ -198,8 +207,7 @@ class Transaction extends AbstractEntity
      *
      * @return Transaction
      */
-    public function setFirstParty(Person $firstParty = null)
-    {
+    public function setFirstParty(Person $firstParty = null) {
         $this->firstParty = $firstParty;
 
         return $this;
@@ -210,8 +218,7 @@ class Transaction extends AbstractEntity
      *
      * @return Person|null
      */
-    public function getFirstParty()
-    {
+    public function getFirstParty() {
         return $this->firstParty;
     }
 
@@ -222,8 +229,7 @@ class Transaction extends AbstractEntity
      *
      * @return Transaction
      */
-    public function setSecondParty(Person $secondParty = null)
-    {
+    public function setSecondParty(Person $secondParty = null) {
         $this->secondParty = $secondParty;
 
         return $this;
@@ -234,8 +240,78 @@ class Transaction extends AbstractEntity
      *
      * @return Person|null
      */
-    public function getSecondParty()
-    {
+    public function getSecondParty() {
         return $this->secondParty;
+    }
+
+    /**
+     * Set date.
+     *
+     * @param string $date
+     *
+     * @return Transaction
+     */
+    public function setDate($date) {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date.
+     *
+     * @return string
+     */
+    public function getDate() {
+        return $this->date;
+    }
+
+
+    /**
+     * Set page.
+     *
+     * @param int $page
+     *
+     * @return Transaction
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
+    /**
+     * Get page.
+     *
+     * @return int
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * Set notes.
+     *
+     * @param string $notes
+     *
+     * @return Transaction
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get notes.
+     *
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
     }
 }

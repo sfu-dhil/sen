@@ -29,6 +29,12 @@ class Event extends AbstractEntity
     private $date;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $note;
+
+    /**
      * @var EventCategory
      * @ORM\ManyToOne(targetEntity="EventCategory", inversedBy="events")
      */
@@ -65,6 +71,14 @@ class Event extends AbstractEntity
      */
     public function __toString() {
         return get_class($this) . "#" . $this->getId();
+    }
+
+    public function setNote($note) {
+        $this->note = $note;
+    }
+
+    public function getNote() {
+        return $this->note;
     }
 
     /**
