@@ -15,7 +15,7 @@ use Nines\UtilBundle\Entity\AbstractEntity;
 class Transaction extends AbstractEntity {
 
     /**
-     * @var integer
+     * @var DateTime
      * @ORM\Column(type="date", nullable=false)
      *
      */
@@ -23,14 +23,14 @@ class Transaction extends AbstractEntity {
 
     /**
      * @var integer
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="integer")
      *
      */
     private $page;
 
     /**
      * @var string
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
      */
     private $notes;
@@ -247,11 +247,11 @@ class Transaction extends AbstractEntity {
     /**
      * Set date.
      *
-     * @param string $date
+     * @param DateTime $date
      *
      * @return Transaction
      */
-    public function setDate($date) {
+    public function setDate(\DateTime $date) {
         $this->date = $date;
 
         return $this;
@@ -260,7 +260,7 @@ class Transaction extends AbstractEntity {
     /**
      * Get date.
      *
-     * @return string
+     * @return \DateTime
      */
     public function getDate() {
         return $this->date;

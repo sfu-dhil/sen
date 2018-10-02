@@ -30,10 +30,10 @@ class LoadTransaction extends Fixture implements DependentFixtureInterface
         $transaction->setLedger($this->getReference("ledger.1"));
         $transaction->setSecondParty($this->getReference("person.2"));
         $transaction->setSecondPartyNote("and children");
-        $transaction->setDate("1790/04/20");
+        $transaction->setDate(new \DateTime("1790-04-20"));
         $transaction->setPage(27);
         $manager->persist($transaction);
-        $this->setReference("transaction.1");
+        $this->setReference("transaction.1", $transaction);
 
         $manager->flush();
     }

@@ -38,10 +38,8 @@ class LoadPerson extends Fixture implements DependentFixtureInterface {
         $person2 = new Person();
         $person2->setFirstName("Savanah");
         $person2->setLastName("Kansas");
-        $person2->setNative();
         $person2->setBirthDate("1761/02/03");
         $person2->setBirthPlace($this->getReference("city.1"));
-        $person2->setAlias();
         $person2->setOccupation("1776 busness person");
         $person2->setRace($this->getReference("race.1"));
         $person2->setSex(Person::FEMALE);

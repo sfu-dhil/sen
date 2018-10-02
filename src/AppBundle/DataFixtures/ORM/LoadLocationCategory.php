@@ -8,7 +8,7 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
-use AppBundle\Entity\EventCategory;
+use AppBundle\Entity\LocationCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -20,11 +20,11 @@ use Doctrine\Common\Persistence\ObjectManager;
 class LoadLocationCategory extends Fixture {
     //put your code here
     public function load(ObjectManager $manager) {
-        $category = new EventCategory();
+        $category = new LocationCategory();
         $category->setName('church');
         $category->setLabel('Church');
         $manager->persist($category);
-        $this->setReference('category.1', $category);
+        $this->setReference('locationcategory.1', $category);
 
         $manager->flush();
     }

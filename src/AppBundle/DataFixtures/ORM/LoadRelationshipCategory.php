@@ -24,8 +24,8 @@ class LoadRelationshipCategory extends Fixture {
         $category->setName('rel');
         $category->setLabel('Rel');
         $manager->persist($category);
-        $this->setReference("relationshipcategory.1");
-        
+        $this->setReference("relationshipcategory.1", $category);
+
         $manager->flush();
     }
 

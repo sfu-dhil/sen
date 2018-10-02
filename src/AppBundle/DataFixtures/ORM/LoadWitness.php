@@ -10,6 +10,7 @@ namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\Witness;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -17,7 +18,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  *
  * @author michael
  */
-class LoadWitness extends Fixture {
+class LoadWitness extends Fixture implements DependentFixtureInterface {
     //put your code here
     public function load(ObjectManager $manager) {
         $witness = new Witness();
@@ -28,6 +29,14 @@ class LoadWitness extends Fixture {
         $this->setReference("witness.1", $witness);
 
         $manager->flush();
+    }
+
+    public function getDependencies(): array {
+        return array(
+            LoadEvent::class,
+            LoadWitnessCategory::class,
+            LoadPerson::class,
+        );
     }
 
 }

@@ -21,7 +21,7 @@ class LoadLocation extends Fixture implements DependentFixtureInterface {
     //put your code here
     public function load(ObjectManager $manager) {
         $location = new Location();
-        $location->setCategory("locationcategory.1");
+        $location->setCategory($this->getReference("locationcategory.1"));
         $location->setName("Saint Barnabas Church");
         $manager->persist($location);
         $this->setReference('location.1', $location);

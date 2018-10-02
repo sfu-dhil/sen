@@ -222,7 +222,7 @@ class Event extends AbstractEntity
      *
      * @return Event
      */
-    public function setDate($date = null)
+    public function setDate(\DateTime $date = null)
     {
         $this->date = $date;
 

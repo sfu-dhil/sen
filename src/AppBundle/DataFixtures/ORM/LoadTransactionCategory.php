@@ -8,7 +8,7 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
-use AppBundle\Entity\Race;
+use AppBundle\Entity\TransactionCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -17,15 +17,14 @@ use Doctrine\Common\Persistence\ObjectManager;
  *
  * @author michael
  */
-class LoadRace extends Fixture {
-    //put your code here
-    public function load(ObjectManager $manager) {
-        $race = new Race();
-        $race->setName("indian");
-        $race->setLabel("Indian");
-        $this->setReference("race.1", $race);
-        $manager->persist($race);
+class LoadTransactionCategory extends Fixture {
 
+    public function load(ObjectManager $manager) {
+        $category = new TransactionCategory();
+        $category->setName("sale-property");
+        $category->setLabel("Sale of property");
+        $manager->persist($category);
+        $this->setReference("transactioncategory.1", $category);
         $manager->flush();
     }
 

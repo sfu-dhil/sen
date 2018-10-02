@@ -27,7 +27,7 @@ class LoadResidence extends Fixture implements DependentFixtureInterface
         $residence->setPerson($this->getReference("person.1"));
         $residence->setDate("1780");
         $manager->persist($residence);
-        $this->setReference("residence.1");
+        $this->setReference("residence.1", $residence);
 
         $manager->flush();
     }
