@@ -59,7 +59,7 @@
             <tr>
                 <th>Firstparty</th>
                 <td>
-                    <a href="{{ path('firstParty_show', { 'id': transaction.firstParty.id}) }}">
+                    <a href="{{ path('person_show', { 'id': transaction.firstParty.id}) }}">
                         {{ transaction.firstParty }}
                     </a>
                 </td>
@@ -67,7 +67,7 @@
             <tr>
                 <th>Secondparty</th>
                 <td>
-                    <a href="{{ path('secondParty_show', { 'id': transaction.secondParty.id}) }}">
+                    <a href="{{ path('person_show', { 'id': transaction.secondParty.id}) }}">
                         {{ transaction.secondParty }}
                     </a>
                 </td>
@@ -75,7 +75,7 @@
             <tr>
                 <th>Category</th>
                 <td>
-                    <a href="{{ path('category_show', { 'id': transaction.category.id}) }}">
+                    <a href="{{ path('transaction_category_show', { 'id': transaction.category.id}) }}">
                         {{ transaction.category }}
                     </a>
                 </td>

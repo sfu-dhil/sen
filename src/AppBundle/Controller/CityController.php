@@ -16,11 +16,10 @@ use AppBundle\Form\CityType;
 /**
  * City controller.
  *
- * @Security("has_role('ROLE_USER')")
  * @Route("/city")
  */
-class CityController extends Controller
-{
+class CityController extends Controller {
+
     /**
      * Lists all City entities.
      *
@@ -32,8 +31,7 @@ class CityController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(City::class, 'e')->orderBy('e.id', 'ASC');
@@ -46,17 +44,17 @@ class CityController extends Controller
         );
     }
 
-/**
+    /**
      * Typeahead API endpoint for City entities.
      *
      * To make this work, add something like this to CityRepository:
-        //    public function typeaheadQuery($q) {
-        //        $qb = $this->createQueryBuilder('e');
-        //        $qb->andWhere("e.name LIKE :q");
-        //        $qb->orderBy('e.name');
-        //        $qb->setParameter('q', "{$q}%");
-        //        return $qb->getQuery()->execute();
-        //    }
+      //    public function typeaheadQuery($q) {
+      //        $qb = $this->createQueryBuilder('e');
+      //        $qb->andWhere("e.name LIKE :q");
+      //        $qb->orderBy('e.name');
+      //        $qb->setParameter('q', "{$q}%");
+      //        return $qb->getQuery()->execute();
+      //    }
      *
      * @param Request $request
      *
@@ -64,23 +62,23 @@ class CityController extends Controller
      * @Method("GET")
      * @return JsonResponse
      */
-    public function typeahead(Request $request)
-    {
+    public function typeahead(Request $request) {
         $q = $request->query->get('q');
-        if( ! $q) {
+        if (!$q) {
             return new JsonResponse([]);
         }
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository(City::class);
+        $repo = $em->getRepository(City::class);
         $data = [];
-        foreach($repo->typeaheadQuery($q) as $result) {
+        foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
-                'text' => (string)$result,
+                'text' => (string) $result,
             ];
         }
         return new JsonResponse($data);
     }
+
     /**
      * Search for City entities.
      *
@@ -105,18 +103,17 @@ class CityController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function searchAction(Request $request)
-    {
+    public function searchAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository('AppBundle:City');
-	$q = $request->query->get('q');
-	if($q) {
-	    $query = $repo->searchQuery($q);
+        $repo = $em->getRepository('AppBundle:City');
+        $q = $request->query->get('q');
+        if ($q) {
+            $query = $repo->searchQuery($q);
             $paginator = $this->get('knp_paginator');
             $cities = $paginator->paginate($query, $request->query->getInt('page', 1), 25);
-	} else {
+        } else {
             $cities = array();
-	}
+        }
 
         return array(
             'cities' => $cities,
@@ -136,8 +133,7 @@ class CityController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $city = new City();
         $form = $this->createForm(CityType::class, $city);
         $form->handleRequest($request);
@@ -169,8 +165,7 @@ class CityController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newPopupAction(Request $request)
-    {
+    public function newPopupAction(Request $request) {
         return $this->newAction($request);
     }
 
@@ -185,8 +180,7 @@ class CityController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function showAction(City $city)
-    {
+    public function showAction(City $city) {
 
         return array(
             'city' => $city,
@@ -207,8 +201,7 @@ class CityController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function editAction(Request $request, City $city)
-    {
+    public function editAction(Request $request, City $city) {
         $editForm = $this->createForm(CityType::class, $city);
         $editForm->handleRequest($request);
 
@@ -238,8 +231,7 @@ class CityController extends Controller
      * @Route("/{id}/delete", name="city_delete")
      * @Method("GET")
      */
-    public function deleteAction(Request $request, City $city)
-    {
+    public function deleteAction(Request $request, City $city) {
         $em = $this->getDoctrine()->getManager();
         $em->remove($city);
         $em->flush();
@@ -247,4 +239,5 @@ class CityController extends Controller
 
         return $this->redirectToRoute('city_index');
     }
+
 }

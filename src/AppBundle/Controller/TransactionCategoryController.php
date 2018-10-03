@@ -16,11 +16,10 @@ use AppBundle\Form\TransactionCategoryType;
 /**
  * TransactionCategory controller.
  *
- * @Security("has_role('ROLE_USER')")
  * @Route("/transaction_category")
  */
-class TransactionCategoryController extends Controller
-{
+class TransactionCategoryController extends Controller {
+
     /**
      * Lists all TransactionCategory entities.
      *
@@ -32,8 +31,7 @@ class TransactionCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(TransactionCategory::class, 'e')->orderBy('e.id', 'ASC');
@@ -46,17 +44,17 @@ class TransactionCategoryController extends Controller
         );
     }
 
-/**
+    /**
      * Typeahead API endpoint for TransactionCategory entities.
      *
      * To make this work, add something like this to TransactionCategoryRepository:
-        //    public function typeaheadQuery($q) {
-        //        $qb = $this->createQueryBuilder('e');
-        //        $qb->andWhere("e.name LIKE :q");
-        //        $qb->orderBy('e.name');
-        //        $qb->setParameter('q', "{$q}%");
-        //        return $qb->getQuery()->execute();
-        //    }
+      //    public function typeaheadQuery($q) {
+      //        $qb = $this->createQueryBuilder('e');
+      //        $qb->andWhere("e.name LIKE :q");
+      //        $qb->orderBy('e.name');
+      //        $qb->setParameter('q', "{$q}%");
+      //        return $qb->getQuery()->execute();
+      //    }
      *
      * @param Request $request
      *
@@ -64,23 +62,23 @@ class TransactionCategoryController extends Controller
      * @Method("GET")
      * @return JsonResponse
      */
-    public function typeahead(Request $request)
-    {
+    public function typeahead(Request $request) {
         $q = $request->query->get('q');
-        if( ! $q) {
+        if (!$q) {
             return new JsonResponse([]);
         }
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository(TransactionCategory::class);
+        $repo = $em->getRepository(TransactionCategory::class);
         $data = [];
-        foreach($repo->typeaheadQuery($q) as $result) {
+        foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
-                'text' => (string)$result,
+                'text' => (string) $result,
             ];
         }
         return new JsonResponse($data);
     }
+
     /**
      * Search for TransactionCategory entities.
      *
@@ -105,18 +103,17 @@ class TransactionCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function searchAction(Request $request)
-    {
+    public function searchAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository('AppBundle:TransactionCategory');
-	$q = $request->query->get('q');
-	if($q) {
-	    $query = $repo->searchQuery($q);
+        $repo = $em->getRepository('AppBundle:TransactionCategory');
+        $q = $request->query->get('q');
+        if ($q) {
+            $query = $repo->searchQuery($q);
             $paginator = $this->get('knp_paginator');
             $transactionCategories = $paginator->paginate($query, $request->query->getInt('page', 1), 25);
-	} else {
+        } else {
             $transactionCategories = array();
-	}
+        }
 
         return array(
             'transactionCategories' => $transactionCategories,
@@ -136,8 +133,7 @@ class TransactionCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $transactionCategory = new TransactionCategory();
         $form = $this->createForm(TransactionCategoryType::class, $transactionCategory);
         $form->handleRequest($request);
@@ -169,8 +165,7 @@ class TransactionCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newPopupAction(Request $request)
-    {
+    public function newPopupAction(Request $request) {
         return $this->newAction($request);
     }
 
@@ -185,8 +180,7 @@ class TransactionCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function showAction(TransactionCategory $transactionCategory)
-    {
+    public function showAction(TransactionCategory $transactionCategory) {
 
         return array(
             'transactionCategory' => $transactionCategory,
@@ -207,8 +201,7 @@ class TransactionCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function editAction(Request $request, TransactionCategory $transactionCategory)
-    {
+    public function editAction(Request $request, TransactionCategory $transactionCategory) {
         $editForm = $this->createForm(TransactionCategoryType::class, $transactionCategory);
         $editForm->handleRequest($request);
 
@@ -238,8 +231,7 @@ class TransactionCategoryController extends Controller
      * @Route("/{id}/delete", name="transaction_category_delete")
      * @Method("GET")
      */
-    public function deleteAction(Request $request, TransactionCategory $transactionCategory)
-    {
+    public function deleteAction(Request $request, TransactionCategory $transactionCategory) {
         $em = $this->getDoctrine()->getManager();
         $em->remove($transactionCategory);
         $em->flush();
@@ -247,4 +239,5 @@ class TransactionCategoryController extends Controller
 
         return $this->redirectToRoute('transaction_category_index');
     }
+
 }

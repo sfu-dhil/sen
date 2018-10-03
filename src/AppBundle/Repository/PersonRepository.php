@@ -10,5 +10,14 @@ namespace AppBundle\Repository;
  */
 class PersonRepository extends \Doctrine\ORM\EntityRepository
 {
+          public function typeaheadQuery($q) {
+              $qb = $this->createQueryBuilder('e');
+              $qb->andWhere("e.firstName LIKE :q");
+              $qb->orWhere("e.lastName LIKE :q");
+              $qb->orderBy('e.lastName');
+              $qb->addOrderBy('e.firstName');
+              $qb->setParameter('q', "{$q}%");
+              return $qb->getQuery()->execute();
+          }
 
 }

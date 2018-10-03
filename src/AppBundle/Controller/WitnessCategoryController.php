@@ -16,11 +16,10 @@ use AppBundle\Form\WitnessCategoryType;
 /**
  * WitnessCategory controller.
  *
- * @Security("has_role('ROLE_USER')")
  * @Route("/witness_category")
  */
-class WitnessCategoryController extends Controller
-{
+class WitnessCategoryController extends Controller {
+
     /**
      * Lists all WitnessCategory entities.
      *
@@ -32,8 +31,7 @@ class WitnessCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(WitnessCategory::class, 'e')->orderBy('e.id', 'ASC');
@@ -46,17 +44,17 @@ class WitnessCategoryController extends Controller
         );
     }
 
-/**
+    /**
      * Typeahead API endpoint for WitnessCategory entities.
      *
      * To make this work, add something like this to WitnessCategoryRepository:
-        //    public function typeaheadQuery($q) {
-        //        $qb = $this->createQueryBuilder('e');
-        //        $qb->andWhere("e.name LIKE :q");
-        //        $qb->orderBy('e.name');
-        //        $qb->setParameter('q', "{$q}%");
-        //        return $qb->getQuery()->execute();
-        //    }
+      //    public function typeaheadQuery($q) {
+      //        $qb = $this->createQueryBuilder('e');
+      //        $qb->andWhere("e.name LIKE :q");
+      //        $qb->orderBy('e.name');
+      //        $qb->setParameter('q', "{$q}%");
+      //        return $qb->getQuery()->execute();
+      //    }
      *
      * @param Request $request
      *
@@ -64,23 +62,23 @@ class WitnessCategoryController extends Controller
      * @Method("GET")
      * @return JsonResponse
      */
-    public function typeahead(Request $request)
-    {
+    public function typeahead(Request $request) {
         $q = $request->query->get('q');
-        if( ! $q) {
+        if (!$q) {
             return new JsonResponse([]);
         }
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository(WitnessCategory::class);
+        $repo = $em->getRepository(WitnessCategory::class);
         $data = [];
-        foreach($repo->typeaheadQuery($q) as $result) {
+        foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
-                'text' => (string)$result,
+                'text' => (string) $result,
             ];
         }
         return new JsonResponse($data);
     }
+
     /**
      * Search for WitnessCategory entities.
      *
@@ -105,18 +103,17 @@ class WitnessCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function searchAction(Request $request)
-    {
+    public function searchAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository('AppBundle:WitnessCategory');
-	$q = $request->query->get('q');
-	if($q) {
-	    $query = $repo->searchQuery($q);
+        $repo = $em->getRepository('AppBundle:WitnessCategory');
+        $q = $request->query->get('q');
+        if ($q) {
+            $query = $repo->searchQuery($q);
             $paginator = $this->get('knp_paginator');
             $witnessCategories = $paginator->paginate($query, $request->query->getInt('page', 1), 25);
-	} else {
+        } else {
             $witnessCategories = array();
-	}
+        }
 
         return array(
             'witnessCategories' => $witnessCategories,
@@ -136,8 +133,7 @@ class WitnessCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $witnessCategory = new WitnessCategory();
         $form = $this->createForm(WitnessCategoryType::class, $witnessCategory);
         $form->handleRequest($request);
@@ -169,8 +165,7 @@ class WitnessCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newPopupAction(Request $request)
-    {
+    public function newPopupAction(Request $request) {
         return $this->newAction($request);
     }
 
@@ -185,8 +180,7 @@ class WitnessCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function showAction(WitnessCategory $witnessCategory)
-    {
+    public function showAction(WitnessCategory $witnessCategory) {
 
         return array(
             'witnessCategory' => $witnessCategory,
@@ -207,8 +201,7 @@ class WitnessCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function editAction(Request $request, WitnessCategory $witnessCategory)
-    {
+    public function editAction(Request $request, WitnessCategory $witnessCategory) {
         $editForm = $this->createForm(WitnessCategoryType::class, $witnessCategory);
         $editForm->handleRequest($request);
 
@@ -238,8 +231,7 @@ class WitnessCategoryController extends Controller
      * @Route("/{id}/delete", name="witness_category_delete")
      * @Method("GET")
      */
-    public function deleteAction(Request $request, WitnessCategory $witnessCategory)
-    {
+    public function deleteAction(Request $request, WitnessCategory $witnessCategory) {
         $em = $this->getDoctrine()->getManager();
         $em->remove($witnessCategory);
         $em->flush();
@@ -247,4 +239,5 @@ class WitnessCategoryController extends Controller
 
         return $this->redirectToRoute('witness_category_index');
     }
+
 }

@@ -16,11 +16,10 @@ use AppBundle\Form\LocationCategoryType;
 /**
  * LocationCategory controller.
  *
- * @Security("has_role('ROLE_USER')")
  * @Route("/location_category")
  */
-class LocationCategoryController extends Controller
-{
+class LocationCategoryController extends Controller {
+
     /**
      * Lists all LocationCategory entities.
      *
@@ -32,8 +31,7 @@ class LocationCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(LocationCategory::class, 'e')->orderBy('e.id', 'ASC');
@@ -46,17 +44,17 @@ class LocationCategoryController extends Controller
         );
     }
 
-/**
+    /**
      * Typeahead API endpoint for LocationCategory entities.
      *
      * To make this work, add something like this to LocationCategoryRepository:
-        //    public function typeaheadQuery($q) {
-        //        $qb = $this->createQueryBuilder('e');
-        //        $qb->andWhere("e.name LIKE :q");
-        //        $qb->orderBy('e.name');
-        //        $qb->setParameter('q', "{$q}%");
-        //        return $qb->getQuery()->execute();
-        //    }
+      //    public function typeaheadQuery($q) {
+      //        $qb = $this->createQueryBuilder('e');
+      //        $qb->andWhere("e.name LIKE :q");
+      //        $qb->orderBy('e.name');
+      //        $qb->setParameter('q', "{$q}%");
+      //        return $qb->getQuery()->execute();
+      //    }
      *
      * @param Request $request
      *
@@ -64,23 +62,23 @@ class LocationCategoryController extends Controller
      * @Method("GET")
      * @return JsonResponse
      */
-    public function typeahead(Request $request)
-    {
+    public function typeahead(Request $request) {
         $q = $request->query->get('q');
-        if( ! $q) {
+        if (!$q) {
             return new JsonResponse([]);
         }
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository(LocationCategory::class);
+        $repo = $em->getRepository(LocationCategory::class);
         $data = [];
-        foreach($repo->typeaheadQuery($q) as $result) {
+        foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
-                'text' => (string)$result,
+                'text' => (string) $result,
             ];
         }
         return new JsonResponse($data);
     }
+
     /**
      * Search for LocationCategory entities.
      *
@@ -105,18 +103,17 @@ class LocationCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function searchAction(Request $request)
-    {
+    public function searchAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository('AppBundle:LocationCategory');
-	$q = $request->query->get('q');
-	if($q) {
-	    $query = $repo->searchQuery($q);
+        $repo = $em->getRepository('AppBundle:LocationCategory');
+        $q = $request->query->get('q');
+        if ($q) {
+            $query = $repo->searchQuery($q);
             $paginator = $this->get('knp_paginator');
             $locationCategories = $paginator->paginate($query, $request->query->getInt('page', 1), 25);
-	} else {
+        } else {
             $locationCategories = array();
-	}
+        }
 
         return array(
             'locationCategories' => $locationCategories,
@@ -136,8 +133,7 @@ class LocationCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $locationCategory = new LocationCategory();
         $form = $this->createForm(LocationCategoryType::class, $locationCategory);
         $form->handleRequest($request);
@@ -169,8 +165,7 @@ class LocationCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newPopupAction(Request $request)
-    {
+    public function newPopupAction(Request $request) {
         return $this->newAction($request);
     }
 
@@ -185,8 +180,7 @@ class LocationCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function showAction(LocationCategory $locationCategory)
-    {
+    public function showAction(LocationCategory $locationCategory) {
 
         return array(
             'locationCategory' => $locationCategory,
@@ -207,8 +201,7 @@ class LocationCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function editAction(Request $request, LocationCategory $locationCategory)
-    {
+    public function editAction(Request $request, LocationCategory $locationCategory) {
         $editForm = $this->createForm(LocationCategoryType::class, $locationCategory);
         $editForm->handleRequest($request);
 
@@ -238,8 +231,7 @@ class LocationCategoryController extends Controller
      * @Route("/{id}/delete", name="location_category_delete")
      * @Method("GET")
      */
-    public function deleteAction(Request $request, LocationCategory $locationCategory)
-    {
+    public function deleteAction(Request $request, LocationCategory $locationCategory) {
         $em = $this->getDoctrine()->getManager();
         $em->remove($locationCategory);
         $em->flush();
@@ -247,4 +239,5 @@ class LocationCategoryController extends Controller
 
         return $this->redirectToRoute('location_category_index');
     }
+
 }

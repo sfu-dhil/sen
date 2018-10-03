@@ -16,11 +16,10 @@ use AppBundle\Form\PersonType;
 /**
  * Person controller.
  *
- * @Security("has_role('ROLE_USER')")
  * @Route("/person")
  */
-class PersonController extends Controller
-{
+class PersonController extends Controller {
+
     /**
      * Lists all Person entities.
      *
@@ -32,8 +31,7 @@ class PersonController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Person::class, 'e')->orderBy('e.id', 'ASC');
@@ -46,17 +44,17 @@ class PersonController extends Controller
         );
     }
 
-/**
+    /**
      * Typeahead API endpoint for Person entities.
      *
      * To make this work, add something like this to PersonRepository:
-        //    public function typeaheadQuery($q) {
-        //        $qb = $this->createQueryBuilder('e');
-        //        $qb->andWhere("e.name LIKE :q");
-        //        $qb->orderBy('e.name');
-        //        $qb->setParameter('q', "{$q}%");
-        //        return $qb->getQuery()->execute();
-        //    }
+      //    public function typeaheadQuery($q) {
+      //        $qb = $this->createQueryBuilder('e');
+      //        $qb->andWhere("e.name LIKE :q");
+      //        $qb->orderBy('e.name');
+      //        $qb->setParameter('q', "{$q}%");
+      //        return $qb->getQuery()->execute();
+      //    }
      *
      * @param Request $request
      *
@@ -64,23 +62,23 @@ class PersonController extends Controller
      * @Method("GET")
      * @return JsonResponse
      */
-    public function typeahead(Request $request)
-    {
+    public function typeahead(Request $request) {
         $q = $request->query->get('q');
-        if( ! $q) {
+        if (!$q) {
             return new JsonResponse([]);
         }
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository(Person::class);
+        $repo = $em->getRepository(Person::class);
         $data = [];
-        foreach($repo->typeaheadQuery($q) as $result) {
+        foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
-                'text' => (string)$result,
+                'text' => (string) $result,
             ];
         }
         return new JsonResponse($data);
     }
+
     /**
      * Search for Person entities.
      *
@@ -105,18 +103,17 @@ class PersonController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function searchAction(Request $request)
-    {
+    public function searchAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository('AppBundle:Person');
-	$q = $request->query->get('q');
-	if($q) {
-	    $query = $repo->searchQuery($q);
+        $repo = $em->getRepository('AppBundle:Person');
+        $q = $request->query->get('q');
+        if ($q) {
+            $query = $repo->searchQuery($q);
             $paginator = $this->get('knp_paginator');
             $people = $paginator->paginate($query, $request->query->getInt('page', 1), 25);
-	} else {
+        } else {
             $people = array();
-	}
+        }
 
         return array(
             'people' => $people,
@@ -136,8 +133,7 @@ class PersonController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $person = new Person();
         $form = $this->createForm(PersonType::class, $person);
         $form->handleRequest($request);
@@ -169,8 +165,7 @@ class PersonController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newPopupAction(Request $request)
-    {
+    public function newPopupAction(Request $request) {
         return $this->newAction($request);
     }
 
@@ -185,8 +180,7 @@ class PersonController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function showAction(Person $person)
-    {
+    public function showAction(Person $person) {
 
         return array(
             'person' => $person,
@@ -207,8 +201,7 @@ class PersonController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function editAction(Request $request, Person $person)
-    {
+    public function editAction(Request $request, Person $person) {
         $editForm = $this->createForm(PersonType::class, $person);
         $editForm->handleRequest($request);
 
@@ -238,8 +231,7 @@ class PersonController extends Controller
      * @Route("/{id}/delete", name="person_delete")
      * @Method("GET")
      */
-    public function deleteAction(Request $request, Person $person)
-    {
+    public function deleteAction(Request $request, Person $person) {
         $em = $this->getDoctrine()->getManager();
         $em->remove($person);
         $em->flush();
@@ -247,4 +239,5 @@ class PersonController extends Controller
 
         return $this->redirectToRoute('person_index');
     }
+
 }

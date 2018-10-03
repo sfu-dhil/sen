@@ -71,7 +71,7 @@
             <tr>
                 <th>Birthplace</th>
                 <td>
-                    <a href="{{ path('birthPlace_show', { 'id': person.birthPlace.id}) }}">
+                    <a href="{{ path('city_show', { 'id': person.birthPlace.id}) }}">
                         {{ person.birthPlace }}
                     </a>
                 </td>
@@ -89,10 +89,10 @@
                 <td>
                     {% if person.relationships | length > 0 %}
                         <ul>
-                            {% for relationships in person.relationships %}
+                            {% for relationship in person.relationships %}
                                 <li>
-                                    <a href="{{ path("relationships_show", {"id":relationships.id}) }}">
-                                        {{ relationships }}
+                                    <a href="{{ path("relationship_show", {"id":relationship.id}) }}">
+                                        {{ relationship }}
                                     </a>
                                 </li>
                             {% endfor %}
@@ -105,10 +105,10 @@
                 <td>
                     {% if person.events | length > 0 %}
                         <ul>
-                            {% for events in person.events %}
+                            {% for event in person.events %}
                                 <li>
-                                    <a href="{{ path("events_show", {"id":events.id}) }}">
-                                        {{ events }}
+                                    <a href="{{ path("event_show", {"id":event.id}) }}">
+                                        {{ event }}
                                     </a>
                                 </li>
                             {% endfor %}
@@ -121,10 +121,10 @@
     {% if person.residences | length > 0 %}
         <h2>Residences</h2>
         <ul>
-            {% for residences in person.residences %}
+            {% for residence in person.residences %}
                 <li>
-                    <a href="{{ path("residences_show", {"id":residences.id}) }}">
-                        {{ residences }}
+                    <a href="{{ path("city_show", {"id":residence.id}) }}">
+                        {{ residence }}
                     </a>
                 </li>
             {% endfor %}
@@ -133,10 +133,10 @@
     {% if person.witnesses | length > 0 %}
         <h2>Witnesses</h2>
         <ul>
-            {% for witnesses in person.witnesses %}
+            {% for witness in person.witnesses %}
                 <li>
-                    <a href="{{ path("witnesses_show", {"id":witnesses.id}) }}">
-                        {{ witnesses }}
+                    <a href="{{ path("witness_show", {"id":witness.id}) }}">
+                        {{ witness }}
                     </a>
                 </li>
             {% endfor %}
@@ -145,10 +145,10 @@
     {% if person.firstPartyTransactions | length > 0 %}
         <h2>Firstpartytransactions</h2>
         <ul>
-            {% for firstPartyTransactions in person.firstPartyTransactions %}
+            {% for firstPartyTransaction in person.firstPartyTransactions %}
                 <li>
-                    <a href="{{ path("firstPartyTransactions_show", {"id":firstPartyTransactions.id}) }}">
-                        {{ firstPartyTransactions }}
+                    <a href="{{ path("firstPartyTransactions_show", {"id":firstPartyTransaction.id}) }}">
+                        {{ firstPartyTransaction }}
                     </a>
                 </li>
             {% endfor %}
@@ -157,10 +157,10 @@
     {% if person.secondPartyTransactions | length > 0 %}
         <h2>Secondpartytransactions</h2>
         <ul>
-            {% for secondPartyTransactions in person.secondPartyTransactions %}
+            {% for secondPartyTransaction in person.secondPartyTransactions %}
                 <li>
-                    <a href="{{ path("secondPartyTransactions_show", {"id":secondPartyTransactions.id}) }}">
-                        {{ secondPartyTransactions }}
+                    <a href="{{ path("secondPartyTransaction_show", {"id":secondPartyTransaction.id}) }}">
+                        {{ secondPartyTransaction }}
                     </a>
                 </li>
             {% endfor %}

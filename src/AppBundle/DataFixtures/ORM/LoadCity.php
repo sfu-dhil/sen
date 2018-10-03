@@ -21,7 +21,7 @@ class LoadCity extends Fixture {
     //put your code here
     public function load(ObjectManager $manager) {
         $neworleans = new City();
-        $neworleans->setName("New Orleans");
+        $neworleans->setName("Abbeville");
         $manager->persist($neworleans);
         $this->setReference("city.1", $neworleans);
 

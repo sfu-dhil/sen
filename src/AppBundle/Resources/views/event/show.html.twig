@@ -47,7 +47,7 @@
             <tr>
                 <th>Category</th>
                 <td>
-                    <a href="{{ path('category_show', { 'id': event.category.id}) }}">
+                    <a href="{{ path('event_category_show', { 'id': event.category.id}) }}">
                         {{ event.category }}
                     </a>
                 </td>
@@ -67,7 +67,7 @@
                         <ul>
                             {% for participants in event.participants %}
                                 <li>
-                                    <a href="{{ path("participants_show", {"id":participants.id}) }}">
+                                    <a href="{{ path("participant_show", {"id":participants.id}) }}">
                                         {{ participants }}
                                     </a>
                                 </li>
@@ -81,10 +81,10 @@
     {% if event.witnesses | length > 0 %}
         <h2>Witnesses</h2>
         <ul>
-            {% for witnesses in event.witnesses %}
+            {% for witness in event.witnesses %}
                 <li>
-                    <a href="{{ path("witnesses_show", {"id":witnesses.id}) }}">
-                        {{ witnesses }}
+                    <a href="{{ path("witness_show", {"id":witness.id}) }}">
+                        {{ witness }}
                     </a>
                 </li>
             {% endfor %}

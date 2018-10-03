@@ -16,11 +16,10 @@ use AppBundle\Form\RaceType;
 /**
  * Race controller.
  *
- * @Security("has_role('ROLE_USER')")
  * @Route("/race")
  */
-class RaceController extends Controller
-{
+class RaceController extends Controller {
+
     /**
      * Lists all Race entities.
      *
@@ -32,8 +31,7 @@ class RaceController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Race::class, 'e')->orderBy('e.id', 'ASC');
@@ -46,17 +44,17 @@ class RaceController extends Controller
         );
     }
 
-/**
+    /**
      * Typeahead API endpoint for Race entities.
      *
      * To make this work, add something like this to RaceRepository:
-        //    public function typeaheadQuery($q) {
-        //        $qb = $this->createQueryBuilder('e');
-        //        $qb->andWhere("e.name LIKE :q");
-        //        $qb->orderBy('e.name');
-        //        $qb->setParameter('q', "{$q}%");
-        //        return $qb->getQuery()->execute();
-        //    }
+      //    public function typeaheadQuery($q) {
+      //        $qb = $this->createQueryBuilder('e');
+      //        $qb->andWhere("e.name LIKE :q");
+      //        $qb->orderBy('e.name');
+      //        $qb->setParameter('q', "{$q}%");
+      //        return $qb->getQuery()->execute();
+      //    }
      *
      * @param Request $request
      *
@@ -64,23 +62,23 @@ class RaceController extends Controller
      * @Method("GET")
      * @return JsonResponse
      */
-    public function typeahead(Request $request)
-    {
+    public function typeahead(Request $request) {
         $q = $request->query->get('q');
-        if( ! $q) {
+        if (!$q) {
             return new JsonResponse([]);
         }
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository(Race::class);
+        $repo = $em->getRepository(Race::class);
         $data = [];
-        foreach($repo->typeaheadQuery($q) as $result) {
+        foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
-                'text' => (string)$result,
+                'text' => (string) $result,
             ];
         }
         return new JsonResponse($data);
     }
+
     /**
      * Search for Race entities.
      *
@@ -105,18 +103,17 @@ class RaceController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function searchAction(Request $request)
-    {
+    public function searchAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository('AppBundle:Race');
-	$q = $request->query->get('q');
-	if($q) {
-	    $query = $repo->searchQuery($q);
+        $repo = $em->getRepository('AppBundle:Race');
+        $q = $request->query->get('q');
+        if ($q) {
+            $query = $repo->searchQuery($q);
             $paginator = $this->get('knp_paginator');
             $races = $paginator->paginate($query, $request->query->getInt('page', 1), 25);
-	} else {
+        } else {
             $races = array();
-	}
+        }
 
         return array(
             'races' => $races,
@@ -136,8 +133,7 @@ class RaceController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $race = new Race();
         $form = $this->createForm(RaceType::class, $race);
         $form->handleRequest($request);
@@ -169,8 +165,7 @@ class RaceController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newPopupAction(Request $request)
-    {
+    public function newPopupAction(Request $request) {
         return $this->newAction($request);
     }
 
@@ -185,8 +180,7 @@ class RaceController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function showAction(Race $race)
-    {
+    public function showAction(Race $race) {
 
         return array(
             'race' => $race,
@@ -207,8 +201,7 @@ class RaceController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function editAction(Request $request, Race $race)
-    {
+    public function editAction(Request $request, Race $race) {
         $editForm = $this->createForm(RaceType::class, $race);
         $editForm->handleRequest($request);
 
@@ -238,8 +231,7 @@ class RaceController extends Controller
      * @Route("/{id}/delete", name="race_delete")
      * @Method("GET")
      */
-    public function deleteAction(Request $request, Race $race)
-    {
+    public function deleteAction(Request $request, Race $race) {
         $em = $this->getDoctrine()->getManager();
         $em->remove($race);
         $em->flush();
@@ -247,4 +239,5 @@ class RaceController extends Controller
 
         return $this->redirectToRoute('race_index');
     }
+
 }

@@ -16,11 +16,10 @@ use AppBundle\Form\EventCategoryType;
 /**
  * EventCategory controller.
  *
- * @Security("has_role('ROLE_USER')")
  * @Route("/event_category")
  */
-class EventCategoryController extends Controller
-{
+class EventCategoryController extends Controller {
+
     /**
      * Lists all EventCategory entities.
      *
@@ -32,8 +31,7 @@ class EventCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(EventCategory::class, 'e')->orderBy('e.id', 'ASC');
@@ -46,17 +44,17 @@ class EventCategoryController extends Controller
         );
     }
 
-/**
+    /**
      * Typeahead API endpoint for EventCategory entities.
      *
      * To make this work, add something like this to EventCategoryRepository:
-        //    public function typeaheadQuery($q) {
-        //        $qb = $this->createQueryBuilder('e');
-        //        $qb->andWhere("e.name LIKE :q");
-        //        $qb->orderBy('e.name');
-        //        $qb->setParameter('q', "{$q}%");
-        //        return $qb->getQuery()->execute();
-        //    }
+      //    public function typeaheadQuery($q) {
+      //        $qb = $this->createQueryBuilder('e');
+      //        $qb->andWhere("e.name LIKE :q");
+      //        $qb->orderBy('e.name');
+      //        $qb->setParameter('q', "{$q}%");
+      //        return $qb->getQuery()->execute();
+      //    }
      *
      * @param Request $request
      *
@@ -64,23 +62,23 @@ class EventCategoryController extends Controller
      * @Method("GET")
      * @return JsonResponse
      */
-    public function typeahead(Request $request)
-    {
+    public function typeahead(Request $request) {
         $q = $request->query->get('q');
-        if( ! $q) {
+        if (!$q) {
             return new JsonResponse([]);
         }
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository(EventCategory::class);
+        $repo = $em->getRepository(EventCategory::class);
         $data = [];
-        foreach($repo->typeaheadQuery($q) as $result) {
+        foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
-                'text' => (string)$result,
+                'text' => (string) $result,
             ];
         }
         return new JsonResponse($data);
     }
+
     /**
      * Search for EventCategory entities.
      *
@@ -105,18 +103,17 @@ class EventCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function searchAction(Request $request)
-    {
+    public function searchAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository('AppBundle:EventCategory');
-	$q = $request->query->get('q');
-	if($q) {
-	    $query = $repo->searchQuery($q);
+        $repo = $em->getRepository('AppBundle:EventCategory');
+        $q = $request->query->get('q');
+        if ($q) {
+            $query = $repo->searchQuery($q);
             $paginator = $this->get('knp_paginator');
             $eventCategories = $paginator->paginate($query, $request->query->getInt('page', 1), 25);
-	} else {
+        } else {
             $eventCategories = array();
-	}
+        }
 
         return array(
             'eventCategories' => $eventCategories,
@@ -136,8 +133,7 @@ class EventCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $eventCategory = new EventCategory();
         $form = $this->createForm(EventCategoryType::class, $eventCategory);
         $form->handleRequest($request);
@@ -169,8 +165,7 @@ class EventCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newPopupAction(Request $request)
-    {
+    public function newPopupAction(Request $request) {
         return $this->newAction($request);
     }
 
@@ -185,8 +180,7 @@ class EventCategoryController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function showAction(EventCategory $eventCategory)
-    {
+    public function showAction(EventCategory $eventCategory) {
 
         return array(
             'eventCategory' => $eventCategory,
@@ -207,8 +201,7 @@ class EventCategoryController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function editAction(Request $request, EventCategory $eventCategory)
-    {
+    public function editAction(Request $request, EventCategory $eventCategory) {
         $editForm = $this->createForm(EventCategoryType::class, $eventCategory);
         $editForm->handleRequest($request);
 
@@ -238,8 +231,7 @@ class EventCategoryController extends Controller
      * @Route("/{id}/delete", name="event_category_delete")
      * @Method("GET")
      */
-    public function deleteAction(Request $request, EventCategory $eventCategory)
-    {
+    public function deleteAction(Request $request, EventCategory $eventCategory) {
         $em = $this->getDoctrine()->getManager();
         $em->remove($eventCategory);
         $em->flush();
@@ -247,4 +239,5 @@ class EventCategoryController extends Controller
 
         return $this->redirectToRoute('event_category_index');
     }
+
 }

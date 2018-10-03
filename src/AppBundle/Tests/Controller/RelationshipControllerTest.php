@@ -10,13 +10,18 @@ use Nines\UtilBundle\Tests\Util\BaseTestCase;
 class RelationshipControllerTest extends BaseTestCase
 {
 
+    protected function setUp() {
+        parent::setUp();
+        $this->markTestSkipped("Relationships haven't been defined yet.");
+    }
+
     protected function getFixtures() {
         return [
             LoadUser::class,
             LoadRelationship::class
         ];
     }
-    
+
     /**
      * @group anon
      * @group index
@@ -27,7 +32,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(0, $crawler->selectLink('New')->count());
     }
-    
+
     /**
      * @group user
      * @group index
@@ -38,7 +43,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(0, $crawler->selectLink('New')->count());
     }
-    
+
     /**
      * @group admin
      * @group index
@@ -49,7 +54,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(1, $crawler->selectLink('New')->count());
     }
-    
+
     /**
      * @group anon
      * @group show
@@ -61,7 +66,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(0, $crawler->selectLink('Edit')->count());
         $this->assertEquals(0, $crawler->selectLink('Delete')->count());
     }
-    
+
     /**
      * @group user
      * @group show
@@ -73,7 +78,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(0, $crawler->selectLink('Edit')->count());
         $this->assertEquals(0, $crawler->selectLink('Delete')->count());
     }
-    
+
     /**
      * @group admin
      * @group show
@@ -98,7 +103,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
     }
@@ -115,7 +120,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
     }
@@ -132,7 +137,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
     }
@@ -146,7 +151,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group user
      * @group edit
@@ -156,7 +161,7 @@ class RelationshipControllerTest extends BaseTestCase
         $crawler = $client->request('GET', '/relationship/1/edit');
         $this->assertEquals(403, $client->getResponse()->getStatusCode());
     }
-    
+
     /**
      * @group admin
      * @group edit
@@ -165,22 +170,22 @@ class RelationshipControllerTest extends BaseTestCase
         $client = $this->makeClient(LoadUser::ADMIN);
         $formCrawler = $client->request('GET', '/relationship/1/edit');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $form = $formCrawler->selectButton('Update')->form([
             // DO STUFF HERE.
             // 'relationships[FIELDNAME]' => 'FIELDVALUE',
         ]);
-        
+
         $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect('/relationship/1'));
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
-    
+
     /**
      * @group anon
      * @group new
@@ -191,7 +196,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group anon
      * @group new
@@ -202,7 +207,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group user
      * @group new
@@ -231,22 +236,22 @@ class RelationshipControllerTest extends BaseTestCase
         $client = $this->makeClient(LoadUser::ADMIN);
         $formCrawler = $client->request('GET', '/relationship/new');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $form = $formCrawler->selectButton('Create')->form([
             // DO STUFF HERE.
             // 'relationships[FIELDNAME]' => 'FIELDVALUE',
         ]);
-        
+
         $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect());
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
-    
+
     /**
      * @group admin
      * @group new
@@ -255,22 +260,22 @@ class RelationshipControllerTest extends BaseTestCase
         $client = $this->makeClient(LoadUser::ADMIN);
         $formCrawler = $client->request('GET', '/relationship/new_popup');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $form = $formCrawler->selectButton('Create')->form([
             // DO STUFF HERE.
             // 'relationships[FIELDNAME]' => 'FIELDVALUE',
         ]);
-        
+
         $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect());
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
-    
+
     /**
      * @group anon
      * @group delete
@@ -281,7 +286,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group user
      * @group delete
@@ -304,7 +309,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertTrue($client->getResponse()->isRedirect());
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->em->clear();
         $postCount = count($this->em->getRepository(Relationship::class)->findAll());
         $this->assertEquals($preCount - 1, $postCount);
