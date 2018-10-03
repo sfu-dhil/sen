@@ -7,18 +7,18 @@
     <p class="count">
         Displaying {{ transactions|length }} transactions of {{ transactions.getTotalItemCount }} total.
     </p>
- {% endblock %} 
+{% endblock %}
 
 {% block body %}
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-                        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('transaction_new') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus"></span> New
-            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('transaction_new') }}" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span> New
+                </a>
             {% endif %}
-                        <a href="{{ path('transaction_search') }}" class="btn btn-default">
+            <a href="{{ path('transaction_search') }}" class="btn btn-default">
                 <span class="glyphicon glyphicon-search"></span> Search
             </a>
         </div>
@@ -33,23 +33,23 @@
                 <th>First Party Note</th>
                 <th>Conjunction</th>
                 <th>Second Party Note</th>
-                </tr>
+            </tr>
         </thead>
         <tbody>
-        {% for transaction in transactions %}
-            <tr>
-                <td>
-                    <a href="{{ path('transaction_show', { 'id': transaction.id }) }}">
-                        {{ transaction.date }}
-                    </a>
-                </td>
-                <td>{{ transaction.page }}</td>
-                <td>{{ transaction.notes }}</td>
-                <td>{{ transaction.firstPartyNote }}</td>
-                <td>{{ transaction.conjunction }}</td>
-                <td>{{ transaction.secondPartyNote }}</td>
-            </tr>
-        {% endfor %}
+            {% for transaction in transactions %}
+                <tr>
+                    <td>
+                        <a href="{{ path('transaction_show', { 'id': transaction.id }) }}">
+                            {{ transaction.date }}
+                        </a>
+                    </td>
+                    <td>{{ transaction.page }}</td>
+                    <td>{{ transaction.notes }}</td>
+                    <td>{{ transaction.firstPartyNote }}</td>
+                    <td>{{ transaction.conjunction }}</td>
+                    <td>{{ transaction.secondPartyNote }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 

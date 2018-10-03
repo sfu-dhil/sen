@@ -7,18 +7,18 @@
     <p class="count">
         Displaying {{ locationCategories|length }} locationCategories of {{ locationCategories.getTotalItemCount }} total.
     </p>
- {% endblock %} 
+{% endblock %}
 
 {% block body %}
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-                        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('location_category_new') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus"></span> New
-            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('location_category_new') }}" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span> New
+                </a>
             {% endif %}
-                        <a href="{{ path('location_category_search') }}" class="btn btn-default">
+            <a href="{{ path('location_category_search') }}" class="btn btn-default">
                 <span class="glyphicon glyphicon-search"></span> Search
             </a>
         </div>
@@ -27,13 +27,13 @@
     <table class="table table-bordered table-condensed table-hover table-striped">
         <thead>
             <tr>
-                </tr>
+            </tr>
         </thead>
         <tbody>
-        {% for locationCategory in locationCategories %}
-            <tr>
-            </tr>
-        {% endfor %}
+            {% for locationCategory in locationCategories %}
+                <tr>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 

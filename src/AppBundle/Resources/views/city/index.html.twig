@@ -7,18 +7,18 @@
     <p class="count">
         Displaying {{ cities|length }} cities of {{ cities.getTotalItemCount }} total.
     </p>
- {% endblock %} 
+{% endblock %}
 
 {% block body %}
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-                        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('city_new') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus"></span> New
-            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('city_new') }}" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span> New
+                </a>
             {% endif %}
-                        <a href="{{ path('city_search') }}" class="btn btn-default">
+            <a href="{{ path('city_search') }}" class="btn btn-default">
                 <span class="glyphicon glyphicon-search"></span> Search
             </a>
         </div>
@@ -28,18 +28,18 @@
         <thead>
             <tr>
                 <th>Name</th>
-                </tr>
+            </tr>
         </thead>
         <tbody>
-        {% for city in cities %}
-            <tr>
-                <td>
-                    <a href="{{ path('city_show', { 'id': city.id }) }}">
-                        {{ city.name }}
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
+            {% for city in cities %}
+                <tr>
+                    <td>
+                        <a href="{{ path('city_show', { 'id': city.id }) }}">
+                            {{ city.name }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 

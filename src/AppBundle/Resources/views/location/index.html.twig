@@ -7,18 +7,18 @@
     <p class="count">
         Displaying {{ locations|length }} locations of {{ locations.getTotalItemCount }} total.
     </p>
- {% endblock %} 
+{% endblock %}
 
 {% block body %}
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-                        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('location_new') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus"></span> New
-            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('location_new') }}" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span> New
+                </a>
             {% endif %}
-                        <a href="{{ path('location_search') }}" class="btn btn-default">
+            <a href="{{ path('location_search') }}" class="btn btn-default">
                 <span class="glyphicon glyphicon-search"></span> Search
             </a>
         </div>
@@ -28,18 +28,18 @@
         <thead>
             <tr>
                 <th>Name</th>
-                </tr>
+            </tr>
         </thead>
         <tbody>
-        {% for location in locations %}
-            <tr>
-                <td>
-                    <a href="{{ path('location_show', { 'id': location.id }) }}">
-                        {{ location.name }}
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
+            {% for location in locations %}
+                <tr>
+                    <td>
+                        <a href="{{ path('location_show', { 'id': location.id }) }}">
+                            {{ location.name }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 

@@ -7,18 +7,18 @@
     <p class="count">
         Displaying {{ events|length }} events of {{ events.getTotalItemCount }} total.
     </p>
- {% endblock %} 
+{% endblock %}
 
 {% block body %}
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-                        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('event_new') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus"></span> New
-            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('event_new') }}" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span> New
+                </a>
             {% endif %}
-                        <a href="{{ path('event_search') }}" class="btn btn-default">
+            <a href="{{ path('event_search') }}" class="btn btn-default">
                 <span class="glyphicon glyphicon-search"></span> Search
             </a>
         </div>
@@ -30,20 +30,20 @@
                 <th>Written Date</th>
                 <th>Date</th>
                 <th>Note</th>
-                </tr>
+            </tr>
         </thead>
         <tbody>
-        {% for event in events %}
-            <tr>
-                <td>
-                    <a href="{{ path('event_show', { 'id': event.id }) }}">
-                        {{ event.writtenDate }}
-                    </a>
-                </td>
-                <td>{% if event.date %}{{ event.date|date('Y-m-d') }}{% endif %}</td>
-                <td>{{ event.note }}</td>
-            </tr>
-        {% endfor %}
+            {% for event in events %}
+                <tr>
+                    <td>
+                        <a href="{{ path('event_show', { 'id': event.id }) }}">
+                            {{ event.writtenDate }}
+                        </a>
+                    </td>
+                    <td>{% if event.date %}{{ event.date|date('Y-m-d') }}{% endif %}</td>
+                    <td>{{ event.note }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 

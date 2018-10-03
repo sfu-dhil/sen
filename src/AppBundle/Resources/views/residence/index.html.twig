@@ -7,18 +7,18 @@
     <p class="count">
         Displaying {{ residences|length }} residences of {{ residences.getTotalItemCount }} total.
     </p>
- {% endblock %} 
+{% endblock %}
 
 {% block body %}
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-                        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('residence_new') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus"></span> New
-            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('residence_new') }}" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span> New
+                </a>
             {% endif %}
-                        <a href="{{ path('residence_search') }}" class="btn btn-default">
+            <a href="{{ path('residence_search') }}" class="btn btn-default">
                 <span class="glyphicon glyphicon-search"></span> Search
             </a>
         </div>
@@ -28,18 +28,18 @@
         <thead>
             <tr>
                 <th>Date</th>
-                </tr>
+            </tr>
         </thead>
         <tbody>
-        {% for residence in residences %}
-            <tr>
-                <td>
-                    <a href="{{ path('residence_show', { 'id': residence.id }) }}">
-                        {{ residence.date }}
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
+            {% for residence in residences %}
+                <tr>
+                    <td>
+                        <a href="{{ path('residence_show', { 'id': residence.id }) }}">
+                            {{ residence.date }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 

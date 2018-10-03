@@ -2,26 +2,26 @@
 
 {% block title %}EventCategory{% endblock %}
 
- {% block pageheader %} 
+{% block pageheader %}
     <h1>EventCategory Details</h1>
- {% endblock %} 
+{% endblock %}
 
 {% block body %}
     <div class="btn-toolbar">
-    <div class="btn-group pull-right">
-        <a href="{{ path('event_category_index') }}" class="btn btn-default">
-            <span class="glyphicon glyphicon-arrow-left"></span> Back
-        </a>
-                {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('event_category_edit', { 'id': eventCategory.id }) }}" class="btn btn-default">
-            <span class='glyphicon glyphicon-edit'></span> Edit
-        </a>
-        <a href="{{ path('event_category_delete', { 'id': eventCategory.id }) }}" class="btn btn-default" data-confirm="Are you sure you want to delete this EventCategory?">
-            <span class='glyphicon glyphicon-remove'></span> Delete
-        </a>
-        {% endif %}
-            </div>
-</div>
+        <div class="btn-group pull-right">
+            <a href="{{ path('event_category_index') }}" class="btn btn-default">
+                <span class="glyphicon glyphicon-arrow-left"></span> Back
+            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('event_category_edit', { 'id': eventCategory.id }) }}" class="btn btn-default">
+                    <span class='glyphicon glyphicon-edit'></span> Edit
+                </a>
+                <a href="{{ path('event_category_delete', { 'id': eventCategory.id }) }}" class="btn btn-default" data-confirm="Are you sure you want to delete this EventCategory?">
+                    <span class='glyphicon glyphicon-remove'></span> Delete
+                </a>
+            {% endif %}
+        </div>
+    </div>
     <table class="table table-bordered table-condensed table-hover table-striped">
         <tbody>
             <tr>
@@ -31,19 +31,19 @@
             <tr>
                 <th>Updated</th>
                 <td>{% if eventCategory.updated %}{{ eventCategory.updated|date }}{% endif %}</td>
-            </tr>        
+            </tr>
         </tbody>
     </table>
-    {% if eventCategory.events | length > 0 %}    
-    <h2>Events</h2>
-    <ul>
-        {% for events in eventCategory.events %}
-        <li>
-            <a href="{{ path("events_show", {"id":events.id}) }}">
-                {{ events }}
-            </a>
-        </li>
-        {% endfor %} 
-    </ul>
+    {% if eventCategory.events | length > 0 %}
+        <h2>Events</h2>
+        <ul>
+            {% for events in eventCategory.events %}
+                <li>
+                    <a href="{{ path("events_show", {"id":events.id}) }}">
+                        {{ events }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
     {% endif %}
 {% endblock %}
