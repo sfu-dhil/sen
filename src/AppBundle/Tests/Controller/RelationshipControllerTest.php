@@ -2,13 +2,13 @@
 
 namespace AppBundle\Tests\Controller;
 
+use AppBundle\DataFixtures\ORM\LoadAll;
 use AppBundle\Entity\Relationship;
 use AppBundle\DataFixtures\ORM\LoadRelationship;
 use Nines\UserBundle\DataFixtures\ORM\LoadUser;
 use Nines\UtilBundle\Tests\Util\BaseTestCase;
 
-class RelationshipControllerTest extends BaseTestCase
-{
+class RelationshipControllerTest extends BaseTestCase {
 
     protected function setUp() {
         parent::setUp();
@@ -16,10 +16,16 @@ class RelationshipControllerTest extends BaseTestCase
     }
 
     protected function getFixtures() {
-        return [
-            LoadUser::class,
-            LoadRelationship::class
-        ];
+        if (getenv("SEN_ALL_FIXTURES") == 1) {
+            return [
+                LoadAll::class,
+            ];
+        } else {
+            return [
+                LoadUser::class,
+                LoadRelationship::class
+            ];
+        }
     }
 
     /**
@@ -102,7 +108,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
@@ -119,7 +125,7 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
@@ -136,11 +142,12 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
     }
+
     /**
      * @group anon
      * @group edit
@@ -172,11 +179,11 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Update')->form([
-            // DO STUFF HERE.
-            // 'relationships[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'relationships[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);
@@ -238,11 +245,11 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Create')->form([
-            // DO STUFF HERE.
-            // 'relationships[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'relationships[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);
@@ -262,11 +269,11 @@ class RelationshipControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Create')->form([
-            // DO STUFF HERE.
-            // 'relationships[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'relationships[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);

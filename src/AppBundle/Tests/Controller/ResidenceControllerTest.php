@@ -2,19 +2,25 @@
 
 namespace AppBundle\Tests\Controller;
 
+use AppBundle\DataFixtures\ORM\LoadAll;
 use AppBundle\Entity\Residence;
 use AppBundle\DataFixtures\ORM\LoadResidence;
 use Nines\UserBundle\DataFixtures\ORM\LoadUser;
 use Nines\UtilBundle\Tests\Util\BaseTestCase;
 
-class ResidenceControllerTest extends BaseTestCase
-{
+class ResidenceControllerTest extends BaseTestCase {
 
     protected function getFixtures() {
-        return [
-            LoadUser::class,
-            LoadResidence::class
-        ];
+        if (getenv("SEN_ALL_FIXTURES") == 1) {
+            return [
+                LoadAll::class,
+            ];
+        } else {
+            return [
+                LoadUser::class,
+                LoadResidence::class
+            ];
+        }
     }
 
     /**
@@ -117,11 +123,11 @@ class ResidenceControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Update')->form([
-            // DO STUFF HERE.
-            // 'residences[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'residences[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);
@@ -183,11 +189,11 @@ class ResidenceControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Create')->form([
-            // DO STUFF HERE.
-            // 'residences[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'residences[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);
@@ -207,11 +213,11 @@ class ResidenceControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Create')->form([
-            // DO STUFF HERE.
-            // 'residences[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'residences[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);

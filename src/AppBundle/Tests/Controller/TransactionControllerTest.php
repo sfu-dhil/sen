@@ -2,19 +2,25 @@
 
 namespace AppBundle\Tests\Controller;
 
+use AppBundle\DataFixtures\ORM\LoadAll;
 use AppBundle\Entity\Transaction;
 use AppBundle\DataFixtures\ORM\LoadTransaction;
 use Nines\UserBundle\DataFixtures\ORM\LoadUser;
 use Nines\UtilBundle\Tests\Util\BaseTestCase;
 
-class TransactionControllerTest extends BaseTestCase
-{
+class TransactionControllerTest extends BaseTestCase {
 
     protected function getFixtures() {
-        return [
-            LoadUser::class,
-            LoadTransaction::class
-        ];
+        if (getenv("SEN_ALL_FIXTURES") == 1) {
+            return [
+                LoadAll::class,
+            ];
+        } else {
+            return [
+                LoadUser::class,
+                LoadTransaction::class
+            ];
+        }
     }
 
     /**
@@ -117,11 +123,11 @@ class TransactionControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Update')->form([
-            // DO STUFF HERE.
-            // 'transactions[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'transactions[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);
@@ -183,11 +189,11 @@ class TransactionControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Create')->form([
-            // DO STUFF HERE.
-            // 'transactions[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'transactions[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);
@@ -207,11 +213,11 @@ class TransactionControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Create')->form([
-            // DO STUFF HERE.
-            // 'transactions[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'transactions[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);

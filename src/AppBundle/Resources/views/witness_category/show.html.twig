@@ -37,10 +37,10 @@
     {% if witnessCategory.witnesses | length > 0 %}
         <h2>Witnesses</h2>
         <ul>
-            {% for witnesses in witnessCategory.witnesses %}
+            {% for witness in witnessCategory.witnesses %}
                 <li>
-                    <a href="{{ path("witnesses_show", {"id":witnesses.id}) }}">
-                        {{ witnesses }}
+                    <a href="{{ path("witness_show", {"id":witness.id}) }}">
+                        {{ witness }}
                     </a>
                 </li>
             {% endfor %}

@@ -37,10 +37,10 @@
     {% if race.people | length > 0 %}
         <h2>People</h2>
         <ul>
-            {% for people in race.people %}
+            {% for person in race.people %}
                 <li>
-                    <a href="{{ path("people_show", {"id":people.id}) }}">
-                        {{ people }}
+                    <a href="{{ path("person_show", {"id":person.id}) }}">
+                        {{ person }}
                     </a>
                 </li>
             {% endfor %}

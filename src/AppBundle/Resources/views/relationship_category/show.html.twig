@@ -37,10 +37,10 @@
     {% if relationshipCategory.relationships | length > 0 %}
         <h2>Relationships</h2>
         <ul>
-            {% for relationships in relationshipCategory.relationships %}
+            {% for relationship in relationshipCategory.relationships %}
                 <li>
-                    <a href="{{ path("relationships_show", {"id":relationships.id}) }}">
-                        {{ relationships }}
+                    <a href="{{ path("relationship_show", {"id":relationship.id}) }}">
+                        {{ relationship }}
                     </a>
                 </li>
             {% endfor %}

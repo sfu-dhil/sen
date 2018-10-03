@@ -2,19 +2,25 @@
 
 namespace AppBundle\Tests\Controller;
 
+use AppBundle\DataFixtures\ORM\LoadAll;
 use AppBundle\Entity\Ledger;
 use AppBundle\DataFixtures\ORM\LoadLedger;
 use Nines\UserBundle\DataFixtures\ORM\LoadUser;
 use Nines\UtilBundle\Tests\Util\BaseTestCase;
 
-class LedgerControllerTest extends BaseTestCase
-{
+class LedgerControllerTest extends BaseTestCase {
 
     protected function getFixtures() {
-        return [
-            LoadUser::class,
-            LoadLedger::class
-        ];
+        if (getenv("SEN_ALL_FIXTURES") == 1) {
+            return [
+                LoadAll::class,
+            ];
+        } else {
+            return [
+                LoadUser::class,
+                LoadLedger::class
+            ];
+        }
     }
 
     /**
@@ -117,11 +123,11 @@ class LedgerControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Update')->form([
-            // DO STUFF HERE.
-            // 'ledgers[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'ledgers[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);
@@ -183,11 +189,11 @@ class LedgerControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Create')->form([
-            // DO STUFF HERE.
-            // 'ledgers[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'ledgers[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);
@@ -207,11 +213,11 @@ class LedgerControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+                'This test has not been implemented yet.'
         );
         $form = $formCrawler->selectButton('Create')->form([
-            // DO STUFF HERE.
-            // 'ledgers[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'ledgers[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
         $client->submit($form);

@@ -2,21 +2,27 @@
 
 namespace AppBundle\Tests\Controller;
 
-use AppBundle\Entity\Location;
+use AppBundle\DataFixtures\ORM\LoadAll;
 use AppBundle\DataFixtures\ORM\LoadLocation;
+use AppBundle\Entity\Location;
 use Nines\UserBundle\DataFixtures\ORM\LoadUser;
 use Nines\UtilBundle\Tests\Util\BaseTestCase;
 
-class LocationControllerTest extends BaseTestCase
-{
+class LocationControllerTest extends BaseTestCase {
 
     protected function getFixtures() {
-        return [
-            LoadUser::class,
+        if (getenv("SEN_ALL_FIXTURES") == 1) {
+            return [
+                LoadAll::class,
+            ];
+        } else {
+            return [
+                LoadUser::class,
             LoadLocation::class
-        ];
+            ];
+        }
     }
-    
+
     /**
      * @group anon
      * @group index
@@ -27,7 +33,7 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(0, $crawler->selectLink('New')->count());
     }
-    
+
     /**
      * @group user
      * @group index
@@ -38,7 +44,7 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(0, $crawler->selectLink('New')->count());
     }
-    
+
     /**
      * @group admin
      * @group index
@@ -49,7 +55,7 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(1, $crawler->selectLink('New')->count());
     }
-    
+
     /**
      * @group anon
      * @group show
@@ -61,7 +67,7 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(0, $crawler->selectLink('Edit')->count());
         $this->assertEquals(0, $crawler->selectLink('Delete')->count());
     }
-    
+
     /**
      * @group user
      * @group show
@@ -73,7 +79,7 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(0, $crawler->selectLink('Edit')->count());
         $this->assertEquals(0, $crawler->selectLink('Delete')->count());
     }
-    
+
     /**
      * @group admin
      * @group show
@@ -97,8 +103,8 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );        
+                'This test has not been implemented yet.'
+        );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
     }
@@ -114,8 +120,8 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );        
+                'This test has not been implemented yet.'
+        );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
     }
@@ -131,11 +137,12 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );        
+                'This test has not been implemented yet.'
+        );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
     }
+
     /**
      * @group anon
      * @group edit
@@ -146,7 +153,7 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group user
      * @group edit
@@ -156,7 +163,7 @@ class LocationControllerTest extends BaseTestCase
         $crawler = $client->request('GET', '/location/1/edit');
         $this->assertEquals(403, $client->getResponse()->getStatusCode());
     }
-    
+
     /**
      * @group admin
      * @group edit
@@ -165,22 +172,22 @@ class LocationControllerTest extends BaseTestCase
         $client = $this->makeClient(LoadUser::ADMIN);
         $formCrawler = $client->request('GET', '/location/1/edit');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );        
+                'This test has not been implemented yet.'
+        );
         $form = $formCrawler->selectButton('Update')->form([
-            // DO STUFF HERE.
-            // 'locations[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'locations[FIELDNAME]' => 'FIELDVALUE',
         ]);
-        
+
         $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect('/location/1'));
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
-    
+
     /**
      * @group anon
      * @group new
@@ -191,7 +198,7 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group anon
      * @group new
@@ -202,7 +209,7 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group user
      * @group new
@@ -231,22 +238,22 @@ class LocationControllerTest extends BaseTestCase
         $client = $this->makeClient(LoadUser::ADMIN);
         $formCrawler = $client->request('GET', '/location/new');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );        
+                'This test has not been implemented yet.'
+        );
         $form = $formCrawler->selectButton('Create')->form([
-            // DO STUFF HERE.
-            // 'locations[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'locations[FIELDNAME]' => 'FIELDVALUE',
         ]);
-        
+
         $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect());
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
-    
+
     /**
      * @group admin
      * @group new
@@ -255,22 +262,22 @@ class LocationControllerTest extends BaseTestCase
         $client = $this->makeClient(LoadUser::ADMIN);
         $formCrawler = $client->request('GET', '/location/new_popup');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );        
+                'This test has not been implemented yet.'
+        );
         $form = $formCrawler->selectButton('Create')->form([
-            // DO STUFF HERE.
-            // 'locations[FIELDNAME]' => 'FIELDVALUE',
+                // DO STUFF HERE.
+                // 'locations[FIELDNAME]' => 'FIELDVALUE',
         ]);
-        
+
         $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect());
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
-    
+
     /**
      * @group anon
      * @group delete
@@ -281,7 +288,7 @@ class LocationControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group user
      * @group delete
@@ -304,7 +311,7 @@ class LocationControllerTest extends BaseTestCase
         $this->assertTrue($client->getResponse()->isRedirect());
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->em->clear();
         $postCount = count($this->em->getRepository(Location::class)->findAll());
         $this->assertEquals($preCount - 1, $postCount);

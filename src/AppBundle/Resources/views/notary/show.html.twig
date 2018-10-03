@@ -41,10 +41,10 @@
     {% if notary.ledgers | length > 0 %}
         <h2>Ledgers</h2>
         <ul>
-            {% for ledgers in notary.ledgers %}
+            {% for ledger in notary.ledgers %}
                 <li>
-                    <a href="{{ path("ledgers_show", {"id":ledgers.id}) }}">
-                        {{ ledgers }}
+                    <a href="{{ path("ledger_show", {"id":ledger.id}) }}">
+                        {{ ledger }}
                     </a>
                 </li>
             {% endfor %}

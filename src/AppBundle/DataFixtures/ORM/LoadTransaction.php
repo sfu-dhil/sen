@@ -34,7 +34,6 @@ class LoadTransaction extends Fixture implements DependentFixtureInterface
         $transaction->setPage(27);
         $manager->persist($transaction);
         $this->setReference("transaction.1", $transaction);
-
         $manager->flush();
     }
 

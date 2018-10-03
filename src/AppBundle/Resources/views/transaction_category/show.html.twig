@@ -37,10 +37,10 @@
     {% if transactionCategory.transactions | length > 0 %}
         <h2>Transactions</h2>
         <ul>
-            {% for transactions in transactionCategory.transactions %}
+            {% for transaction in transactionCategory.transactions %}
                 <li>
-                    <a href="{{ path("transactions_show", {"id":transactions.id}) }}">
-                        {{ transactions }}
+                    <a href="{{ path("transaction_show", {"id":transaction.id}) }}">
+                        {{ transaction }}
                     </a>
                 </li>
             {% endfor %}

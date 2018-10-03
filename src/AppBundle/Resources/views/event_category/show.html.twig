@@ -37,10 +37,10 @@
     {% if eventCategory.events | length > 0 %}
         <h2>Events</h2>
         <ul>
-            {% for events in eventCategory.events %}
+            {% for event in eventCategory.events %}
                 <li>
-                    <a href="{{ path("events_show", {"id":events.id}) }}">
-                        {{ events }}
+                    <a href="{{ path("event_show", {"id":event.id}) }}">
+                        {{ event }}
                     </a>
                 </li>
             {% endfor %}

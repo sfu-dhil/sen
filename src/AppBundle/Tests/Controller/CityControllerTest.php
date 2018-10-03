@@ -2,8 +2,9 @@
 
 namespace AppBundle\Tests\Controller;
 
-use AppBundle\Entity\City;
+use AppBundle\DataFixtures\ORM\LoadAll;
 use AppBundle\DataFixtures\ORM\LoadCity;
+use AppBundle\Entity\City;
 use Nines\UserBundle\DataFixtures\ORM\LoadUser;
 use Nines\UtilBundle\Tests\Util\BaseTestCase;
 
@@ -11,10 +12,16 @@ class CityControllerTest extends BaseTestCase
 {
 
     protected function getFixtures() {
-        return [
-            LoadUser::class,
-            LoadCity::class
-        ];
+        if(getenv("SEN_ALL_FIXTURES") == 1) {
+            return [
+                LoadAll::class,
+            ];
+        } else {
+            return [
+                LoadUser::class,
+                LoadCity::class
+            ];
+        }
     }
 
     /**

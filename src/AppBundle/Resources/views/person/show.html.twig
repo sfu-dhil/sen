@@ -147,7 +147,7 @@
         <ul>
             {% for firstPartyTransaction in person.firstPartyTransactions %}
                 <li>
-                    <a href="{{ path("firstPartyTransactions_show", {"id":firstPartyTransaction.id}) }}">
+                    <a href="{{ path("transaction_show", {"id":firstPartyTransaction.id}) }}">
                         {{ firstPartyTransaction }}
                     </a>
                 </li>
@@ -159,7 +159,7 @@
         <ul>
             {% for secondPartyTransaction in person.secondPartyTransactions %}
                 <li>
-                    <a href="{{ path("secondPartyTransaction_show", {"id":secondPartyTransaction.id}) }}">
+                    <a href="{{ path("transaction_show", {"id":secondPartyTransaction.id}) }}">
                         {{ secondPartyTransaction }}
                     </a>
                 </li>
