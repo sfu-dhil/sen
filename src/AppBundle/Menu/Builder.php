@@ -12,8 +12,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 /**
  * Menu builder for the navigation and search menus.
  */
-class Builder implements ContainerAwareInterface
-{
+class Builder implements ContainerAwareInterface {
 
     use ContainerAwareTrait;
 
@@ -85,19 +84,67 @@ class Builder implements ContainerAwareInterface
         $browse->setLinkAttribute('data-toggle', 'dropdown');
         $browse->setChildrenAttribute('class', 'dropdown-menu');
 
-        $browse->addChild('Public', array(
-            'uri' => '#',
+        $browse->addChild('Cities', array(
+            'route' => 'city_index',
+        ));
+        $browse->addChild('Events', array(
+            'route' => 'event_index',
+        ));
+        $browse->addChild('Ledgers', array(
+            'route' => 'ledger_index',
+        ));
+        $browse->addChild('Locations', array(
+            'route' => 'location_index',
+        ));
+        $browse->addChild('Notaries', array(
+            'route' => 'notary_index',
+        ));
+        $browse->addChild('People', array(
+            'route' => 'person_index',
+        ));
+        $browse->addChild('Races', array(
+            'route' => 'race_index',
+        ));
+        $browse->addChild('Relationships', array(
+            'route' => 'relationship_index',
+        ));
+        $browse->addChild('Residences', array(
+            'route' => 'residence_index',
+        ));
+        $browse->addChild('Transactions', array(
+            'route' => 'transaction_index',
+        ));
+        $browse->addChild('Witnesses', array(
+            'route' => 'witness_index',
         ));
 
         if ($this->hasRole('ROLE_USER')) {
-            $browse->addChild('divider', array(
+            $divider = $browse->addChild('divider', array(
                 'label' => '',
             ));
-            $browse->addChild('Private', array(
-                'uri' => '#',
+            $divider->setAttributes(array(
+                'role' => 'separator',
+                'class' => 'divider',
+            ));
+
+            $browse->addChild('Event Categories', array(
+                'route' => 'event_category_index',
+            ));
+            $browse->addChild('Location Categories', array(
+                'route' => 'location_category_index',
+            ));
+            $browse->addChild('Relationship Categories', array(
+                'route' => 'relationship_category_index',
+            ));
+            $browse->addChild('Transaction Categories', array(
+                'route' => 'transaction_category_index',
+            ));
+            $browse->addChild('Witness Categories', array(
+                'route' => 'witness_category_index',
             ));
         }
 
         return $menu;
     }
+
 }
