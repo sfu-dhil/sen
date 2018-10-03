@@ -9,7 +9,7 @@ use Nines\UtilBundle\Entity\AbstractEntity;
 /**
  * Transaction
  *
- * @ORM\Table(name="transaction")
+ * @ORM\Table(name="transactions")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TransactionRepository")
  */
 class Transaction extends AbstractEntity {
