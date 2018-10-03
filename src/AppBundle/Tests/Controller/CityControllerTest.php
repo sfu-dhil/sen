@@ -16,7 +16,7 @@ class CityControllerTest extends BaseTestCase
             LoadCity::class
         ];
     }
-    
+
     /**
      * @group anon
      * @group index
@@ -27,7 +27,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(0, $crawler->selectLink('New')->count());
     }
-    
+
     /**
      * @group user
      * @group index
@@ -38,7 +38,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(0, $crawler->selectLink('New')->count());
     }
-    
+
     /**
      * @group admin
      * @group index
@@ -49,7 +49,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(1, $crawler->selectLink('New')->count());
     }
-    
+
     /**
      * @group anon
      * @group show
@@ -61,7 +61,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals(0, $crawler->selectLink('Edit')->count());
         $this->assertEquals(0, $crawler->selectLink('Delete')->count());
     }
-    
+
     /**
      * @group user
      * @group show
@@ -73,7 +73,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals(0, $crawler->selectLink('Edit')->count());
         $this->assertEquals(0, $crawler->selectLink('Delete')->count());
     }
-    
+
     /**
      * @group admin
      * @group show
@@ -98,7 +98,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
     }
@@ -115,7 +115,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
     }
@@ -132,7 +132,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $json = json_decode($response->getContent());
         $this->assertEquals(4, count($json));
     }
@@ -146,7 +146,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group user
      * @group edit
@@ -156,7 +156,7 @@ class CityControllerTest extends BaseTestCase
         $crawler = $client->request('GET', '/city/1/edit');
         $this->assertEquals(403, $client->getResponse()->getStatusCode());
     }
-    
+
     /**
      * @group admin
      * @group edit
@@ -165,22 +165,22 @@ class CityControllerTest extends BaseTestCase
         $client = $this->makeClient(LoadUser::ADMIN);
         $formCrawler = $client->request('GET', '/city/1/edit');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $form = $formCrawler->selectButton('Update')->form([
             // DO STUFF HERE.
             // 'citys[FIELDNAME]' => 'FIELDVALUE',
         ]);
-        
+
         $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect('/city/1'));
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
-    
+
     /**
      * @group anon
      * @group new
@@ -191,7 +191,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group anon
      * @group new
@@ -202,7 +202,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group user
      * @group new
@@ -231,22 +231,22 @@ class CityControllerTest extends BaseTestCase
         $client = $this->makeClient(LoadUser::ADMIN);
         $formCrawler = $client->request('GET', '/city/new');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $form = $formCrawler->selectButton('Create')->form([
             // DO STUFF HERE.
             // 'citys[FIELDNAME]' => 'FIELDVALUE',
         ]);
-        
+
         $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect());
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
-    
+
     /**
      * @group admin
      * @group new
@@ -255,22 +255,22 @@ class CityControllerTest extends BaseTestCase
         $client = $this->makeClient(LoadUser::ADMIN);
         $formCrawler = $client->request('GET', '/city/new_popup');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
-        );        
+        );
         $form = $formCrawler->selectButton('Create')->form([
             // DO STUFF HERE.
             // 'citys[FIELDNAME]' => 'FIELDVALUE',
         ]);
-        
+
         $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect());
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
-    
+
     /**
      * @group anon
      * @group delete
@@ -281,7 +281,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->isRedirect());
     }
-    
+
     /**
      * @group user
      * @group delete
@@ -304,7 +304,7 @@ class CityControllerTest extends BaseTestCase
         $this->assertTrue($client->getResponse()->isRedirect());
         $responseCrawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+
         $this->em->clear();
         $postCount = count($this->em->getRepository(City::class)->findAll());
         $this->assertEquals($preCount - 1, $postCount);
