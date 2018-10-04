@@ -45,7 +45,7 @@ class Location extends AbstractEntity
      * @return string
      */
     public function __toString() {
-        return get_class($this) . "#" . $this->getId();
+        return $this->name;
     }
 
     /**

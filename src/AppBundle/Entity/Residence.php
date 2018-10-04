@@ -33,7 +33,7 @@ class Residence extends AbstractEntity
     private $city;
 
     public function __toString() {
-        return "";
+        return $this->date . " " . $this->city;
     }
 
 
