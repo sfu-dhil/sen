@@ -38,6 +38,7 @@ class Transaction extends AbstractEntity {
     /**
      * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="firstPartyTransactions")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $firstParty;
 
@@ -56,6 +57,7 @@ class Transaction extends AbstractEntity {
     /**
      * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="secondPartyTransactions")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $secondParty;
 
@@ -68,12 +70,14 @@ class Transaction extends AbstractEntity {
     /**
      * @var Collection|TransactionCategory[]
      * @ORM\ManyToOne(targetEntity="TransactionCategory", inversedBy="transactions")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $category;
 
     /**
      * @var Collection|Ledger[]
      * @ORM\ManyToOne(targetEntity="Ledger", inversedBy="transactions")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $ledger;
 

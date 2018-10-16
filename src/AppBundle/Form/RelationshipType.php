@@ -11,20 +11,34 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * RelationshipType form.
  */
-class RelationshipType extends AbstractType
-{
+class RelationshipType extends AbstractType {
+
     /**
      * Add form fields to $builder.
      *
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {                $builder->add('category');
-                        $builder->add('people');
-        
+    public function buildForm(FormBuilderInterface $builder, array $options) {
+        $builder->add('startDate', null, array(
+            'label' => 'Start Date',
+            'required' => false,
+            'attr' => array(
+                'help_block' => '',
+            ),
+        ));
+        $builder->add('endDate', null, array(
+            'label' => 'End Date',
+            'required' => false,
+            'attr' => array(
+                'help_block' => '',
+            ),
+        ));
+        $builder->add('category');
+        $builder->add('person');
+        $builder->add('relation');
     }
-    
+
     /**
      * Define options for the form.
      *
@@ -33,8 +47,7 @@ class RelationshipType extends AbstractType
      *
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
-    {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Relationship'
         ));

@@ -2,8 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
 
@@ -17,20 +15,40 @@ class Relationship extends AbstractEntity
 {
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $startDate;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $endDate;
+
+    /**
      * @var RelationshipCategory
      * @ORM\ManyToOne(targetEntity="RelationshipCategory", inversedBy="relationships")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $category;
 
     /**
-     * @var Collection|Person[]
-     * @ORM\ManyToMany(targetEntity="Person", mappedBy="relationships")
+     * @var Person
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="relationships")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $people;
+    private $person;
+
+    /**
+     * @var Person
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $relation;
 
     public function __construct() {
         parent::__construct();
-        $this->people = new ArrayCollection();
     }
 
     /**
@@ -39,17 +57,66 @@ class Relationship extends AbstractEntity
      * @return string
      */
     public function __toString() {
-        return get_class($this) . "#" . $this->getId();
+        return $this->person . " " . $this->category . " " . $this->relation;
+    }
+
+
+    /**
+     * Set startDate.
+     *
+     * @param string|null $startDate
+     *
+     * @return Relationship
+     */
+    public function setStartDate($startDate = null)
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    /**
+     * Get startDate.
+     *
+     * @return string|null
+     */
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * Set endDate.
+     *
+     * @param string|null $endDate
+     *
+     * @return Relationship
+     */
+    public function setEndDate($endDate = null)
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * Get endDate.
+     *
+     * @return string|null
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
     }
 
     /**
      * Set category.
      *
-     * @param RelationshipCategory|null $category
+     * @param RelationshipCategory $category
      *
      * @return Relationship
      */
-    public function setCategory(RelationshipCategory $category = null)
+    public function setCategory(RelationshipCategory $category)
     {
         $this->category = $category;
 
@@ -59,7 +126,7 @@ class Relationship extends AbstractEntity
     /**
      * Get category.
      *
-     * @return RelationshipCategory|null
+     * @return RelationshipCategory
      */
     public function getCategory()
     {
@@ -67,38 +134,50 @@ class Relationship extends AbstractEntity
     }
 
     /**
-     * Add person.
+     * Set person.
      *
      * @param Person $person
      *
      * @return Relationship
      */
-    public function addPerson(Person $person)
+    public function setPerson(Person $person)
     {
-        $this->people[] = $person;
+        $this->person = $person;
 
         return $this;
     }
 
     /**
-     * Remove person.
+     * Get person.
      *
-     * @param Person $person
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return Person
      */
-    public function removePerson(Person $person)
+    public function getPerson()
     {
-        return $this->people->removeElement($person);
+        return $this->person;
     }
 
     /**
-     * Get people.
+     * Set relation.
      *
-     * @return Collection
+     * @param Person $relation
+     *
+     * @return Relationship
      */
-    public function getPeople()
+    public function setRelation(Person $relation)
     {
-        return $this->people;
+        $this->relation = $relation;
+
+        return $this;
+    }
+
+    /**
+     * Get relation.
+     *
+     * @return Person
+     */
+    public function getRelation()
+    {
+        return $this->relation;
     }
 }

@@ -37,6 +37,7 @@ class Event extends AbstractEntity
     /**
      * @var EventCategory
      * @ORM\ManyToOne(targetEntity="EventCategory", inversedBy="events")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $category;
 
@@ -55,6 +56,7 @@ class Event extends AbstractEntity
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="Location", inversedBy="events")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $location;
 

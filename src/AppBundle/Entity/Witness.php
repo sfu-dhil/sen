@@ -23,12 +23,14 @@ class Witness extends AbstractEntity
     /**
      * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="witnesses")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $person;
 
     /**
      * @var Event
      * @ORM\ManyToOne(targetEntity="Event", inversedBy="witnesses")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $event;
 

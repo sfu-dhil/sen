@@ -23,12 +23,14 @@ class Residence extends AbstractEntity
     /**
      * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="residences")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $person;
 
     /**
      * @var City
      * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $city;
 

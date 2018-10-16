@@ -25,6 +25,7 @@ class Location extends AbstractEntity
     /**
      * @var LocationCategory
      * @ORM\ManyToOne(targetEntity="LocationCategory", inversedBy="locations")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $category;
 

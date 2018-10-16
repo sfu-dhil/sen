@@ -16,10 +16,11 @@ use AppBundle\Form\RelationshipType;
 /**
  * Relationship controller.
  *
+ * @Security("has_role('ROLE_USER')")
  * @Route("/relationship")
  */
-class RelationshipController extends Controller {
-
+class RelationshipController extends Controller
+{
     /**
      * Lists all Relationship entities.
      *
@@ -31,7 +32,8 @@ class RelationshipController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function indexAction(Request $request) {
+    public function indexAction(Request $request)
+    {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Relationship::class, 'e')->orderBy('e.id', 'ASC');
@@ -44,17 +46,17 @@ class RelationshipController extends Controller {
         );
     }
 
-    /**
+/**
      * Typeahead API endpoint for Relationship entities.
      *
      * To make this work, add something like this to RelationshipRepository:
-      //    public function typeaheadQuery($q) {
-      //        $qb = $this->createQueryBuilder('e');
-      //        $qb->andWhere("e.name LIKE :q");
-      //        $qb->orderBy('e.name');
-      //        $qb->setParameter('q', "{$q}%");
-      //        return $qb->getQuery()->execute();
-      //    }
+        //    public function typeaheadQuery($q) {
+        //        $qb = $this->createQueryBuilder('e');
+        //        $qb->andWhere("e.name LIKE :q");
+        //        $qb->orderBy('e.name');
+        //        $qb->setParameter('q', "{$q}%");
+        //        return $qb->getQuery()->execute();
+        //    }
      *
      * @param Request $request
      *
@@ -62,23 +64,23 @@ class RelationshipController extends Controller {
      * @Method("GET")
      * @return JsonResponse
      */
-    public function typeahead(Request $request) {
+    public function typeahead(Request $request)
+    {
         $q = $request->query->get('q');
-        if (!$q) {
+        if( ! $q) {
             return new JsonResponse([]);
         }
         $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(Relationship::class);
+	$repo = $em->getRepository(Relationship::class);
         $data = [];
-        foreach ($repo->typeaheadQuery($q) as $result) {
+        foreach($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
-                'text' => (string) $result,
+                'text' => (string)$result,
             ];
         }
         return new JsonResponse($data);
     }
-
     /**
      * Search for Relationship entities.
      *
@@ -103,17 +105,18 @@ class RelationshipController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function searchAction(Request $request) {
+    public function searchAction(Request $request)
+    {
         $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('AppBundle:Relationship');
-        $q = $request->query->get('q');
-        if ($q) {
-            $query = $repo->searchQuery($q);
+	$repo = $em->getRepository('AppBundle:Relationship');
+	$q = $request->query->get('q');
+	if($q) {
+	    $query = $repo->searchQuery($q);
             $paginator = $this->get('knp_paginator');
             $relationships = $paginator->paginate($query, $request->query->getInt('page', 1), 25);
-        } else {
+	} else {
             $relationships = array();
-        }
+	}
 
         return array(
             'relationships' => $relationships,
@@ -133,7 +136,8 @@ class RelationshipController extends Controller {
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request)
+    {
         $relationship = new Relationship();
         $form = $this->createForm(RelationshipType::class, $relationship);
         $form->handleRequest($request);
@@ -165,7 +169,8 @@ class RelationshipController extends Controller {
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function newPopupAction(Request $request) {
+    public function newPopupAction(Request $request)
+    {
         return $this->newAction($request);
     }
 
@@ -180,7 +185,8 @@ class RelationshipController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function showAction(Relationship $relationship) {
+    public function showAction(Relationship $relationship)
+    {
 
         return array(
             'relationship' => $relationship,
@@ -201,7 +207,8 @@ class RelationshipController extends Controller {
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function editAction(Request $request, Relationship $relationship) {
+    public function editAction(Request $request, Relationship $relationship)
+    {
         $editForm = $this->createForm(RelationshipType::class, $relationship);
         $editForm->handleRequest($request);
 
@@ -231,7 +238,8 @@ class RelationshipController extends Controller {
      * @Route("/{id}/delete", name="relationship_delete")
      * @Method("GET")
      */
-    public function deleteAction(Request $request, Relationship $relationship) {
+    public function deleteAction(Request $request, Relationship $relationship)
+    {
         $em = $this->getDoctrine()->getManager();
         $em->remove($relationship);
         $em->flush();
@@ -239,5 +247,4 @@ class RelationshipController extends Controller {
 
         return $this->redirectToRoute('relationship_index');
     }
-
 }

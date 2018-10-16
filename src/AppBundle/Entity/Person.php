@@ -96,7 +96,7 @@ class Person extends AbstractEntity
 
     /**
      * @var Collection|Relationship[]
-     * @ORM\ManyToMany(targetEntity="Relationship", inversedBy="people")
+     * @ORM\OneToMany(targetEntity="Relationship", mappedBy="person")
      */
     private $relationships;
 

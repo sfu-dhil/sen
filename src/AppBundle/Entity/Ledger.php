@@ -33,6 +33,7 @@ class Ledger extends AbstractEntity
     /**
      * @var Notary
      * @ORM\ManyToOne(targetEntity="Notary", inversedBy="ledgers")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $notary;
 
