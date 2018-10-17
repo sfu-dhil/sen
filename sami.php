@@ -3,6 +3,7 @@
 use Sami\Sami;
 use Sami\RemoteRepository\GitHubRemoteRepository;
 use Symfony\Component\Finder\Finder;
+use Sami\Parser\Filter\TrueFilter;
 
 $dir = __DIR__;
 
@@ -28,4 +29,8 @@ $options = array(
     'sort_class_interfaces' => true,
 );
 
-return new Sami($iterator, $options);
+$sami = new Sami($iterator, $options);
+$sami['filter'] = function(){
+    return new TrueFilter();
+};
+return $sami;

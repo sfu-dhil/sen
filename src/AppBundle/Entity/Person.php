@@ -10,7 +10,11 @@ use Nines\UtilBundle\Entity\AbstractEntity;
 /**
  * Person
  *
- * @ORM\Table(name="person")
+ * @ORM\Table(name="person",
+ *  indexes={
+ *      @ORM\Index(name="person_ft_idx", columns={"first_name","last_name"}, flags={"fulltext"})
+ *  }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
  */
 class Person extends AbstractEntity
@@ -60,7 +64,7 @@ class Person extends AbstractEntity
 
     /**
      * @var string
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $birthDate;
 
@@ -78,7 +82,7 @@ class Person extends AbstractEntity
 
     /**
      * @var string
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $status;
 

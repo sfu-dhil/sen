@@ -71,17 +71,21 @@
             <tr>
                 <th>Birthplace</th>
                 <td>
-                    <a href="{{ path('city_show', { 'id': person.birthPlace.id}) }}">
-                        {{ person.birthPlace }}
-                    </a>
+                    {% if person.birthPlace %}
+                        <a href="{{ path('city_show', { 'id': person.birthPlace.id}) }}">
+                            {{ person.birthPlace }}
+                        </a>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
                 <th>Race</th>
                 <td>
-                    <a href="{{ path('race_show', { 'id': person.race.id}) }}">
-                        {{ person.race }}
-                    </a>
+                    {% if person.race %}
+                        <a href="{{ path('race_show', { 'id': person.race.id}) }}">
+                            {{ person.race }}
+                        </a>
+                    {% endif %}
                 </td>
             </tr>
             <tr>

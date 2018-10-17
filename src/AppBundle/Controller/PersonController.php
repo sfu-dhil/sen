@@ -47,15 +47,6 @@ class PersonController extends Controller {
     /**
      * Typeahead API endpoint for Person entities.
      *
-     * To make this work, add something like this to PersonRepository:
-      //    public function typeaheadQuery($q) {
-      //        $qb = $this->createQueryBuilder('e');
-      //        $qb->andWhere("e.name LIKE :q");
-      //        $qb->orderBy('e.name');
-      //        $qb->setParameter('q', "{$q}%");
-      //        return $qb->getQuery()->execute();
-      //    }
-     *
      * @param Request $request
      *
      * @Route("/typeahead", name="person_typeahead")

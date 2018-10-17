@@ -20,6 +20,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 class LoadRelationshipCategory extends Fixture {
     //put your code here
     public function load(ObjectManager $manager) {
+
         $category = new RelationshipCategory();
         $category->setName('rel');
         $category->setLabel('Rel');
