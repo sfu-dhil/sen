@@ -6,6 +6,11 @@ use AppBundle\Entity\Ledger;
 use AppBundle\Entity\Notary;
 use AppBundle\Entity\Person;
 use AppBundle\Entity\Race;
+use AppBundle\Entity\Relationship;
+use AppBundle\Entity\RelationshipCategory;
+use AppBundle\Entity\Transaction;
+use AppBundle\Entity\TransactionCategory;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -93,7 +98,7 @@ class ImportNotaryCommand extends ContainerAwareCommand {
         return $race;
     }
 
-    protected function findPerson($given, $family, $raceName, $status) {
+    protected function findPerson($given, $family, $raceName = '', $status = '') {
         $repo = $this->em->getRepository(Person::class);
         $person = $repo->findOneBy(array(
             'firstName' => $given,
@@ -117,6 +122,66 @@ class ImportNotaryCommand extends ContainerAwareCommand {
         return $person;
     }
 
+    protected function findTransactionCategory($label) {
+        $repo = $this->em->getRepository(TransactionCategory::class);
+        $category = $repo->findOneBy(array(
+            'label' => $label,
+        ));
+        if(! $category) {
+            $short = preg_replace("[^a-z0-9]", "-", strtolower($label));
+            $category = new TransactionCategory();
+            $category->setName($short);
+            $category->setLabel($label);
+            $this->em->persist($category);
+        }
+        return $category;
+    }
+
+    protected function findRelationshipCategory($name) {
+        $repo = $this->em->getRepository(RelationshipCategory::class);
+        $category = $repo->findOneBy(array(
+            'name' => $name,
+        ));
+        if( ! $category) {
+            $category = new RelationshipCategory();
+            $category->setName($name);
+            $category->setLabel(ucwords($name));
+            $this->em->persist($category);
+        }
+        return $category;
+    }
+
+    protected function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, $row) {
+        $transaction = new Transaction();
+        $transaction->setLedger($ledger);
+        $transaction->setFirstParty($firstParty);
+        $transaction->setFirstPartyNote($row[9]);
+        if($row[8]) {
+            $firstSpouse = $this->findPerson($row[8], $firstParty->getLastName());
+            $firstRelationship = new Relationship();
+            $firstRelationship->setCategory($this->findRelationshipCategory('spouse'));
+            $firstRelationship->setPerson($firstParty);
+            $firstRelationship->setRelation($firstSpouse);
+            $this->em->persist($firstRelationship);
+        }
+        $transaction->setConjunction($row[10]);
+        $transaction->setSecondParty($secondParty);
+        if($row[15]) {
+            $secondSpouse = $this->findPerson($row[15], $secondParty->getLastName());
+            $secondRelationship = new Relationship();
+            $secondRelationship->setCategory($this->findRelationshipCategory('spouse'));
+            $secondRelationship->setPerson($secondParty);
+            $secondRelationship->setRelation($secondSpouse);
+            $this->em->persist($secondRelationship);
+        }
+        $transaction->setSecondPartyNote($row[16]);
+        $transaction->setCategory($this->findTransactionCategory($row[17]));
+        $transaction->setDate(new DateTime($row[18] . '-' . $row[3]));
+        $transaction->setPage($row[19]);
+        $transaction->setNotes($row[20]);
+        $this->em->persist($transaction);
+    }
+
     protected function import($file, $skip) {
         $handle = fopen($file, 'r');
         for($i = 1; $i <= $skip; $i++) {
@@ -127,6 +192,7 @@ class ImportNotaryCommand extends ContainerAwareCommand {
             $ledger = $this->findLedger($notary, $row[2], $row[3]);
             $firstParty = $this->findPerson($row[5], $row[4], $row[6], $row[7]);
             $secondParty = $this->findPerson($row[11], $row[12], $row[13], $row[14]);
+            $transaction = $this->createTransaction($ledger, $firstParty, $secondParty, $row);
             $this->em->flush();
         }
     }
