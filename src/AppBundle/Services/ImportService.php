@@ -2,7 +2,6 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\Entity\City;
 use AppBundle\Entity\Ledger;
 use AppBundle\Entity\Notary;
 use AppBundle\Entity\Person;
@@ -49,7 +48,7 @@ class ImportService {
      * @param string $name
      * @return Notary
      */
-    public function findNotary($name) {
+    protected function findNotary($name) {
         $repo = $this->em->getRepository(Notary::class);
         $notary = $repo->findOneBy(array(
             'name' => $name,
@@ -71,7 +70,7 @@ class ImportService {
      * @param integer $year
      * @return Ledger
      */
-    public function findLedger(Notary $notary, $volume, $year) {
+    protected function findLedger(Notary $notary, $volume, $year) {
         $repo = $this->em->getRepository(Ledger::class);
         $ledger = $repo->findOneBy(array(
             'volume' => $volume,
@@ -93,7 +92,7 @@ class ImportService {
      * @param string $name
      * @return Race
      */
-    public function findRace($name) {
+    protected function findRace($name) {
         if (!$name) {
             return null;
         }
@@ -119,11 +118,11 @@ class ImportService {
      * @param string $status
      * @return Person
      */
-    public function findPerson($given, $family, $raceName = '', $status = '') {
+    protected function findPerson($given, $family, $raceName = '', $status = '') {
         $repo = $this->em->getRepository(Person::class);
         $person = $repo->findOneBy(array(
             'firstName' => $given,
-            'lastName' => strtoupper($family),
+            'lastName' => $family,
         ));
         $race = $this->findRace($raceName);
         if (!$person) {
@@ -143,32 +142,19 @@ class ImportService {
         return $person;
     }
 
-    public function findCity($name) {
-        $repo = $this->em->getRepository(City::class);
-        $city = $repo->findOneBy(array(
-            'name' => $name,
-        ));
-        if( ! $city) {
-            $city = new City();
-            $city->setName($name);
-            $this->em->persist($city);
-        }
-        return $city;
-    }
-
     /**
      * Find or create a transaction category by label.
      *
      * @param string $label
      * @return TransactionCategory
      */
-    public function findTransactionCategory($label) {
+    protected function findTransactionCategory($label) {
         $repo = $this->em->getRepository(TransactionCategory::class);
         $category = $repo->findOneBy(array(
             'label' => $label,
         ));
         if (!$category) {
-            $short = preg_replace("/[^a-z0-9]/u", "-", strtolower($label));
+            $short = preg_replace("[^a-z0-9]", "-", strtolower($label));
             $category = new TransactionCategory();
             $category->setName($short);
             $category->setLabel($label);
@@ -183,7 +169,7 @@ class ImportService {
      * @param string $name
      * @return RelationshipCategory
      */
-    public function findRelationshipCategory($name) {
+    protected function findRelationshipCategory($name) {
         $repo = $this->em->getRepository(RelationshipCategory::class);
         $category = $repo->findOneBy(array(
             'name' => $name,
@@ -205,7 +191,7 @@ class ImportService {
      * @param Person $secondParty
      * @param array $row
      */
-    public function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, $row) {
+    protected function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, $row) {
         $transaction = new Transaction();
         $transaction->setLedger($ledger);
         $transaction->setFirstParty($firstParty);
