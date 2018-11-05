@@ -55,7 +55,7 @@ twig:
     globals:
         comment_service: "@feedback.comment"
     date:
-        format: d.m.Y, H:i:s
+        format: d M Y
         interval_format: '%%d days'
 
 # Doctrine Configuration

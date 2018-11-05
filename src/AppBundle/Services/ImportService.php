@@ -3,6 +3,7 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\Ledger;
+use AppBundle\Entity\Location;
 use AppBundle\Entity\Notary;
 use AppBundle\Entity\Person;
 use AppBundle\Entity\Race;
@@ -48,7 +49,7 @@ class ImportService {
      * @param string $name
      * @return Notary
      */
-    protected function findNotary($name) {
+    public function findNotary($name) {
         $repo = $this->em->getRepository(Notary::class);
         $notary = $repo->findOneBy(array(
             'name' => $name,
@@ -70,7 +71,7 @@ class ImportService {
      * @param integer $year
      * @return Ledger
      */
-    protected function findLedger(Notary $notary, $volume, $year) {
+    public function findLedger(Notary $notary, $volume, $year) {
         $repo = $this->em->getRepository(Ledger::class);
         $ledger = $repo->findOneBy(array(
             'volume' => $volume,
@@ -92,7 +93,7 @@ class ImportService {
      * @param string $name
      * @return Race
      */
-    protected function findRace($name) {
+    public function findRace($name) {
         if (!$name) {
             return null;
         }
@@ -118,11 +119,11 @@ class ImportService {
      * @param string $status
      * @return Person
      */
-    protected function findPerson($given, $family, $raceName = '', $status = '') {
+    public function findPerson($given, $family, $raceName = '', $status = '') {
         $repo = $this->em->getRepository(Person::class);
         $person = $repo->findOneBy(array(
             'firstName' => $given,
-            'lastName' => $family,
+            'lastName' => strtoupper($family),
         ));
         $race = $this->findRace($raceName);
         if (!$person) {
@@ -142,13 +143,17 @@ class ImportService {
         return $person;
     }
 
+    public function findLocation($name) {
+        $repo = $this->em->getRepository(Location::class);
+    }
+
     /**
      * Find or create a transaction category by label.
      *
      * @param string $label
      * @return TransactionCategory
      */
-    protected function findTransactionCategory($label) {
+    public function findTransactionCategory($label) {
         $repo = $this->em->getRepository(TransactionCategory::class);
         $category = $repo->findOneBy(array(
             'label' => $label,
@@ -169,7 +174,7 @@ class ImportService {
      * @param string $name
      * @return RelationshipCategory
      */
-    protected function findRelationshipCategory($name) {
+    public function findRelationshipCategory($name) {
         $repo = $this->em->getRepository(RelationshipCategory::class);
         $category = $repo->findOneBy(array(
             'name' => $name,
@@ -191,7 +196,7 @@ class ImportService {
      * @param Person $secondParty
      * @param array $row
      */
-    protected function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, $row) {
+    public function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, $row) {
         $transaction = new Transaction();
         $transaction->setLedger($ledger);
         $transaction->setFirstParty($firstParty);

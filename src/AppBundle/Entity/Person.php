@@ -17,8 +17,7 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
  */
-class Person extends AbstractEntity
-{
+class Person extends AbstractEntity {
 
     const MALE = 'M';
 
@@ -63,10 +62,16 @@ class Person extends AbstractEntity
     private $sex;
 
     /**
-     * @var string
-     * @ORM\Column(type="string", nullable=true)
+     * @var \DateTime
+     * @ORM\Column(type="string", length=10, nullable=true)
      */
     private $birthDate;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=24, nullable=true)
+     */
+    private $birthDateDisplay;
 
     /**
      * @var City
@@ -76,7 +81,7 @@ class Person extends AbstractEntity
 
     /**
      * @var string
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="date", nullable=true)
      */
     private $birthStatus;
 
@@ -140,7 +145,6 @@ class Person extends AbstractEntity
         $this->secondPartyTransactions = new ArrayCollection();
     }
 
-
     /**
      * Returns a string representation of this entity.
      *
@@ -157,8 +161,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function setRace(Race $race = null)
-    {
+    public function setRace(Race $race = null) {
         $this->race = $race;
 
         return $this;
@@ -169,8 +172,7 @@ class Person extends AbstractEntity
      *
      * @return Race|null
      */
-    public function getRace()
-    {
+    public function getRace() {
         return $this->race;
     }
 
@@ -181,8 +183,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function addTransaction(Transaction $transaction)
-    {
+    public function addTransaction(Transaction $transaction) {
         $this->transactions[] = $transaction;
 
         return $this;
@@ -195,8 +196,7 @@ class Person extends AbstractEntity
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeTransaction(Transaction $transaction)
-    {
+    public function removeTransaction(Transaction $transaction) {
         return $this->transactions->removeElement($transaction);
     }
 
@@ -205,8 +205,7 @@ class Person extends AbstractEntity
      *
      * @return Collection
      */
-    public function getTransactions()
-    {
+    public function getTransactions() {
         return $this->transactions;
     }
 
@@ -217,8 +216,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function addRelationship(Relationship $relationship)
-    {
+    public function addRelationship(Relationship $relationship) {
         $this->relationships[] = $relationship;
 
         return $this;
@@ -231,8 +229,7 @@ class Person extends AbstractEntity
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeRelationship(Relationship $relationship)
-    {
+    public function removeRelationship(Relationship $relationship) {
         return $this->relationships->removeElement($relationship);
     }
 
@@ -241,8 +238,7 @@ class Person extends AbstractEntity
      *
      * @return Collection
      */
-    public function getRelationships()
-    {
+    public function getRelationships() {
         return $this->relationships;
     }
 
@@ -253,8 +249,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function addWitness(Witness $witness)
-    {
+    public function addWitness(Witness $witness) {
         $this->witnesses[] = $witness;
 
         return $this;
@@ -267,8 +262,7 @@ class Person extends AbstractEntity
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeWitness(Witness $witness)
-    {
+    public function removeWitness(Witness $witness) {
         return $this->witnesses->removeElement($witness);
     }
 
@@ -277,8 +271,7 @@ class Person extends AbstractEntity
      *
      * @return Collection
      */
-    public function getWitnesses()
-    {
+    public function getWitnesses() {
         return $this->witnesses;
     }
 
@@ -289,8 +282,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function addEvent(Event $event)
-    {
+    public function addEvent(Event $event) {
         $this->events[] = $event;
 
         return $this;
@@ -303,8 +295,7 @@ class Person extends AbstractEntity
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeEvent(Event $event)
-    {
+    public function removeEvent(Event $event) {
         return $this->events->removeElement($event);
     }
 
@@ -313,8 +304,7 @@ class Person extends AbstractEntity
      *
      * @return Collection
      */
-    public function getEvents()
-    {
+    public function getEvents() {
         return $this->events;
     }
 
@@ -325,8 +315,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function setFirstName($firstName)
-    {
+    public function setFirstName($firstName) {
         $this->firstName = $firstName;
 
         return $this;
@@ -337,8 +326,7 @@ class Person extends AbstractEntity
      *
      * @return string
      */
-    public function getFirstName()
-    {
+    public function getFirstName() {
         return $this->firstName;
     }
 
@@ -349,9 +337,8 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
+    public function setLastName($lastName) {
+        $this->lastName = strtoupper($lastName);
 
         return $this;
     }
@@ -361,8 +348,7 @@ class Person extends AbstractEntity
      *
      * @return string
      */
-    public function getLastName()
-    {
+    public function getLastName() {
         return $this->lastName;
     }
 
@@ -373,8 +359,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function setAlias($alias)
-    {
+    public function setAlias($alias) {
         $this->alias = $alias;
 
         return $this;
@@ -385,8 +370,7 @@ class Person extends AbstractEntity
      *
      * @return array
      */
-    public function getAlias()
-    {
+    public function getAlias() {
         return $this->alias;
     }
 
@@ -397,8 +381,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function setNative($native)
-    {
+    public function setNative($native) {
         $this->native = $native;
 
         return $this;
@@ -409,8 +392,7 @@ class Person extends AbstractEntity
      *
      * @return string
      */
-    public function getNative()
-    {
+    public function getNative() {
         return $this->native;
     }
 
@@ -421,8 +403,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function setOccupation($occupation)
-    {
+    public function setOccupation($occupation) {
         $this->occupation = $occupation;
 
         return $this;
@@ -433,8 +414,7 @@ class Person extends AbstractEntity
      *
      * @return string
      */
-    public function getOccupation()
-    {
+    public function getOccupation() {
         return $this->occupation;
     }
 
@@ -445,8 +425,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function setSex($sex = null)
-    {
+    public function setSex($sex = null) {
         $this->sex = $sex;
 
         return $this;
@@ -457,8 +436,7 @@ class Person extends AbstractEntity
      *
      * @return string|null
      */
-    public function getSex()
-    {
+    public function getSex() {
         return $this->sex;
     }
 
@@ -469,8 +447,10 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function setBirthDate($birthDate)
-    {
+    public function setBirthDate($birthDate) {
+        if($birthDate && ! preg_match("/^\d\d\d\d-\d\d-\d\d$/", $birthDate)) {
+            throw new Exception("Malformed birthdate: '{$birthDate}' does not match YYYY-MM-DD");
+        }
         $this->birthDate = $birthDate;
 
         return $this;
@@ -481,8 +461,32 @@ class Person extends AbstractEntity
      *
      * @return string
      */
-    public function getBirthDate()
-    {
+    public function getBirthDate() {
+        return $this->birthDate;
+    }
+
+    /**
+     * Set birthDate.
+     *
+     * @param string $birthDateDisplay
+     *
+     * @return Person
+     */
+    public function setBirthDateDisplay($birthDateDisplay) {
+        $this->birthDateDisplay = $birthDateDisplay;
+
+        return $this;
+    }
+
+    /**
+     * Get birthDate.
+     *
+     * @return string
+     */
+    public function getBirthDateDisplay() {
+        if ($this->birthDateDisplay) {
+            return $this->birthDateDisplay;
+        }
         return $this->birthDate;
     }
 
@@ -493,8 +497,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function setBirthStatus($birthStatus)
-    {
+    public function setBirthStatus($birthStatus) {
         $this->birthStatus = $birthStatus;
 
         return $this;
@@ -505,8 +508,7 @@ class Person extends AbstractEntity
      *
      * @return string
      */
-    public function getBirthStatus()
-    {
+    public function getBirthStatus() {
         return $this->birthStatus;
     }
 
@@ -517,8 +519,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
 
         return $this;
@@ -529,8 +530,7 @@ class Person extends AbstractEntity
      *
      * @return string
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
 
@@ -541,8 +541,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function setBirthPlace(City $birthPlace = null)
-    {
+    public function setBirthPlace(City $birthPlace = null) {
         $this->birthPlace = $birthPlace;
 
         return $this;
@@ -553,8 +552,7 @@ class Person extends AbstractEntity
      *
      * @return City|null
      */
-    public function getBirthPlace()
-    {
+    public function getBirthPlace() {
         return $this->birthPlace;
     }
 
@@ -565,8 +563,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function addResidence(Residence $residence)
-    {
+    public function addResidence(Residence $residence) {
         $this->residences[] = $residence;
 
         return $this;
@@ -579,8 +576,7 @@ class Person extends AbstractEntity
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeResidence(Residence $residence)
-    {
+    public function removeResidence(Residence $residence) {
         return $this->residences->removeElement($residence);
     }
 
@@ -589,8 +585,7 @@ class Person extends AbstractEntity
      *
      * @return Collection
      */
-    public function getResidences()
-    {
+    public function getResidences() {
         return $this->residences;
     }
 
@@ -601,8 +596,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function addFirstPartyTransaction(Transaction $firstPartyTransaction)
-    {
+    public function addFirstPartyTransaction(Transaction $firstPartyTransaction) {
         $this->firstPartyTransactions[] = $firstPartyTransaction;
 
         return $this;
@@ -615,8 +609,7 @@ class Person extends AbstractEntity
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeFirstPartyTransaction(Transaction $firstPartyTransaction)
-    {
+    public function removeFirstPartyTransaction(Transaction $firstPartyTransaction) {
         return $this->firstPartyTransactions->removeElement($firstPartyTransaction);
     }
 
@@ -625,8 +618,7 @@ class Person extends AbstractEntity
      *
      * @return Collection
      */
-    public function getFirstPartyTransactions()
-    {
+    public function getFirstPartyTransactions() {
         return $this->firstPartyTransactions;
     }
 
@@ -637,8 +629,7 @@ class Person extends AbstractEntity
      *
      * @return Person
      */
-    public function addSecondPartyTransaction(Transaction $secondPartyTransaction)
-    {
+    public function addSecondPartyTransaction(Transaction $secondPartyTransaction) {
         $this->secondPartyTransactions[] = $secondPartyTransaction;
 
         return $this;
@@ -651,8 +642,7 @@ class Person extends AbstractEntity
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeSecondPartyTransaction(Transaction $secondPartyTransaction)
-    {
+    public function removeSecondPartyTransaction(Transaction $secondPartyTransaction) {
         return $this->secondPartyTransactions->removeElement($secondPartyTransaction);
     }
 
@@ -661,8 +651,8 @@ class Person extends AbstractEntity
      *
      * @return Collection
      */
-    public function getSecondPartyTransactions()
-    {
+    public function getSecondPartyTransactions() {
         return $this->secondPartyTransactions;
     }
+
 }

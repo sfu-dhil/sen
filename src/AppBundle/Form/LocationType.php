@@ -28,9 +28,9 @@ class LocationType extends AbstractType
             ),
         ));
                         $builder->add('category');
-        
+
     }
-    
+
     /**
      * Define options for the form.
      *

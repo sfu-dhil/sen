@@ -2,16 +2,14 @@
 
 namespace AppBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
+use Nines\UtilBundle\Form\TermType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * RelationshipCategoryType form.
  */
-class RelationshipCategoryType extends AbstractType
+class RelationshipCategoryType extends TermType
 {
     /**
      * Add form fields to $builder.
@@ -21,8 +19,9 @@ class RelationshipCategoryType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        parent::buildForm($builder, $options);
     }
-    
+
     /**
      * Define options for the form.
      *

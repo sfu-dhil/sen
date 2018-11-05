@@ -3,6 +3,7 @@
 namespace AppBundle\Command;
 
 use AppBundle\Services\ImportService;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -14,6 +15,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  * AppImportSacramentCommand command.
  */
 class ImportSacramentCommand extends ContainerAwareCommand {
+
+    const MONTHS = array(
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov',
+        'Dec'
+    );
+
+    const CIRCAS = array(
+        'ca', 'bef', 'abt', 'aft'
+    );
 
     /**
      * @var EntityManagerInterface
@@ -43,14 +53,53 @@ class ImportSacramentCommand extends ContainerAwareCommand {
         ;
     }
 
+    protected function parseDate($string) {
+        static $months = null;
+        if (!$months) {
+            $months = implode('|', self::MONTHS);
+        }
+        static $circas = null;
+        if (!$circas) {
+            $circas = implode('|', self::CIRCAS);
+        }
+
+        if (!$string) {
+            return null;
+        }
+
+        print "\n\n$string\n";
+        $matches = array();
+        if (preg_match("/(\d\d)\s*({$months})\s*(\d\d\d\d)/", $string, $matches)) {
+            $year = $matches[3];
+            $month = sprintf("%02d", array_search($matches[2], self::MONTHS) + 1);
+            $day = sprintf("%02d", $matches[1]);
+            return "{$year}-{$month}-{$day}";
+        } else if (preg_match("/({$months})\s*(\d\d\d\d)/", $string, $matches)) {
+            $year = $matches[2];
+            $month = sprintf("%02d", array_search($matches[1], self::MONTHS) + 1);
+            return "{$year}-{$month}-00";
+        } else if (preg_match("/(\d\d\d\d)/", $string, $matches)) {
+            $year = $matches[1];
+            return "{$year}-00-00";
+        } else {
+            print "UNPARSEABLE DATE: {$string}\n";
+        }
+        return null;
+    }
+
     protected function import($file, $skip) {
         $handle = fopen($file, 'r');
         for ($i = 1; $i <= $skip; $i++) {
             fgetcsv($handle);
         }
         while ($row = fgetcsv($handle)) {
-            // do stuff.
-            $this->em->flush();
+            $person = $this->importer->findPerson($row[0], $row[1]);
+            $birthDate = $this->parseDate($row[2]);
+            if ($birthDate) {
+                print $person . "\n";
+                dump($birthDate);
+            }
+            //$this->em->flush();
         }
     }
 
