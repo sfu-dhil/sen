@@ -2,8 +2,8 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Entity\City;
 use AppBundle\Entity\Ledger;
-use AppBundle\Entity\Location;
 use AppBundle\Entity\Notary;
 use AppBundle\Entity\Person;
 use AppBundle\Entity\Race;
@@ -143,8 +143,17 @@ class ImportService {
         return $person;
     }
 
-    public function findLocation($name) {
-        $repo = $this->em->getRepository(Location::class);
+    public function findCity($name) {
+        $repo = $this->em->getRepository(City::class);
+        $city = $repo->findOneBy(array(
+            'name' => $name,
+        ));
+        if( ! $city) {
+            $city = new City();
+            $city->setName($name);
+            $this->em->persist($city);
+        }
+        return $city;
     }
 
     /**

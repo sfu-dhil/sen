@@ -94,12 +94,10 @@ class ImportSacramentCommand extends ContainerAwareCommand {
         }
         while ($row = fgetcsv($handle)) {
             $person = $this->importer->findPerson($row[0], $row[1]);
-            $birthDate = $this->parseDate($row[2]);
-            if ($birthDate) {
-                print $person . "\n";
-                dump($birthDate);
-            }
-            //$this->em->flush();
+            $person->setBirthDateDisplay($row[2]);
+            $person->setBirthDate($this->parseDate($row[2]));
+            $person->setBirthPlace($this->importer->findCity($row[3]));
+            // $this->em->flush();
         }
     }
 
