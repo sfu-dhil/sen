@@ -338,7 +338,7 @@ class Person extends AbstractEntity {
      * @return Person
      */
     public function setLastName($lastName) {
-        $this->lastName = strtoupper($lastName);
+        $this->lastName = mb_convert_case($lastName, MB_CASE_UPPER);
 
         return $this;
     }

@@ -64,14 +64,12 @@ class PersonType extends AbstractType {
         ));
         $builder->add('birthDate', null, array(
             'label' => 'Birth Date',
-            'required' => true,
             'attr' => array(
                 'help_block' => 'The closest date known for the date. YYYY-MM-DD. Use -00 for unknown month or day.',
             ),
         ));
         $builder->add('birthDateDisplay', null, array(
             'label' => 'Birth Date',
-            'required' => true,
             'attr' => array(
                 'help_block' => 'Descriptive date. bef 1790, abt 2 Mar 1780. If it is empty, birthDate will be displayed instead.',
             ),
@@ -85,7 +83,6 @@ class PersonType extends AbstractType {
         ));
         $builder->add('status', null, array(
             'label' => 'Status',
-            'required' => true,
             'attr' => array(
                 'help_block' => '',
             ),

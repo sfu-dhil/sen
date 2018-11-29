@@ -55,9 +55,11 @@
             <tr>
                 <th>Location</th>
                 <td>
-                    <a href="{{ path('location_show', { 'id': event.location.id}) }}">
-                        {{ event.location }}
-                    </a>
+                    {% if event.location %}
+                        <a href="{{ path('location_show', { 'id': event.location.id}) }}">
+                            {{ event.location }}
+                        </a>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -65,10 +67,10 @@
                 <td>
                     {% if event.participants | length > 0 %}
                         <ul>
-                            {% for participants in event.participants %}
+                            {% for participant in event.participants %}
                                 <li>
-                                    <a href="{{ path("participant_show", {"id":participants.id}) }}">
-                                        {{ participants }}
+                                    <a href="{{ path("person_show", {"id":participant.id}) }}">
+                                        {{ participant }}
                                     </a>
                                 </li>
                             {% endfor %}
@@ -83,7 +85,7 @@
         <ul>
             {% for witness in event.witnesses %}
                 <li>
-                    <a href="{{ path("witness_show", {"id":witness.id}) }}">
+                    <a href="{{ path("person_show", {"id":witness.id}) }}">
                         {{ witness }}
                     </a>
                 </li>

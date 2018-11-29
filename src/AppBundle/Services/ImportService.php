@@ -168,7 +168,7 @@ class ImportService {
             'label' => $label,
         ));
         if (!$category) {
-            $short = preg_replace("[^a-z0-9]", "-", strtolower($label));
+            $short = preg_replace("/[^a-z0-9]/u", "-", strtolower($label));
             $category = new TransactionCategory();
             $category->setName($short);
             $category->setLabel($label);

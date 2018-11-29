@@ -2,14 +2,21 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Entity\Event;
+use AppBundle\Entity\EventCategory;
+use AppBundle\Entity\Location;
+use AppBundle\Entity\LocationCategory;
+use AppBundle\Entity\Person;
+use AppBundle\Entity\Residence;
 use AppBundle\Services\ImportService;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use function mb_convert_case;
+use function mb_convert_encoding;
 
 /**
  * AppImportSacramentCommand command.
@@ -67,18 +74,17 @@ class ImportSacramentCommand extends ContainerAwareCommand {
             return null;
         }
 
-        print "\n\n$string\n";
         $matches = array();
-        if (preg_match("/(\d\d)\s*({$months})\s*(\d\d\d\d)/", $string, $matches)) {
+        if (preg_match("/(\d\d)\s*({$months})\s*(\d\d\d\d)/u", $string, $matches)) {
             $year = $matches[3];
             $month = sprintf("%02d", array_search($matches[2], self::MONTHS) + 1);
             $day = sprintf("%02d", $matches[1]);
             return "{$year}-{$month}-{$day}";
-        } else if (preg_match("/({$months})\s*(\d\d\d\d)/", $string, $matches)) {
+        } else if (preg_match("/({$months})\s*(\d\d\d\d)/u", $string, $matches)) {
             $year = $matches[2];
             $month = sprintf("%02d", array_search($matches[1], self::MONTHS) + 1);
             return "{$year}-{$month}-00";
-        } else if (preg_match("/(\d\d\d\d)/", $string, $matches)) {
+        } else if (preg_match("/(\d\d\d\d)/u", $string, $matches)) {
             $year = $matches[1];
             return "{$year}-00-00";
         } else {
@@ -87,17 +93,96 @@ class ImportSacramentCommand extends ContainerAwareCommand {
         return null;
     }
 
+    protected function findLocationCategory($name) {
+        $category = $this->em->getRepository(LocationCategory::class)->findOneBy(array(
+            'name' => $name,
+        ));
+        if( ! $category) {
+            $category = new LocationCategory();
+            $category->setName($name);
+            $category->setLabel(mb_convert_case($name, MB_CASE_TITLE));
+            $this->em->persist($category);
+        }
+        return $category;
+    }
+
+    protected function findLocation($name, $categoryName) {
+        if( ! $name) {
+            return;
+        }
+        $category = $this->findLocationCategory($categoryName);
+        $location = $this->em->getRepository(Location::class)->findOneBy(array(
+            'name' => $name,
+            'category' => $category,
+        ));
+        if( ! $location) {
+            $location = new Location();
+            $location->setName($name);
+            $location->setCategory($category);
+            $this->em->persist($location);
+        }
+        return $location;
+    }
+
+    protected function addManumission(Person $person, $row) {
+        if(! $row[7]) {
+            return;
+        }
+        $category = $this->em->getRepository(EventCategory::class)->findOneBy(array(
+            'name' => 'manumission',
+        ));
+        $event = new Event();
+        $event->setCategory($category);
+        $event->addParticipant($person);
+        $event->setLocation($this->findLocation($row[6], 'church'));
+        $this->em->persist($event);
+    }
+
+    protected function addBaptism(Person $person, $row) {
+        if(! $row[5]) {
+            return;
+        }
+        $category = $this->em->getRepository(EventCategory::class)->findOneBy(array(
+            'name' => 'baptism',
+        ));
+        $event = new Event();
+        $event->setCategory($category);
+        $event->addParticipant($person);
+        $event->setLocation($this->findLocation($row[6], 'church'));
+        $this->em->persist($event);
+    }
+
+    protected function addResidence(Person $person, $row) {
+        if( ! $row[10]) {
+            return;
+        }
+        $city = $this->importer->findCity($row[10]);
+        $residence = new Residence();
+        $residence->setCity($city);
+        $residence->setPerson($person);
+        if($row[9]) {
+            $residence->setDate($row[9]);
+        }
+        $this->em->persist($residence);
+    }
+
     protected function import($file, $skip) {
         $handle = fopen($file, 'r');
         for ($i = 1; $i <= $skip; $i++) {
             fgetcsv($handle);
         }
         while ($row = fgetcsv($handle)) {
+            $row = array_map(function($data){return mb_convert_encoding($data, "UTF-8", "UTF-8");}, $row);
             $person = $this->importer->findPerson($row[0], $row[1]);
             $person->setBirthDateDisplay($row[2]);
             $person->setBirthDate($this->parseDate($row[2]));
             $person->setBirthPlace($this->importer->findCity($row[3]));
-            // $this->em->flush();
+            $this->addBaptism($person, $row);
+            $this->addManumission($person, $row);
+
+            $this->addResidence($person, $row);
+
+            $this->em->flush();
         }
     }
 
