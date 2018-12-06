@@ -42,7 +42,7 @@
             </tr>
             <tr>
                 <th>Occupation</th>
-                <td>{{ person.occupation }}</td>
+                <td>{% if person.occupation %}{{ person.occupation|join(', ') }}{% endif %}</td>
             </tr>
             <tr>
                 <th>Sex</th>

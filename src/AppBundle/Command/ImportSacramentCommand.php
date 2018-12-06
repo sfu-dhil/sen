@@ -97,7 +97,7 @@ class ImportSacramentCommand extends ContainerAwareCommand {
         $category = $this->em->getRepository(LocationCategory::class)->findOneBy(array(
             'name' => $name,
         ));
-        if( ! $category) {
+        if (!$category) {
             $category = new LocationCategory();
             $category->setName($name);
             $category->setLabel(mb_convert_case($name, MB_CASE_TITLE));
@@ -107,7 +107,7 @@ class ImportSacramentCommand extends ContainerAwareCommand {
     }
 
     protected function findLocation($name, $categoryName) {
-        if( ! $name) {
+        if (!$name) {
             return;
         }
         $category = $this->findLocationCategory($categoryName);
@@ -115,7 +115,7 @@ class ImportSacramentCommand extends ContainerAwareCommand {
             'name' => $name,
             'category' => $category,
         ));
-        if( ! $location) {
+        if (!$location) {
             $location = new Location();
             $location->setName($name);
             $location->setCategory($category);
@@ -125,7 +125,7 @@ class ImportSacramentCommand extends ContainerAwareCommand {
     }
 
     protected function addManumission(Person $person, $row) {
-        if(! $row[7]) {
+        if (!$row[7]) {
             return;
         }
         $category = $this->em->getRepository(EventCategory::class)->findOneBy(array(
@@ -139,7 +139,7 @@ class ImportSacramentCommand extends ContainerAwareCommand {
     }
 
     protected function addBaptism(Person $person, $row) {
-        if(! $row[5]) {
+        if (!$row[5]) {
             return;
         }
         $category = $this->em->getRepository(EventCategory::class)->findOneBy(array(
@@ -153,17 +153,40 @@ class ImportSacramentCommand extends ContainerAwareCommand {
     }
 
     protected function addResidence(Person $person, $row) {
-        if( ! $row[10]) {
+        if (!$row[10]) {
             return;
         }
         $city = $this->importer->findCity($row[10]);
         $residence = new Residence();
         $residence->setCity($city);
         $residence->setPerson($person);
-        if($row[9]) {
+        if ($row[9]) {
             $residence->setDate($row[9]);
         }
         $this->em->persist($residence);
+    }
+
+    protected function addAliases(Person $person, $row) {
+        if (!$row[11]) {
+            return;
+        }
+        $aliases = preg_split('/[,;]/', $row[11]);
+        $person->setAlias($aliases);
+    }
+
+    protected function setNative(Person $person, $row) {
+        if (!$row[12]) {
+            return;
+        }
+        $person->setNative($row[12]);
+    }
+
+    protected function addOccupations(Person $person, $row) {
+        if( ! $row[13]) {
+            return;
+        }
+        $occupations = explode(';', $row[13]);
+        $person->setOccupation($occupations);
     }
 
     protected function import($file, $skip) {
@@ -172,7 +195,9 @@ class ImportSacramentCommand extends ContainerAwareCommand {
             fgetcsv($handle);
         }
         while ($row = fgetcsv($handle)) {
-            $row = array_map(function($data){return mb_convert_encoding($data, "UTF-8", "UTF-8");}, $row);
+            $row = array_map(function($data) {
+                return mb_convert_encoding($data, "UTF-8", "UTF-8");
+            }, $row);
             $person = $this->importer->findPerson($row[0], $row[1]);
             $person->setBirthDateDisplay($row[2]);
             $person->setBirthDate($this->parseDate($row[2]));
@@ -181,6 +206,9 @@ class ImportSacramentCommand extends ContainerAwareCommand {
             $this->addManumission($person, $row);
 
             $this->addResidence($person, $row);
+            $this->setNative($person, $row);
+            $this->addAliases($person, $row);
+            $this->addOccupations($person, $row);
 
             $this->em->flush();
         }
