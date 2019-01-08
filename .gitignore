@@ -21,3 +21,4 @@
 /nbproject
 /data
 web/docs
+app/config/deploy.yml
