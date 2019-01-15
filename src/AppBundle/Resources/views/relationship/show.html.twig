@@ -2,9 +2,9 @@
 
 {% block title %}Relationship{% endblock %}
 
- {% block pageheader %} 
+ {% block pageheader %}
     <h1>Relationship Details</h1>
- {% endblock %} 
+ {% endblock %}
 
 {% block body %}
     <div class="btn-toolbar">
@@ -39,15 +39,15 @@
             <tr>
                 <th>Updated</th>
                 <td>{% if relationship.updated %}{{ relationship.updated|date }}{% endif %}</td>
-            </tr>        
+            </tr>
             <tr>
                 <th>Category</th>
                 <td>
-                    <a href="{{ path('category_show', { 'id': relationship.category.id}) }}">
+                    <a href="{{ path('relationship_category_show', { 'id': relationship.category.id}) }}">
                         {{ relationship.category }}
                     </a>
                 </td>
-            </tr>        
+            </tr>
             <tr>
                 <th>Person</th>
                 <td>
@@ -55,15 +55,15 @@
                         {{ relationship.person }}
                     </a>
                 </td>
-            </tr>        
+            </tr>
             <tr>
                 <th>Relation</th>
                 <td>
-                    <a href="{{ path('relation_show', { 'id': relationship.relation.id}) }}">
+                    <a href="{{ path('person_show', { 'id': relationship.relation.id}) }}">
                         {{ relationship.relation }}
                     </a>
                 </td>
-            </tr>        
+            </tr>
         </tbody>
     </table>
 {% endblock %}

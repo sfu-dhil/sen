@@ -2,9 +2,11 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Nines\UtilBundle\Entity\AbstractEntity;
 
 /**
@@ -48,7 +50,7 @@ class Person extends AbstractEntity {
     private $native;
 
     /**
-     * @var string
+     * @var array
      * @ORM\Column(type="array", nullable=true)
      */
     private $occupation;
@@ -62,7 +64,7 @@ class Person extends AbstractEntity {
     private $sex;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(type="string", length=10, nullable=true)
      */
     private $birthDate;
@@ -399,12 +401,16 @@ class Person extends AbstractEntity {
     /**
      * Set occupation.
      *
-     * @param string $occupation
+     * @param string|array $occupation
      *
      * @return Person
      */
     public function setOccupation($occupation) {
-        $this->occupation = $occupation;
+        if( !is_array($occupation)) {
+            $this->occupation = array($occupation);
+        } else {
+            $this->occupation = $occupation;
+        }
 
         return $this;
     }
@@ -412,7 +418,7 @@ class Person extends AbstractEntity {
     /**
      * Get occupation.
      *
-     * @return string
+     * @return array
      */
     public function getOccupation() {
         return $this->occupation;

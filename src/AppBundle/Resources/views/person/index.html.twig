@@ -49,7 +49,7 @@
                     <td>{{ person.lastName }}</td>
                     <td>{% if person.alias %}{{ person.alias|join(', ') }}{% endif %}</td>
                     <td>{{ person.native }}</td>
-                    <td>{{ person.occupation }}</td>
+                    <td>{% if person.occupation %}{{ person.occupation|join(', ') }}{% endif %}</td>
                     <td>{{ person.sex }}</td>
                     <td>{{ person.birthDateDisplay }}</td>
                     <td>{{ person.birthStatus }}</td>
