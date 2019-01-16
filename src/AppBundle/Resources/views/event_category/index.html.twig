@@ -24,18 +24,11 @@
         </div>
     </div>
 
-    <table class="table table-bordered table-condensed table-hover table-striped">
-        <thead>
-            <tr>
-            </tr>
-        </thead>
-        <tbody>
-            {% for eventCategory in eventCategories %}
-                <tr>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% embed 'NinesUtilBundle:term:partial/index.html.twig' with {
+        'terms': eventCategories,
+        'path': 'event_category_show',
+    } %}
+    {% endembed %}
 
     <div class="navigation">
         {{ knp_pagination_render(eventCategories) }}

@@ -24,6 +24,12 @@
         </div>
     </div>
 
+    {% embed 'NinesUtilBundle:term:partial/index.html.twig' with {
+        'terms': witnessCategories,
+        'path': 'witness_category_show',
+    } %}
+    {% endembed %}
+
     <table class="table table-bordered table-condensed table-hover table-striped">
         <thead>
             <tr>
