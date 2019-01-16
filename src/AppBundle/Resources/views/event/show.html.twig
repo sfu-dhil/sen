@@ -37,14 +37,6 @@
                 <td>{{ event.note }}</td>
             </tr>
             <tr>
-                <th>Created</th>
-                <td>{% if event.created %}{{ event.created|date }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{% if event.updated %}{{ event.updated|date }}{% endif %}</td>
-            </tr>
-            <tr>
                 <th>Category</th>
                 <td>
                     <a href="{{ path('event_category_show', { 'id': event.category.id}) }}">
@@ -82,6 +74,14 @@
                         </ul>
                     {% endif %}
                 </td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{% if event.created %}{{ event.created|date }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if event.updated %}{{ event.updated|date }}{% endif %}</td>
             </tr>
         </tbody>
     </table>

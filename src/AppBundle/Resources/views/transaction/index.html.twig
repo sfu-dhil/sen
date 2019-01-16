@@ -28,11 +28,10 @@
         <thead>
             <tr>
                 <th>Date</th>
-                <th>Page</th>
-                <th>Notes</th>
-                <th>First Party Note</th>
-                <th>Conjunction</th>
-                <th>Second Party Note</th>
+                <th>First Party</th>
+                <th>Category</th>
+                <th>Conj.</th>
+                <th>Second Party</th>
             </tr>
         </thead>
         <tbody>
@@ -43,11 +42,10 @@
                             {{ transaction.date|date }}
                         </a>
                     </td>
-                    <td>{{ transaction.page }}</td>
-                    <td>{{ transaction.notes }}</td>
-                    <td>{{ transaction.firstPartyNote }}</td>
+                    <td>{{ transaction.firstParty }}</td>
+                    <td>{{ transaction.category }}</td>
                     <td>{{ transaction.conjunction }}</td>
-                    <td>{{ transaction.secondPartyNote }}</td>
+                    <td>{{ transaction.secondParty }}</td>
                 </tr>
             {% endfor %}
         </tbody>

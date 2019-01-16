@@ -29,6 +29,7 @@
             <tr>
                 <th>Volume</th>
                 <th>Year</th>
+                <th>Notary</th>
             </tr>
         </thead>
         <tbody>
@@ -40,6 +41,11 @@
                         </a>
                     </td>
                     <td>{{ ledger.year }}</td>
+                    <td>
+                        <a href="{{ path('notary_show', {'id': ledger.notary.id }) }}">
+                            {{ ledger.notary }}
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

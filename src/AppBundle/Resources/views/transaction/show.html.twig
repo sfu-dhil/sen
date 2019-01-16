@@ -49,14 +49,6 @@
                 <td>{{ transaction.secondPartyNote }}</td>
             </tr>
             <tr>
-                <th>Created</th>
-                <td>{% if transaction.created %}{{ transaction.created|date }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{% if transaction.updated %}{{ transaction.updated|date }}{% endif %}</td>
-            </tr>
-            <tr>
                 <th>Firstparty</th>
                 <td>
                     <a href="{{ path('person_show', { 'id': transaction.firstParty.id}) }}">
@@ -87,6 +79,14 @@
                         {{ transaction.ledger }}
                     </a>
                 </td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{% if transaction.created %}{{ transaction.created|date }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if transaction.updated %}{{ transaction.updated|date }}{% endif %}</td>
             </tr>
         </tbody>
     </table>

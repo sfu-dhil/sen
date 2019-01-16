@@ -33,14 +33,6 @@
                 <td>{{ relationship.endDate }}</td>
             </tr>
             <tr>
-                <th>Created</th>
-                <td>{% if relationship.created %}{{ relationship.created|date }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{% if relationship.updated %}{{ relationship.updated|date }}{% endif %}</td>
-            </tr>
-            <tr>
                 <th>Category</th>
                 <td>
                     <a href="{{ path('relationship_category_show', { 'id': relationship.category.id}) }}">
@@ -63,6 +55,14 @@
                         {{ relationship.relation }}
                     </a>
                 </td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{% if relationship.created %}{{ relationship.created|date }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if relationship.updated %}{{ relationship.updated|date }}{% endif %}</td>
             </tr>
         </tbody>
     </table>

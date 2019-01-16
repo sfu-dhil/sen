@@ -33,20 +33,20 @@
                 <td>{{ ledger.year }}</td>
             </tr>
             <tr>
-                <th>Created</th>
-                <td>{% if ledger.created %}{{ ledger.created|date }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{% if ledger.updated %}{{ ledger.updated|date }}{% endif %}</td>
-            </tr>
-            <tr>
                 <th>Notary</th>
                 <td>
                     <a href="{{ path('notary_show', { 'id': ledger.notary.id}) }}">
                         {{ ledger.notary }}
                     </a>
                 </td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{% if ledger.created %}{{ ledger.created|date }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if ledger.updated %}{{ ledger.updated|date }}{% endif %}</td>
             </tr>
         </tbody>
     </table>

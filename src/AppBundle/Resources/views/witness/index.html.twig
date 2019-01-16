@@ -27,11 +27,29 @@
     <table class="table table-bordered table-condensed table-hover table-striped">
         <thead>
             <tr>
+                <th>Person</th>
+                <th>Category</th>
+                <th>Event</th>
             </tr>
         </thead>
         <tbody>
             {% for witness in witnesses %}
                 <tr>
+                    <td>
+                        <a href="{{ path('person_show', {'id': witness.person.id}) }}">
+                            {{ witness.person }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('witness_category_show', {'id': witness.category.id}) }}">
+                            {{ witness.category }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('event_show', {'id': witness.event.id}) }}">
+                            {{ witness.event }}
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
