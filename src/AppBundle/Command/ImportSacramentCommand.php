@@ -4,6 +4,7 @@ namespace AppBundle\Command;
 
 use AppBundle\Services\ImportService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -116,6 +117,9 @@ class ImportSacramentCommand extends ContainerAwareCommand {
         $category = $this->em->getRepository(EventCategory::class)->findOneBy(array(
             'name' => 'manumission',
         ));
+        if( ! $category) {
+            throw new Exception("Manumission event category is missing.");
+        }
         $event = new Event();
         $event->setCategory($category);
         $event->addParticipant($person);
@@ -130,6 +134,9 @@ class ImportSacramentCommand extends ContainerAwareCommand {
         $category = $this->em->getRepository(EventCategory::class)->findOneBy(array(
             'name' => 'baptism',
         ));
+        if( ! $category) {
+            throw new Exception("Baptism event category is missing.");
+        }
         $event = new Event();
         $event->setCategory($category);
         $event->addParticipant($person);
