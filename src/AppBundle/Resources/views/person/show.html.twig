@@ -61,14 +61,6 @@
                 <td>{{ person.status }}</td>
             </tr>
             <tr>
-                <th>Created</th>
-                <td>{% if person.created %}{{ person.created|date }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{% if person.updated %}{{ person.updated|date }}{% endif %}</td>
-            </tr>
-            <tr>
                 <th>Birthplace</th>
                 <td>
                     {% if person.birthPlace %}
@@ -105,6 +97,22 @@
                 </td>
             </tr>
             <tr>
+                <th>Relations</th>
+                <td>
+                    {% if person.relations | length > 0 %}
+                        <ul>
+                            {% for relation in person.relations %}
+                                <li>
+                                    <a href="{{ path("relationship_show", {"id":relation.id}) }}">
+                                        {{ relation }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
                 <th>Events</th>
                 <td>
                     {% if person.events | length > 0 %}
@@ -120,8 +128,17 @@
                     {% endif %}
                 </td>
             </tr>
+            <tr>
+                <th>Created</th>
+                <td>{% if person.created %}{{ person.created|date }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if person.updated %}{{ person.updated|date }}{% endif %}</td>
+            </tr>
         </tbody>
     </table>
+
     {% if person.residences | length > 0 %}
         <h2>Residences</h2>
         <ul>
@@ -134,8 +151,22 @@
             {% endfor %}
         </ul>
     {% endif %}
+
+    {% if person.events | length > 0 %}
+        <h2>Events</h2>
+        <ul>
+            {% for event in person.events %}
+                <li>
+                    <a href="{{ path('event_show', {'id': event.id}) }}">
+                        {{ event }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     {% if person.witnesses | length > 0 %}
-        <h2>Witnesses</h2>
+        <h2>Witnessed Events</h2>
         <ul>
             {% for witness in person.witnesses %}
                 <li>
@@ -146,8 +177,9 @@
             {% endfor %}
         </ul>
     {% endif %}
+
     {% if person.firstPartyTransactions | length > 0 %}
-        <h2>Firstpartytransactions</h2>
+        <h2>First party transactions</h2>
         <ul>
             {% for firstPartyTransaction in person.firstPartyTransactions %}
                 <li>
@@ -159,7 +191,7 @@
         </ul>
     {% endif %}
     {% if person.secondPartyTransactions | length > 0 %}
-        <h2>Secondpartytransactions</h2>
+        <h2>Second party transactions</h2>
         <ul>
             {% for secondPartyTransaction in person.secondPartyTransactions %}
                 <li>

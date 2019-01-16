@@ -112,6 +112,12 @@ class Person extends AbstractEntity {
     private $relationships;
 
     /**
+     * @var Collection|Relationship[]
+     * @ORM\OneToMany(targetEntity="Relationship", mappedBy="relation")
+     */
+    private $relations;
+
+    /**
      * @var Collection|Witness[]
      * @ORM\OneToMany(targetEntity="Witness", mappedBy="person")
      */
@@ -661,4 +667,40 @@ class Person extends AbstractEntity {
         return $this->secondPartyTransactions;
     }
 
+
+    /**
+     * Add relation.
+     *
+     * @param \AppBundle\Entity\Relationship $relation
+     *
+     * @return Person
+     */
+    public function addRelation(\AppBundle\Entity\Relationship $relation)
+    {
+        $this->relations[] = $relation;
+
+        return $this;
+    }
+
+    /**
+     * Remove relation.
+     *
+     * @param \AppBundle\Entity\Relationship $relation
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeRelation(\AppBundle\Entity\Relationship $relation)
+    {
+        return $this->relations->removeElement($relation);
+    }
+
+    /**
+     * Get relations.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRelations()
+    {
+        return $this->relations;
+    }
 }
