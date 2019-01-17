@@ -83,7 +83,7 @@ class Person extends AbstractEntity {
 
     /**
      * @var string
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $birthStatus;
 
@@ -160,6 +160,15 @@ class Person extends AbstractEntity {
      */
     public function __toString() {
         return $this->lastName . ", " . $this->firstName;
+    }
+
+    /**
+     * Returns a string representation of this entity.
+     *
+     * @return string
+     */
+    public function getName() {
+        return $this->__toString();
     }
 
     /**

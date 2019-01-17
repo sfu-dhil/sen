@@ -48,9 +48,11 @@
                         </a>
                     </td>
                     <td>
-                        <a href="{{ path('location_show', {'id': event.location.id}) }}">
-                            {{ event.location }}
-                        </a>
+                        {% if event.location %}
+                            <a href="{{ path('location_show', {'id': event.location.id}) }}">
+                                {{ event.location }}
+                            </a>
+                        {% endif %}
                     </td>
                     <td>
                         {% if event.date %}

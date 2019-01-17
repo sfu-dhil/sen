@@ -9,16 +9,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * LocationCategoryType form.
  */
-class LocationCategoryType extends TermType
-{
+class LocationCategoryType extends TermType {
+
     /**
      * Add form fields to $builder.
      *
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         parent::buildForm($builder, $options);
     }
 
@@ -30,8 +29,7 @@ class LocationCategoryType extends TermType
      *
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
-    {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\LocationCategory'
         ));

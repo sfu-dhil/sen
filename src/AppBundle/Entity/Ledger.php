@@ -57,6 +57,10 @@ class Ledger extends AbstractEntity
         return $this->notary . " " . $this->volume;
     }
 
+    public function getName() {
+        return $this->__toString();
+    }
+
     /**
      * Set notary.
      *

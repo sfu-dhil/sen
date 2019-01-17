@@ -11,25 +11,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * NotaryType form.
  */
-class NotaryType extends AbstractType
-{
+class NotaryType extends AbstractType {
+
     /**
      * Add form fields to $builder.
      *
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {        $builder->add('name', null, array(
+    public function buildForm(FormBuilderInterface $builder, array $options) {
+        $builder->add('name', null, array(
             'label' => 'Name',
             'required' => true,
             'attr' => array(
                 'help_block' => '',
             ),
         ));
-        
     }
-    
+
     /**
      * Define options for the form.
      *
@@ -38,8 +37,7 @@ class NotaryType extends AbstractType
      *
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
-    {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Notary'
         ));
