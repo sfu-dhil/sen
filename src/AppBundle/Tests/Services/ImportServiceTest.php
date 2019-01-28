@@ -288,7 +288,7 @@ class ImportServiceTest extends BaseTestCase {
         ];
         $event = $this->importer->addManumission($person, $row);
         $this->assertNotNull($event);
-        $this->assertEquals('1771-06-05', $event->getDate()->format('Y-m-d'));
+        $this->assertEquals('1771-06-05', $event->getDate());
         $this->assertEquals('5 Jun 1771', $event->getWrittenDate());
     }
 
@@ -305,7 +305,7 @@ class ImportServiceTest extends BaseTestCase {
         ];
         $event = $this->importer->addBaptism($person, $row);
         $this->assertNotNull($event);
-        $this->assertEquals('1771-06-05', $event->getDate()->format('Y-m-d'));
+        $this->assertEquals('1771-06-05', $event->getDate());
         $this->assertEquals('5 Jun 1771', $event->getWrittenDate());
     }
 
