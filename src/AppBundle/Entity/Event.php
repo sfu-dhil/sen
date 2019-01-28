@@ -72,7 +72,7 @@ class Event extends AbstractEntity
      * @return string
      */
     public function __toString() {
-        return $this->category . ($this->date ? (' ' . $this->date->format('Y-m-d')) : '');
+        return $this->category . ' ' . $this->date;
     }
 
     public function setNote($note) {
