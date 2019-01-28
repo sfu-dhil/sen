@@ -158,6 +158,19 @@ class ImportService {
         return $person;
     }
 
+    public function findCity($name) {
+        $repo = $this->em->getRepository(City::class);
+        $city = $repo->findOneBy(array(
+            'name' => $name,
+        ));
+        if (!$city) {
+            $city = new City();
+            $city->setName($name);
+            $this->em->persist($city);
+        }
+        return $city;
+    }
+
     /**
      * Find or create a transaction category by label.
      *
@@ -309,15 +322,15 @@ class ImportService {
         $category = $this->em->getRepository(EventCategory::class)->findOneBy(array(
             'name' => 'manumission',
         ));
-        if( ! $category) {
+        if (!$category) {
             throw new Exception("Manumission event category is missing.");
         }
         $event = new Event();
         $event->setCategory($category);
         $event->addParticipant($person);
-        $event->setDate(new \DateTime($this->parseDate($row[7])));
+        $event->setDate($this->parseDate($row[7]));
         $event->setWrittenDate($row[7]);
-        if(isset($row[8]) && $row[8]) {
+        if (isset($row[8]) && $row[8]) {
             $event->setLocation($this->findLocation($row[8], ''));
         }
         $this->em->persist($event);
@@ -331,15 +344,15 @@ class ImportService {
         $category = $this->em->getRepository(EventCategory::class)->findOneBy(array(
             'name' => 'baptism',
         ));
-        if( ! $category) {
+        if (!$category) {
             throw new Exception("Baptism event category is missing.");
         }
         $event = new Event();
         $event->setCategory($category);
         $event->addParticipant($person);
-        $event->setDate(new \DateTime($this->parseDate($row[5])));
+        $event->setDate($this->parseDate($row[5]));
         $event->setWrittenDate($row[5]);
-        if(isset($row[6]) && $row[6]) {
+        if (isset($row[6]) && $row[6]) {
             $event->setLocation($this->findLocation($row[6], 'church'));
         }
         $this->em->persist($event);
@@ -377,7 +390,7 @@ class ImportService {
     }
 
     public function addOccupations(Person $person, $row) {
-        if(!isset($row[13]) ||  ! $row[13]) {
+        if (!isset($row[13]) || !$row[13]) {
             return;
         }
         $occupations = explode(';', $row[13]);

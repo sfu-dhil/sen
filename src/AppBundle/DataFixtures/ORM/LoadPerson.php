@@ -26,6 +26,7 @@ class LoadPerson extends Fixture implements DependentFixtureInterface {
         $person1->setLastName("Ville");
         $person1->setNative("Attakapas");
         $person1->setBirthDate("1760-01-02");
+        $person1->setBirthDateDisplay("2 Jan 1760");
         $person1->setBirthPlace($this->getReference("city.1"));
         $person1->setAlias(array("Em", "EV"));
         $person1->setOccupation("1775 soldier");
@@ -38,6 +39,7 @@ class LoadPerson extends Fixture implements DependentFixtureInterface {
         $person2 = new Person();
         $person2->setFirstName("Savanah");
         $person2->setLastName("Kansas");
+        $person1->setBirthDateDisplay("3 Feb 1760");
         $person2->setBirthDate("1761-02-03");
         $person2->setBirthPlace($this->getReference("city.1"));
         $person2->setOccupation("1776 busness person");

@@ -64,16 +64,18 @@ class Person extends AbstractEntity {
     private $sex;
 
     /**
-     * @var DateTime
+     * @var string
+     *
      * @ORM\Column(type="string", length=10, nullable=true)
      */
     private $birthDate;
 
     /**
      * @var string
+     *
      * @ORM\Column(type="string", length=24, nullable=true)
      */
-    private $birthDateDisplay;
+    private $writtenBirthDate;
 
     /**
      * @var City
@@ -144,6 +146,7 @@ class Person extends AbstractEntity {
     public function __construct() {
         parent::__construct();
         $this->alias = array();
+        $this->occupation = array();
         $this->transactions = new ArrayCollection();
         $this->relationships = new ArrayCollection();
         $this->witnesses = new ArrayCollection();
@@ -370,10 +373,10 @@ class Person extends AbstractEntity {
     }
 
     public function addAlias($alias) {
-        if(is_array($alias)) {
+        if (is_array($alias)) {
             $this->alias = array_merge($this->alias, $alias);
         } else {
-            $this->alias[] = array($alias);
+            $this->alias[] = $alias;
         }
         return $this;
     }
@@ -423,10 +426,10 @@ class Person extends AbstractEntity {
     }
 
     public function addOccupation($occupation) {
-        if(is_array($occupation)) {
+        if (is_array($occupation)) {
             $this->occupation = array_merge($this->occupation, $occupation);
         } else {
-            $this->occupation = array($occupation);
+            $this->occupation[] = $occupation;
         }
         return $this;
     }
@@ -439,7 +442,7 @@ class Person extends AbstractEntity {
      * @return Person
      */
     public function setOccupation($occupation) {
-        if( !is_array($occupation)) {
+        if (!is_array($occupation)) {
             $this->occupation = array($occupation);
         } else {
             $this->occupation = $occupation;
@@ -487,9 +490,6 @@ class Person extends AbstractEntity {
      * @return Person
      */
     public function setBirthDate($birthDate) {
-        if($birthDate && ! preg_match("/^\d\d\d\d-\d\d-\d\d$/", $birthDate)) {
-            throw new Exception("Malformed birthdate: '{$birthDate}' does not match YYYY-MM-DD");
-        }
         $this->birthDate = $birthDate;
 
         return $this;
@@ -512,7 +512,7 @@ class Person extends AbstractEntity {
      * @return Person
      */
     public function setBirthDateDisplay($birthDateDisplay) {
-        $this->birthDateDisplay = $birthDateDisplay;
+        $this->writtenBirthDate = $birthDateDisplay;
 
         return $this;
     }
@@ -523,10 +523,7 @@ class Person extends AbstractEntity {
      * @return string
      */
     public function getBirthDateDisplay() {
-        if ($this->birthDateDisplay) {
-            return $this->birthDateDisplay;
-        }
-        return $this->birthDate;
+        return $this->writtenBirthDate;
     }
 
     /**
@@ -694,7 +691,6 @@ class Person extends AbstractEntity {
         return $this->secondPartyTransactions;
     }
 
-
     /**
      * Add relation.
      *
@@ -702,8 +698,7 @@ class Person extends AbstractEntity {
      *
      * @return Person
      */
-    public function addRelation(\AppBundle\Entity\Relationship $relation)
-    {
+    public function addRelation(\AppBundle\Entity\Relationship $relation) {
         $this->relations[] = $relation;
 
         return $this;
@@ -716,8 +711,7 @@ class Person extends AbstractEntity {
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeRelation(\AppBundle\Entity\Relationship $relation)
-    {
+    public function removeRelation(\AppBundle\Entity\Relationship $relation) {
         return $this->relations->removeElement($relation);
     }
 
@@ -726,8 +720,8 @@ class Person extends AbstractEntity {
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRelations()
-    {
+    public function getRelations() {
         return $this->relations;
     }
+
 }
