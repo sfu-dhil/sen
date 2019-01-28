@@ -369,6 +369,15 @@ class Person extends AbstractEntity {
         return $this->lastName;
     }
 
+    public function addAlias($alias) {
+        if(is_array($alias)) {
+            $this->alias = array_merge($this->alias, $alias);
+        } else {
+            $this->alias[] = array($alias);
+        }
+        return $this;
+    }
+
     /**
      * Set alias.
      *
@@ -411,6 +420,15 @@ class Person extends AbstractEntity {
      */
     public function getNative() {
         return $this->native;
+    }
+
+    public function addOccupation($occupation) {
+        if(is_array($occupation)) {
+            $this->occupation = array_merge($this->occupation, $occupation);
+        } else {
+            $this->occupation = array($occupation);
+        }
+        return $this;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace AppBundle\Services;
 
 use AppBundle\Entity\City;
 use AppBundle\Entity\EventCategory;
+use AppBundle\Entity\Event;
 use AppBundle\Entity\Ledger;
 use AppBundle\Entity\Location;
 use AppBundle\Entity\LocationCategory;
@@ -17,7 +18,6 @@ use AppBundle\Entity\Transaction;
 use AppBundle\Entity\TransactionCategory;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Event;
 use Exception;
 use Psr\Log\LoggerInterface;
 
@@ -29,7 +29,7 @@ use Psr\Log\LoggerInterface;
 class ImportService {
 
     const MONTHS = array(
-        'jan', 'feb', 'mar', 'apr', 'may', 'jun', 
+        'jan', 'feb', 'mar', 'apr', 'may', 'jun',
         'jul', 'aug', 'sep', 'oct', 'nov', 'dec'
     );
 
@@ -238,7 +238,7 @@ class ImportService {
         $this->em->persist($transaction);
         return $transaction;
     }
-        
+
     public function parseDate($string) {
         static $months = null;
         if (!$months) {
@@ -271,7 +271,7 @@ class ImportService {
         return null;
     }
 
-    protected function findLocationCategory($name) {
+    public function findLocationCategory($name) {
         $category = $this->em->getRepository(LocationCategory::class)->findOneBy(array(
             'name' => $name,
         ));
@@ -284,7 +284,7 @@ class ImportService {
         return $category;
     }
 
-    protected function findLocation($name, $categoryName) {
+    public function findLocation($name, $categoryName) {
         if (!$name) {
             return;
         }
@@ -302,8 +302,8 @@ class ImportService {
         return $location;
     }
 
-    protected function addManumission(Person $person, $row) {
-        if (!$row[7]) {
+    public function addManumission(Person $person, $row) {
+        if (!isset($row[7]) || !$row[7]) {
             return;
         }
         $category = $this->em->getRepository(EventCategory::class)->findOneBy(array(
@@ -315,12 +315,17 @@ class ImportService {
         $event = new Event();
         $event->setCategory($category);
         $event->addParticipant($person);
-        $event->setLocation($this->findLocation($row[6], 'church'));
+        $event->setDate(new \DateTime($this->parseDate($row[7])));
+        $event->setWrittenDate($row[7]);
+        if(isset($row[8]) && $row[8]) {
+            $event->setLocation($this->findLocation($row[8], ''));
+        }
         $this->em->persist($event);
+        return $event;
     }
 
-    protected function addBaptism(Person $person, $row) {
-        if (!$row[5]) {
+    public function addBaptism(Person $person, $row) {
+        if (!isset($row[5]) || !$row[5]) {
             return;
         }
         $category = $this->em->getRepository(EventCategory::class)->findOneBy(array(
@@ -332,45 +337,51 @@ class ImportService {
         $event = new Event();
         $event->setCategory($category);
         $event->addParticipant($person);
-        $event->setLocation($this->findLocation($row[6], 'church'));
+        $event->setDate(new \DateTime($this->parseDate($row[5])));
+        $event->setWrittenDate($row[5]);
+        if(isset($row[6]) && $row[6]) {
+            $event->setLocation($this->findLocation($row[6], 'church'));
+        }
         $this->em->persist($event);
+        return $event;
     }
 
-    protected function addResidence(Person $person, $row) {
-        if (!$row[10]) {
+    public function addResidence(Person $person, $row) {
+        if (!isset($row[10]) || !$row[10]) {
             return;
         }
-        $city = $this->importer->findCity($row[10]);
+        $city = $this->findCity($row[10]);
         $residence = new Residence();
         $residence->setCity($city);
         $residence->setPerson($person);
-        if ($row[9]) {
+        $person->addResidence($residence);
+        if (isset($row[9]) && $row[9]) {
             $residence->setDate($row[9]);
         }
         $this->em->persist($residence);
     }
 
-    protected function addAliases(Person $person, $row) {
-        if (!$row[11]) {
+    public function addAliases(Person $person, $row) {
+        if (!isset($row[11]) || !$row[11]) {
             return;
         }
         $aliases = preg_split('/[,;]/', $row[11]);
-        $person->setAlias($aliases);
+        $person->addAlias($aliases);
     }
 
-    protected function setNative(Person $person, $row) {
-        if (!$row[12]) {
+    public function setNative(Person $person, $row) {
+        if (!isset($row[12]) || !$row[12]) {
             return;
         }
         $person->setNative($row[12]);
     }
 
-    protected function addOccupations(Person $person, $row) {
-        if( ! $row[13]) {
+    public function addOccupations(Person $person, $row) {
+        if(!isset($row[13]) ||  ! $row[13]) {
             return;
         }
         $occupations = explode(';', $row[13]);
-        $person->setOccupation($occupations);
+        $person->addOccupation($occupations);
     }
 
 }

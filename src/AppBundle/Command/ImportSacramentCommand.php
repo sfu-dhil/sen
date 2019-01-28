@@ -57,15 +57,15 @@ class ImportSacramentCommand extends ContainerAwareCommand {
             }, $row);
             $person = $this->importer->findPerson($row[0], $row[1]);
             $person->setBirthDateDisplay($row[2]);
-            $person->setBirthDate($this->parseDate($row[2]));
+            $person->setBirthDate($this->importer->parseDate($row[2]));
             $person->setBirthPlace($this->importer->findCity($row[3]));
-            $this->addBaptism($person, $row);
-            $this->addManumission($person, $row);
+            $this->importer->addBaptism($person, $row);
+            $this->importer->addManumission($person, $row);
 
-            $this->addResidence($person, $row);
-            $this->setNative($person, $row);
-            $this->addAliases($person, $row);
-            $this->addOccupations($person, $row);
+            $this->importer->addResidence($person, $row);
+            $this->importer->setNative($person, $row);
+            $this->importer->addAliases($person, $row);
+            $this->importer->addOccupations($person, $row);
 
             $this->em->flush();
         }
