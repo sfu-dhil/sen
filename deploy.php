@@ -22,11 +22,6 @@ task('dhil:precheck', function(){
     }
 });
 
-task('dhil:ckeditor', function(){
-    $output = run('{{bin/php}} {{bin/console}} ckeditor:install');
-    writeln($output);
-});
-
 option('skip-tests', null, InputOption::VALUE_NONE, 'Skip testing. Probably a bad idea.');
 task('dhil:phpunit', function() {
 	if(input()->getOption('skip-tests')) {
@@ -77,7 +72,7 @@ task('dhil:download:images', function(){
     $host = get('hostname');
     $become = get('become');
 
-    runLocally("rsync -av -e 'ssh' --rsync-path='sudo -u $become rsync' $user@$host:{{deploy_path}}/shared/web/images/clippings/ ./web/images/clippings", ['timeout' => null]);
+    runLocally("rsync -av -e 'ssh' --rsync-path='sudo -u $become rsync' $user@$host:/home/btd/uploads/ ./app/data/uploads", ['timeout' => null]);
 })->desc('Download clipping images from server.');
 
 task('dhil:upload:images', function(){
@@ -157,7 +152,6 @@ task('deploy', [
     'deploy:vendors',
     'dhil:clear:test-cache',
     'dhil:phpunit',
-    'dhil:ckeditor',
     'deploy:assets:install',
     'deploy:cache:clear',
     'deploy:writable',
