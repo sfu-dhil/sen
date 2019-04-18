@@ -4,9 +4,11 @@
 
 {% block pageheader %}
     <h1>City List</h1>
-    <p class="count">
-        Displaying {{ cities|length }} cities of {{ cities.getTotalItemCount }} total.
-    </p>
+    {% if q %}
+        <p class="count">
+            Displaying {{ cities|length }} cities of {{ cities.getTotalItemCount }} total.
+        </p>
+    {% endif %}
 {% endblock %}
 
 {% block body %}
@@ -43,8 +45,10 @@
         </tbody>
     </table>
 
+    {% if q %}
     <div class="navigation">
         {{ knp_pagination_render(cities) }}
     </div>
+    {%  endif %}
 
 {% endblock %}
