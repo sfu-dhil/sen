@@ -144,7 +144,7 @@
         <ul>
             {% for residence in person.residences %}
                 <li>
-                    <a href="{{ path("city_show", {"id":residence.id}) }}">
+                    <a href="{{ path("city_show", {"id":residence.city.id}) }}">
                         {{ residence }}
                     </a>
                 </li>
