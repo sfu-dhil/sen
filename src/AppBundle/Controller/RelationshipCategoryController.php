@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\RelationshipCategory;
@@ -27,8 +26,8 @@ class RelationshipCategoryController extends Controller {
      *
      * @return array
      *
-     * @Route("/", name="relationship_category_index")
-     * @Method("GET")
+     * @Route("/", name="relationship_category_index", methods={"GET"})
+     *
      * @Template()
      */
     public function indexAction(Request $request) {
@@ -58,8 +57,8 @@ class RelationshipCategoryController extends Controller {
      *
      * @param Request $request
      *
-     * @Route("/typeahead", name="relationship_category_typeahead")
-     * @Method("GET")
+     * @Route("/typeahead", name="relationship_category_typeahead", methods={"GET"})
+     *
      * @return JsonResponse
      */
     public function typeahead(Request $request) {
@@ -99,8 +98,8 @@ class RelationshipCategoryController extends Controller {
      *
      * @param Request $request
      *
-     * @Route("/search", name="relationship_category_search")
-     * @Method("GET")
+     * @Route("/search", name="relationship_category_search", methods={"GET"})
+     *
      * @Template()
      */
     public function searchAction(Request $request) {
@@ -129,8 +128,8 @@ class RelationshipCategoryController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="relationship_category_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="relationship_category_new", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newAction(Request $request) {
@@ -161,8 +160,8 @@ class RelationshipCategoryController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="relationship_category_new_popup")
-     * @Method({"GET", "POST"})
+     * @Route("/new_popup", name="relationship_category_new_popup", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newPopupAction(Request $request) {
@@ -176,8 +175,8 @@ class RelationshipCategoryController extends Controller {
      *
      * @return array
      *
-     * @Route("/{id}", name="relationship_category_show")
-     * @Method("GET")
+     * @Route("/{id}", name="relationship_category_show", methods={"GET"})
+     *
      * @Template()
      */
     public function showAction(RelationshipCategory $relationshipCategory) {
@@ -197,8 +196,8 @@ class RelationshipCategoryController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="relationship_category_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="relationship_category_edit", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function editAction(Request $request, RelationshipCategory $relationshipCategory) {
@@ -228,8 +227,8 @@ class RelationshipCategoryController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/delete", name="relationship_category_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="relationship_category_delete", methods={"GET"})
+     *
      */
     public function deleteAction(Request $request, RelationshipCategory $relationshipCategory) {
         $em = $this->getDoctrine()->getManager();

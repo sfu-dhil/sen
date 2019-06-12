@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Race;
@@ -27,8 +26,8 @@ class RaceController extends Controller {
      *
      * @return array
      *
-     * @Route("/", name="race_index")
-     * @Method("GET")
+     * @Route("/", name="race_index", methods={"GET"})
+     *
      * @Template()
      */
     public function indexAction(Request $request) {
@@ -58,8 +57,8 @@ class RaceController extends Controller {
      *
      * @param Request $request
      *
-     * @Route("/typeahead", name="race_typeahead")
-     * @Method("GET")
+     * @Route("/typeahead", name="race_typeahead", methods={"GET"})
+     *
      * @return JsonResponse
      */
     public function typeahead(Request $request) {
@@ -99,8 +98,8 @@ class RaceController extends Controller {
      *
      * @param Request $request
      *
-     * @Route("/search", name="race_search")
-     * @Method("GET")
+     * @Route("/search", name="race_search", methods={"GET"})
+     *
      * @Template()
      */
     public function searchAction(Request $request) {
@@ -129,8 +128,8 @@ class RaceController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="race_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="race_new", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newAction(Request $request) {
@@ -161,8 +160,8 @@ class RaceController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="race_new_popup")
-     * @Method({"GET", "POST"})
+     * @Route("/new_popup", name="race_new_popup", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newPopupAction(Request $request) {
@@ -176,8 +175,8 @@ class RaceController extends Controller {
      *
      * @return array
      *
-     * @Route("/{id}", name="race_show")
-     * @Method("GET")
+     * @Route("/{id}", name="race_show", methods={"GET"})
+     *
      * @Template()
      */
     public function showAction(Race $race) {
@@ -197,8 +196,8 @@ class RaceController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="race_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="race_edit", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function editAction(Request $request, Race $race) {
@@ -228,8 +227,8 @@ class RaceController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/delete", name="race_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="race_delete", methods={"GET"})
+     *
      */
     public function deleteAction(Request $request, Race $race) {
         $em = $this->getDoctrine()->getManager();
