@@ -8,7 +8,9 @@ use Nines\UtilBundle\Entity\AbstractEntity;
 /**
  * City
  *
- * @ORM\Table(name="city")
+ * @ORM\Table(name="city", indexes={
+ *      @ORM\Index(name="city_ft_idx", columns={"name"}, flags={"fulltext"})
+ *  })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CityRepository")
  */
 class City extends AbstractEntity

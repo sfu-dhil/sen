@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\City;
@@ -27,8 +26,8 @@ class CityController extends Controller {
      *
      * @return array
      *
-     * @Route("/", name="city_index")
-     * @Method("GET")
+     * @Route("/", name="city_index", methods={"GET"})
+     *
      * @Template()
      */
     public function indexAction(Request $request) {
@@ -58,8 +57,8 @@ class CityController extends Controller {
      *
      * @param Request $request
      *
-     * @Route("/typeahead", name="city_typeahead")
-     * @Method("GET")
+     * @Route("/typeahead", name="city_typeahead", methods={"GET"})
+     *
      * @return JsonResponse
      */
     public function typeahead(Request $request) {
@@ -99,8 +98,8 @@ class CityController extends Controller {
      *
      * @param Request $request
      *
-     * @Route("/search", name="city_search")
-     * @Method("GET")
+     * @Route("/search", name="city_search", methods={"GET"})
+     *
      * @Template()
      */
     public function searchAction(Request $request) {
@@ -129,8 +128,8 @@ class CityController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="city_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="city_new", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newAction(Request $request) {
@@ -161,8 +160,8 @@ class CityController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="city_new_popup")
-     * @Method({"GET", "POST"})
+     * @Route("/new_popup", name="city_new_popup", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newPopupAction(Request $request) {
@@ -176,8 +175,8 @@ class CityController extends Controller {
      *
      * @return array
      *
-     * @Route("/{id}", name="city_show")
-     * @Method("GET")
+     * @Route("/{id}", name="city_show", methods={"GET"})
+     *
      * @Template()
      */
     public function showAction(City $city) {
@@ -197,8 +196,8 @@ class CityController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="city_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="city_edit", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function editAction(Request $request, City $city) {
@@ -228,8 +227,8 @@ class CityController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/delete", name="city_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="city_delete", methods={"GET"})
+     *
      */
     public function deleteAction(Request $request, City $city) {
         $em = $this->getDoctrine()->getManager();

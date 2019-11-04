@@ -9,19 +9,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * RaceType form.
  */
-class RaceType extends TermType
-{
+class RaceType extends TermType {
+
     /**
      * Add form fields to $builder.
      *
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         parent::buildForm($builder, $options);
     }
-
 
     /**
      * Define options for the form.
@@ -31,8 +29,7 @@ class RaceType extends TermType
      *
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
-    {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Race'
         ));

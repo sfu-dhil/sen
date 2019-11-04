@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}TransactionCategory{% endblock %}
+{% block title %}Transaction Category{% endblock %}
 
 {% block pageheader %}
-    <h1>TransactionCategory Details</h1>
+    <h1>Transaction Category Details</h1>
 {% endblock %}
 
 {% block body %}
@@ -22,18 +22,10 @@
             {% endif %}
         </div>
     </div>
-    <table class="table table-bordered table-condensed table-hover table-striped">
-        <tbody>
-            <tr>
-                <th>Created</th>
-                <td>{% if transactionCategory.created %}{{ transactionCategory.created|date }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{% if transactionCategory.updated %}{{ transactionCategory.updated|date }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
+
+    {% embed 'NinesUtilBundle:term:partial/show.html.twig' with {'term': transactionCategory} %}
+    {% endembed %}
+
     {% if transactionCategory.transactions | length > 0 %}
         <h2>Transactions</h2>
         <ul>

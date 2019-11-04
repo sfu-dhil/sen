@@ -23,10 +23,11 @@ class LoadEvent extends Fixture implements DependentFixtureInterface {
     public function load(ObjectManager $manager) {
         $event1 = new Event();
         $event1->setWrittenDate("21 Feb 1792");
-        $event1->setDate(new \DateTime("1792/01/21"));
+        $event1->setDate("1792-02-21");
         $event1->setCategory($this->getReference("eventcategory.1"));
         $event1->setLocation($this->getReference("location.1"));
         $event1->setNote("Seen original.");
+        $event1->addParticipant($this->getReference('person.1'));
         $this->setReference("event.1", $event1);
         $manager->persist($event1);
 
@@ -38,6 +39,7 @@ class LoadEvent extends Fixture implements DependentFixtureInterface {
             LoadCity::class,
             LoadEventCategory::class,
             LoadLocation::class,
+            LoadPerson::class,
         );
     }
 

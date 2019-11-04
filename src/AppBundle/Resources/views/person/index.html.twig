@@ -27,15 +27,11 @@
     <table class="table table-bordered table-condensed table-hover table-striped">
         <thead>
             <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Alias</th>
-                <th>Native</th>
-                <th>Occupation</th>
+                <th>Name</th>
+                <th>Race</th>
                 <th>Sex</th>
                 <th>Birth Date</th>
-                <th>Birth Status</th>
-                <th>Status</th>
+                <th>Birth Date as Written</th>
             </tr>
         </thead>
         <tbody>
@@ -43,17 +39,13 @@
                 <tr>
                     <td>
                         <a href="{{ path('person_show', { 'id': person.id }) }}">
-                            {{ person.firstName }}
+                            {{ person.lastName }}, {{ person.firstName }}
                         </a>
                     </td>
-                    <td>{{ person.lastName }}</td>
-                    <td>{% if person.alias %}{{ person.alias|join(', ') }}{% endif %}</td>
-                    <td>{{ person.native }}</td>
-                    <td>{{ person.occupation }}</td>
+                    <td>{{ person.race }}</td>
                     <td>{{ person.sex }}</td>
+                    <td>{{ person.birthDate }}</td>
                     <td>{{ person.birthDateDisplay }}</td>
-                    <td>{{ person.birthStatus }}</td>
-                    <td>{{ person.status }}</td>
                 </tr>
             {% endfor %}
         </tbody>

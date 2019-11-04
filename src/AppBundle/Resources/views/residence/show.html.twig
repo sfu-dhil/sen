@@ -29,14 +29,6 @@
                 <td>{{ residence.date }}</td>
             </tr>
             <tr>
-                <th>Created</th>
-                <td>{% if residence.created %}{{ residence.created|date }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{% if residence.updated %}{{ residence.updated|date }}{% endif %}</td>
-            </tr>
-            <tr>
                 <th>Person</th>
                 <td>
                     <a href="{{ path('person_show', { 'id': residence.person.id}) }}">
@@ -51,6 +43,14 @@
                         {{ residence.city }}
                     </a>
                 </td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{% if residence.created %}{{ residence.created|date }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if residence.updated %}{{ residence.updated|date }}{% endif %}</td>
             </tr>
         </tbody>
     </table>

@@ -28,6 +28,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Ledgers</th>
             </tr>
         </thead>
         <tbody>
@@ -37,6 +38,9 @@
                         <a href="{{ path('notary_show', { 'id': notary.id }) }}">
                             {{ notary.name }}
                         </a>
+                    </td>
+                    <td>
+                        {{ notary.ledgers|length }}
                     </td>
                 </tr>
             {% endfor %}

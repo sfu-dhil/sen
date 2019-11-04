@@ -23,8 +23,8 @@ class Event extends AbstractEntity
     private $writtenDate;
 
     /**
-     * @var \DateTime
-     * @ORM\Column(type="date", nullable=true)
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
      */
     private $date;
 
@@ -72,7 +72,7 @@ class Event extends AbstractEntity
      * @return string
      */
     public function __toString() {
-        return $this->category . ($this->date ? (' ' . $this->date->format('Y-m-d')) : '');
+        return $this->category . ' ' . $this->date;
     }
 
     public function setNote($note) {
@@ -220,11 +220,11 @@ class Event extends AbstractEntity
     /**
      * Set date.
      *
-     * @param \DateTime|null $date
+     * @param string $date
      *
      * @return Event
      */
-    public function setDate(\DateTime $date = null)
+    public function setDate($date = null)
     {
         $this->date = $date;
 
@@ -234,7 +234,7 @@ class Event extends AbstractEntity
     /**
      * Get date.
      *
-     * @return \DateTime|null
+     * @return string
      */
     public function getDate()
     {

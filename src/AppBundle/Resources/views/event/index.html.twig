@@ -28,6 +28,8 @@
         <thead>
             <tr>
                 <th>Written Date</th>
+                <th>Category</th>
+                <th>Location</th>
                 <th>Date</th>
                 <th>Note</th>
             </tr>
@@ -40,8 +42,26 @@
                             {{ event.writtenDate }}
                         </a>
                     </td>
-                    <td>{% if event.date %}{{ event.date|date('Y-m-d') }}{% endif %}</td>
-                    <td>{{ event.note }}</td>
+                    <td>
+                        <a href="{{ path('event_category_show', {'id': event.category.id}) }}">
+                            {{ event.category }}
+                        </a>
+                    </td>
+                    <td>
+                        {% if event.location %}
+                            <a href="{{ path('location_show', {'id': event.location.id}) }}">
+                                {{ event.location }}
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if event.date %}
+                            {{ event.date|date('Y-m-d') }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ event.note }}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

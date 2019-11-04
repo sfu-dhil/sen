@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Transaction;
@@ -27,8 +26,8 @@ class TransactionController extends Controller {
      *
      * @return array
      *
-     * @Route("/", name="transaction_index")
-     * @Method("GET")
+     * @Route("/", name="transaction_index", methods={"GET"})
+     *
      * @Template()
      */
     public function indexAction(Request $request) {
@@ -64,8 +63,8 @@ class TransactionController extends Controller {
      *
      * @param Request $request
      *
-     * @Route("/search", name="transaction_search")
-     * @Method("GET")
+     * @Route("/search", name="transaction_search", methods={"GET"})
+     *
      * @Template()
      */
     public function searchAction(Request $request) {
@@ -94,8 +93,8 @@ class TransactionController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="transaction_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="transaction_new", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newAction(Request $request) {
@@ -126,8 +125,8 @@ class TransactionController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="transaction_new_popup")
-     * @Method({"GET", "POST"})
+     * @Route("/new_popup", name="transaction_new_popup", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newPopupAction(Request $request) {
@@ -141,8 +140,8 @@ class TransactionController extends Controller {
      *
      * @return array
      *
-     * @Route("/{id}", name="transaction_show")
-     * @Method("GET")
+     * @Route("/{id}", name="transaction_show", methods={"GET"})
+     *
      * @Template()
      */
     public function showAction(Transaction $transaction) {
@@ -162,8 +161,8 @@ class TransactionController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="transaction_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="transaction_edit", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function editAction(Request $request, Transaction $transaction) {
@@ -193,8 +192,8 @@ class TransactionController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/delete", name="transaction_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="transaction_delete", methods={"GET"})
+     *
      */
     public function deleteAction(Request $request, Transaction $transaction) {
         $em = $this->getDoctrine()->getManager();

@@ -25,14 +25,6 @@
     <table class="table table-bordered table-condensed table-hover table-striped">
         <tbody>
             <tr>
-                <th>Created</th>
-                <td>{% if witness.created %}{{ witness.created|date }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{% if witness.updated %}{{ witness.updated|date }}{% endif %}</td>
-            </tr>
-            <tr>
                 <th>Category</th>
                 <td>
                     <a href="{{ path('witness_category_show', { 'id': witness.category.id}) }}">
@@ -55,6 +47,14 @@
                         {{ witness.event }}
                     </a>
                 </td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{% if witness.created %}{{ witness.created|date }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if witness.updated %}{{ witness.updated|date }}{% endif %}</td>
             </tr>
         </tbody>
     </table>

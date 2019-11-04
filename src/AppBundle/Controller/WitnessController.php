@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Witness;
@@ -27,8 +26,8 @@ class WitnessController extends Controller {
      *
      * @return array
      *
-     * @Route("/", name="witness_index")
-     * @Method("GET")
+     * @Route("/", name="witness_index", methods={"GET"})
+     *
      * @Template()
      */
     public function indexAction(Request $request) {
@@ -58,8 +57,8 @@ class WitnessController extends Controller {
      *
      * @param Request $request
      *
-     * @Route("/typeahead", name="witness_typeahead")
-     * @Method("GET")
+     * @Route("/typeahead", name="witness_typeahead", methods={"GET"})
+     *
      * @return JsonResponse
      */
     public function typeahead(Request $request) {
@@ -99,8 +98,8 @@ class WitnessController extends Controller {
      *
      * @param Request $request
      *
-     * @Route("/search", name="witness_search")
-     * @Method("GET")
+     * @Route("/search", name="witness_search", methods={"GET"})
+     *
      * @Template()
      */
     public function searchAction(Request $request) {
@@ -129,8 +128,8 @@ class WitnessController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="witness_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="witness_new", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newAction(Request $request) {
@@ -161,8 +160,8 @@ class WitnessController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="witness_new_popup")
-     * @Method({"GET", "POST"})
+     * @Route("/new_popup", name="witness_new_popup", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newPopupAction(Request $request) {
@@ -176,8 +175,8 @@ class WitnessController extends Controller {
      *
      * @return array
      *
-     * @Route("/{id}", name="witness_show")
-     * @Method("GET")
+     * @Route("/{id}", name="witness_show", methods={"GET"})
+     *
      * @Template()
      */
     public function showAction(Witness $witness) {
@@ -197,8 +196,8 @@ class WitnessController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="witness_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="witness_edit", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function editAction(Request $request, Witness $witness) {
@@ -228,8 +227,8 @@ class WitnessController extends Controller {
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/delete", name="witness_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="witness_delete", methods={"GET"})
+     *
      */
     public function deleteAction(Request $request, Witness $witness) {
         $em = $this->getDoctrine()->getManager();

@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Relationship;
@@ -16,7 +15,6 @@ use AppBundle\Form\RelationshipType;
 /**
  * Relationship controller.
  *
- * @Security("has_role('ROLE_USER')")
  * @Route("/relationship")
  */
 class RelationshipController extends Controller
@@ -28,8 +26,8 @@ class RelationshipController extends Controller
      *
      * @return array
      *
-     * @Route("/", name="relationship_index")
-     * @Method("GET")
+     * @Route("/", name="relationship_index", methods={"GET"})
+     *
      * @Template()
      */
     public function indexAction(Request $request)
@@ -46,41 +44,6 @@ class RelationshipController extends Controller
         );
     }
 
-/**
-     * Typeahead API endpoint for Relationship entities.
-     *
-     * To make this work, add something like this to RelationshipRepository:
-        //    public function typeaheadQuery($q) {
-        //        $qb = $this->createQueryBuilder('e');
-        //        $qb->andWhere("e.name LIKE :q");
-        //        $qb->orderBy('e.name');
-        //        $qb->setParameter('q', "{$q}%");
-        //        return $qb->getQuery()->execute();
-        //    }
-     *
-     * @param Request $request
-     *
-     * @Route("/typeahead", name="relationship_typeahead")
-     * @Method("GET")
-     * @return JsonResponse
-     */
-    public function typeahead(Request $request)
-    {
-        $q = $request->query->get('q');
-        if( ! $q) {
-            return new JsonResponse([]);
-        }
-        $em = $this->getDoctrine()->getManager();
-	$repo = $em->getRepository(Relationship::class);
-        $data = [];
-        foreach($repo->typeaheadQuery($q) as $result) {
-            $data[] = [
-                'id' => $result->getId(),
-                'text' => (string)$result,
-            ];
-        }
-        return new JsonResponse($data);
-    }
     /**
      * Search for Relationship entities.
      *
@@ -101,8 +64,8 @@ class RelationshipController extends Controller
      *
      * @param Request $request
      *
-     * @Route("/search", name="relationship_search")
-     * @Method("GET")
+     * @Route("/search", name="relationship_search", methods={"GET"})
+     *
      * @Template()
      */
     public function searchAction(Request $request)
@@ -132,8 +95,8 @@ class RelationshipController extends Controller
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="relationship_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="relationship_new", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newAction(Request $request)
@@ -165,8 +128,8 @@ class RelationshipController extends Controller
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="relationship_new_popup")
-     * @Method({"GET", "POST"})
+     * @Route("/new_popup", name="relationship_new_popup", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function newPopupAction(Request $request)
@@ -181,8 +144,8 @@ class RelationshipController extends Controller
      *
      * @return array
      *
-     * @Route("/{id}", name="relationship_show")
-     * @Method("GET")
+     * @Route("/{id}", name="relationship_show", methods={"GET"})
+     *
      * @Template()
      */
     public function showAction(Relationship $relationship)
@@ -203,8 +166,8 @@ class RelationshipController extends Controller
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="relationship_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="relationship_edit", methods={"GET","POST"})
+     *
      * @Template()
      */
     public function editAction(Request $request, Relationship $relationship)
@@ -235,8 +198,8 @@ class RelationshipController extends Controller
      * @return array|RedirectResponse
      *
      * @Security("has_role('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/delete", name="relationship_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="relationship_delete", methods={"GET"})
+     *
      */
     public function deleteAction(Request $request, Relationship $relationship)
     {

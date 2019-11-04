@@ -22,18 +22,10 @@
             {% endif %}
         </div>
     </div>
-    <table class="table table-bordered table-condensed table-hover table-striped">
-        <tbody>
-            <tr>
-                <th>Created</th>
-                <td>{% if relationshipCategory.created %}{{ relationshipCategory.created|date }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{% if relationshipCategory.updated %}{{ relationshipCategory.updated|date }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
+
+    {% embed 'NinesUtilBundle:term:partial/show.html.twig' with {'term': relationshipCategory} %}
+    {% endembed %}
+
     {% if relationshipCategory.relationships | length > 0 %}
         <h2>Relationships</h2>
         <ul>

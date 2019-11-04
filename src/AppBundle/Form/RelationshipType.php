@@ -2,11 +2,13 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Person;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 /**
  * RelationshipType form.
@@ -20,14 +22,14 @@ class RelationshipType extends AbstractType {
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('startDate', null, array(
+        $builder->add('startDate', TextType::class, array(
             'label' => 'Start Date',
             'required' => false,
             'attr' => array(
                 'help_block' => '',
             ),
         ));
-        $builder->add('endDate', null, array(
+        $builder->add('endDate', TextType::class, array(
             'label' => 'End Date',
             'required' => false,
             'attr' => array(
@@ -35,8 +37,28 @@ class RelationshipType extends AbstractType {
             ),
         ));
         $builder->add('category');
-        $builder->add('person');
-        $builder->add('relation');
+        $builder->add('person', Select2EntityType::class, array(
+            'remote_route' => 'person_typeahead',
+            'class' => Person::class,
+            'multiple' => false,
+            'primary_key' => 'id',
+            'text_property' => 'name',
+            'page_limit' => 10,
+            'allow_clear' => true,
+            'delay' => 250,
+            'language' => 'en',
+        ));
+        $builder->add('relation', Select2EntityType::class, array(
+            'remote_route' => 'person_typeahead',
+            'class' => Person::class,
+            'multiple' => false,
+            'primary_key' => 'id',
+            'text_property' => 'name',
+            'page_limit' => 10,
+            'allow_clear' => true,
+            'delay' => 250,
+            'language' => 'en',
+        ));
     }
 
     /**

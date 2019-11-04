@@ -4,9 +4,11 @@
 
 {% block pageheader %}
     <h1>Event List</h1>
+    {% if q %}
     <p class="count">
         Displaying {{ events|length }} events of {{ events.getTotalItemCount }} total.
     </p>
+    {% endif %}
 {% endblock %}
 
 {% block body %}
@@ -24,6 +26,7 @@
         </div>
     </div>
 
+    {% if q %}
     <table class="table table-bordered table-condensed table-hover table-striped">
         <thead>
             <tr>
@@ -50,5 +53,6 @@
     <div class="navigation">
         {{ knp_pagination_render(events) }}
     </div>
+    {% endif %}
 
 {% endblock %}

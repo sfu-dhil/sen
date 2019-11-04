@@ -2,11 +2,15 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\City;
+use AppBundle\Entity\Person;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 /**
  * PersonType form.
@@ -31,14 +35,23 @@ class PersonType extends AbstractType {
             'label' => 'Last Name',
             'required' => true,
             'attr' => array(
-                'help_block' => '',
+                'help_block' => 'Last name be automatically converted to upper case.',
             ),
         ));
-        $builder->add('alias', null, array(
-            'label' => 'Alias',
-            'required' => true,
+        $builder->add('alias', CollectionType::class, array(
+            'label' => 'Aliases',
+            'required' => false,
+            'entry_type' => TextType::class,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'delete_empty' => true,
+            'entry_options' => array(
+                'label' => false,
+            ),
+            'by_reference' => false,
             'attr' => array(
                 'help_block' => '',
+                'class' => 'collection-simple',
             ),
         ));
         $builder->add('native', null, array(
@@ -48,21 +61,33 @@ class PersonType extends AbstractType {
                 'help_block' => '',
             ),
         ));
-        $builder->add('occupation', null, array(
-            'label' => 'Occupation',
+        $builder->add('occupation', CollectionType::class, array(
+            'label' => 'Occupations',
             'required' => false,
+            'required' => false,
+            'entry_type' => TextType::class,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'delete_empty' => true,
+            'entry_options' => array(
+                'label' => false,
+            ),
+            'by_reference' => false,
             'attr' => array(
-                'help_block' => '',
+                'help_block' => 'Format: Year (if known); Occupation',
+                'class' => 'collection-simple',
             ),
         ));
-        $builder->add('sex', null, array(
-            'label' => 'Sex',
-            'required' => false,
-            'attr' => array(
-                'help_block' => '',
+        $builder->add('sex', ChoiceType::class, array(
+            'expanded' => true,
+            'multiple' => false,
+            'choices' => array(
+                'Female' => Person::FEMALE,
+                'Male' => Person::MALE,
+                'Unknown' => null,
             ),
         ));
-        $builder->add('birthDate', null, array(
+        $builder->add('birthDate', TextType::class, array(
             'label' => 'Birth Date',
             'attr' => array(
                 'help_block' => 'The closest date known for the date. YYYY-MM-DD. Use -00 for unknown month or day.',
@@ -87,10 +112,18 @@ class PersonType extends AbstractType {
                 'help_block' => '',
             ),
         ));
-        $builder->add('birthPlace');
+        $builder->add('birthPlace', Select2EntityType::class, array(
+            'remote_route' => 'city_typeahead',
+            'class' => City::class,
+            'multiple' => false,
+            'primary_key' => 'id',
+            'text_property' => 'name',
+            'page_limit' => 10,
+            'allow_clear' => true,
+            'delay' => 250,
+            'language' => 'en',
+        ));
         $builder->add('race');
-        $builder->add('relationships');
-        $builder->add('events');
     }
 
     /**

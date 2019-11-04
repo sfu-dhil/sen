@@ -28,6 +28,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Events</th>
             </tr>
         </thead>
         <tbody>
@@ -37,6 +38,9 @@
                         <a href="{{ path('location_show', { 'id': location.id }) }}">
                             {{ location.name }}
                         </a>
+                    </td>
+                    <td>
+                        {{ location.events|length }}
                     </td>
                 </tr>
             {% endfor %}

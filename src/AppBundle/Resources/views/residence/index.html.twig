@@ -28,6 +28,8 @@
         <thead>
             <tr>
                 <th>Date</th>
+                <th>Person</th>
+                <th>City</th>
             </tr>
         </thead>
         <tbody>
@@ -36,6 +38,16 @@
                     <td>
                         <a href="{{ path('residence_show', { 'id': residence.id }) }}">
                             {{ residence.date }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('person_show', { 'id': residence.person.id }) }}">
+                            {{ residence.person }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('city_show', { 'id': residence.city.id }) }}">
+                            {{ residence.city }}
                         </a>
                     </td>
                 </tr>

@@ -37,14 +37,6 @@
                 <td>{{ event.note }}</td>
             </tr>
             <tr>
-                <th>Created</th>
-                <td>{% if event.created %}{{ event.created|date }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{% if event.updated %}{{ event.updated|date }}{% endif %}</td>
-            </tr>
-            <tr>
                 <th>Category</th>
                 <td>
                     <a href="{{ path('event_category_show', { 'id': event.category.id}) }}">
@@ -59,6 +51,11 @@
                         <a href="{{ path('location_show', { 'id': event.location.id}) }}">
                             {{ event.location }}
                         </a>
+                        {% if event.location.category %}
+                            <a href="{{ path('location_category_show', {'id': event.location.category.id }) }}">
+                                ({{ event.location.category }})
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>
@@ -78,6 +75,14 @@
                     {% endif %}
                 </td>
             </tr>
+            <tr>
+                <th>Created</th>
+                <td>{% if event.created %}{{ event.created|date }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if event.updated %}{{ event.updated|date }}{% endif %}</td>
+            </tr>
         </tbody>
     </table>
     {% if event.witnesses | length > 0 %}
@@ -87,6 +92,9 @@
                 <li>
                     <a href="{{ path("person_show", {"id":witness.id}) }}">
                         {{ witness }}
+                    </a>
+                    <a href="{{ path('witness_category_show', {'id': witness.category.id}) }}">
+                        ({{ witness.category }})
                     </a>
                 </li>
             {% endfor %}
