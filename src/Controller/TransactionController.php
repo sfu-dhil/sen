@@ -9,9 +9,13 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
+use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Transaction;
 use App\Form\TransactionType;
+use App\Repository\TransactionRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +28,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/transaction")
  */
-class TransactionController extends AbstractController {
+class TransactionController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all Transaction entities.
      *
@@ -34,8 +40,8 @@ class TransactionController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Transaction::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -69,9 +75,8 @@ class TransactionController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:Transaction');
+    public function searchAction(Request $request, TransactionRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -97,13 +102,13 @@ class TransactionController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $transaction = new Transaction();
         $form = $this->createForm(TransactionType::class, $transaction);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($transaction);
             $em->flush();
 
@@ -157,12 +162,12 @@ class TransactionController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, Transaction $transaction) {
+    public function editAction(Request $request, EntityManagerInterface $em, Transaction $transaction) {
         $editForm = $this->createForm(TransactionType::class, $transaction);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The transaction has been updated.');
 
@@ -183,8 +188,8 @@ class TransactionController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="transaction_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, Transaction $transaction) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, Transaction $transaction) {
+
         $em->remove($transaction);
         $em->flush();
         $this->addFlash('success', 'The transaction was deleted.');

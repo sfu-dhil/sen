@@ -10,6 +10,10 @@ parameters:
 
     asset.request_context.base_path: '%env(string:ROUTE_BASE)%'
     asset.request_context.secure: auto
+    dhil.piwik_enabled: '%env(bool:PIWIK_ENABLED)%'
+    dhil.piwik_url: null
+    dhil.piwik_siteid: null
+    dhil.piwik_domain: null
 
 services:
     # default configuration for services in *this* file

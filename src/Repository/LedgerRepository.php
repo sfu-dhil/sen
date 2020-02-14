@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Ledger;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * LedgerRepository.
@@ -19,6 +21,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  * repository methods below.
  */
 class LedgerRepository extends ServiceEntityRepository {
+    public function __construct(ManagerRegistry $registry) {
+        parent::__construct($registry, Ledger::class);
+    }
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->innerJoin('e.notary', 'n');

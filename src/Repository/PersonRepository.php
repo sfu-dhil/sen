@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Person;
+use Doctrine\Persistence\ManagerRegistry;
+
 /**
  * PersonRepository.
  *
@@ -17,6 +20,9 @@ namespace App\Repository;
  * repository methods below.
  */
 class PersonRepository extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository {
+    public function __construct(ManagerRegistry $registry) {
+        parent::__construct($registry, Person::class);
+    }
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->andWhere('e.firstName LIKE :q');

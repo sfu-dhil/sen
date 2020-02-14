@@ -9,9 +9,13 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
+use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\EventCategory;
 use App\Form\EventCategoryType;
+use App\Repository\EventCategoryRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +29,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/event_category")
  */
-class EventCategoryController extends AbstractController {
+class EventCategoryController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all EventCategory entities.
      *
@@ -35,8 +41,8 @@ class EventCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(EventCategory::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -57,13 +63,12 @@ class EventCategoryController extends AbstractController {
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request) {
+    public function typeahead(Request $request, EventCategoryRepository $repo) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
         }
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(EventCategory::class);
+
         $data = [];
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
@@ -97,9 +102,8 @@ class EventCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:EventCategory');
+    public function searchAction(Request $request, EventCategoryRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -125,13 +129,13 @@ class EventCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $eventCategory = new EventCategory();
         $form = $this->createForm(EventCategoryType::class, $eventCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($eventCategory);
             $em->flush();
 
@@ -185,12 +189,12 @@ class EventCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, EventCategory $eventCategory) {
+    public function editAction(Request $request, EntityManagerInterface $em, EventCategory $eventCategory) {
         $editForm = $this->createForm(EventCategoryType::class, $eventCategory);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The eventCategory has been updated.');
 
@@ -211,8 +215,8 @@ class EventCategoryController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="event_category_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, EventCategory $eventCategory) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, EventCategory $eventCategory) {
+
         $em->remove($eventCategory);
         $em->flush();
         $this->addFlash('success', 'The eventCategory was deleted.');

@@ -9,9 +9,13 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
+use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Event;
 use App\Form\EventType;
+use App\Repository\EventRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +28,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/event")
  */
-class EventController extends AbstractController {
+class EventController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all Event entities.
      *
@@ -34,8 +40,8 @@ class EventController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Event::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -69,9 +75,8 @@ class EventController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:Event');
+    public function searchAction(Request $request, EventRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -97,13 +102,13 @@ class EventController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $event = new Event();
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($event);
             $em->flush();
 
@@ -157,12 +162,12 @@ class EventController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, Event $event) {
+    public function editAction(Request $request, EntityManagerInterface $em, Event $event) {
         $editForm = $this->createForm(EventType::class, $event);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The event has been updated.');
 
@@ -183,8 +188,8 @@ class EventController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="event_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, Event $event) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, Event $event) {
+
         $em->remove($event);
         $em->flush();
         $this->addFlash('success', 'The event was deleted.');

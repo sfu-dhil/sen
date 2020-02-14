@@ -9,9 +9,13 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
+use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Ledger;
 use App\Form\LedgerType;
+use App\Repository\LedgerRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +29,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/ledger")
  */
-class LedgerController extends AbstractController {
+class LedgerController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all Ledger entities.
      *
@@ -35,8 +41,8 @@ class LedgerController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Ledger::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -57,13 +63,12 @@ class LedgerController extends AbstractController {
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request) {
+    public function typeahead(Request $request, LedgerRepository $repo) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
         }
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(Ledger::class);
+
         $data = [];
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
@@ -97,9 +102,8 @@ class LedgerController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:Ledger');
+    public function searchAction(Request $request, LedgerRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -125,13 +129,13 @@ class LedgerController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $ledger = new Ledger();
         $form = $this->createForm(LedgerType::class, $ledger);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($ledger);
             $em->flush();
 
@@ -185,12 +189,12 @@ class LedgerController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, Ledger $ledger) {
+    public function editAction(Request $request, EntityManagerInterface $em, Ledger $ledger) {
         $editForm = $this->createForm(LedgerType::class, $ledger);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The ledger has been updated.');
 
@@ -211,8 +215,8 @@ class LedgerController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="ledger_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, Ledger $ledger) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, Ledger $ledger) {
+
         $em->remove($ledger);
         $em->flush();
         $this->addFlash('success', 'The ledger was deleted.');

@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\EventCategory;
+use Doctrine\Persistence\ManagerRegistry;
+
 /**
  * EventCategoryRepository.
  *
@@ -17,6 +20,9 @@ namespace App\Repository;
  * repository methods below.
  */
 class EventCategoryRepository extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository {
+    public function __construct(ManagerRegistry $registry) {
+        parent::__construct($registry, EventCategory::class);
+    }
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->andWhere('e.label LIKE :q');

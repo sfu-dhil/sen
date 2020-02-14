@@ -9,9 +9,13 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
+use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\TransactionCategory;
 use App\Form\TransactionCategoryType;
+use App\Repository\TransactionCategoryRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +29,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/transaction_category")
  */
-class TransactionCategoryController extends AbstractController {
+class TransactionCategoryController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all TransactionCategory entities.
      *
@@ -35,8 +41,8 @@ class TransactionCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(TransactionCategory::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -57,13 +63,12 @@ class TransactionCategoryController extends AbstractController {
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request) {
+    public function typeahead(Request $request, TransactionCategoryRepository $repo) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
         }
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(TransactionCategory::class);
+
         $data = [];
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
@@ -97,9 +102,8 @@ class TransactionCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:TransactionCategory');
+    public function searchAction(Request $request, TransactionCategoryRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -125,13 +129,13 @@ class TransactionCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $transactionCategory = new TransactionCategory();
         $form = $this->createForm(TransactionCategoryType::class, $transactionCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($transactionCategory);
             $em->flush();
 
@@ -185,12 +189,12 @@ class TransactionCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, TransactionCategory $transactionCategory) {
+    public function editAction(Request $request, EntityManagerInterface $em, TransactionCategory $transactionCategory) {
         $editForm = $this->createForm(TransactionCategoryType::class, $transactionCategory);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The transactionCategory has been updated.');
 
@@ -211,8 +215,8 @@ class TransactionCategoryController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="transaction_category_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, TransactionCategory $transactionCategory) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, TransactionCategory $transactionCategory) {
+
         $em->remove($transactionCategory);
         $em->flush();
         $this->addFlash('success', 'The transactionCategory was deleted.');

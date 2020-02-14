@@ -9,9 +9,13 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
+use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Race;
 use App\Form\RaceType;
+use App\Repository\RaceRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +29,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/race")
  */
-class RaceController extends AbstractController {
+class RaceController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all Race entities.
      *
@@ -35,8 +41,8 @@ class RaceController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Race::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -57,13 +63,12 @@ class RaceController extends AbstractController {
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request) {
+    public function typeahead(Request $request, RaceRepository $repo) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
         }
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(Race::class);
+
         $data = [];
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
@@ -97,9 +102,8 @@ class RaceController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:Race');
+    public function searchAction(Request $request, RaceRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -125,13 +129,13 @@ class RaceController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $race = new Race();
         $form = $this->createForm(RaceType::class, $race);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($race);
             $em->flush();
 
@@ -185,12 +189,12 @@ class RaceController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, Race $race) {
+    public function editAction(Request $request, EntityManagerInterface $em, Race $race) {
         $editForm = $this->createForm(RaceType::class, $race);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The race has been updated.');
 
@@ -211,8 +215,8 @@ class RaceController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="race_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, Race $race) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, Race $race) {
+
         $em->remove($race);
         $em->flush();
         $this->addFlash('success', 'The race was deleted.');

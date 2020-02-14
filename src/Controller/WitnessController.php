@@ -12,6 +12,9 @@ namespace App\Controller;
 
 use App\Entity\Witness;
 use App\Form\WitnessType;
+use App\Repository\WitnessRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,13 +22,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Witness controller.
  *
  * @Route("/witness")
  */
-class WitnessController extends AbstractController {
+class WitnessController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all Witness entities.
      *
@@ -35,8 +41,8 @@ class WitnessController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Witness::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -57,13 +63,12 @@ class WitnessController extends AbstractController {
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request) {
+    public function typeahead(Request $request, WitnessRepository $repo) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
         }
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(Witness::class);
+
         $data = [];
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
@@ -97,9 +102,8 @@ class WitnessController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:Witness');
+    public function searchAction(Request $request, WitnessRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -125,13 +129,13 @@ class WitnessController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $witness = new Witness();
         $form = $this->createForm(WitnessType::class, $witness);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($witness);
             $em->flush();
 
@@ -185,12 +189,12 @@ class WitnessController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, Witness $witness) {
+    public function editAction(Request $request, EntityManagerInterface $em, Witness $witness) {
         $editForm = $this->createForm(WitnessType::class, $witness);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The witness has been updated.');
 
@@ -211,8 +215,8 @@ class WitnessController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="witness_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, Witness $witness) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, Witness $witness) {
+
         $em->remove($witness);
         $em->flush();
         $this->addFlash('success', 'The witness was deleted.');

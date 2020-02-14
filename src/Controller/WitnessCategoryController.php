@@ -9,9 +9,14 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
+use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\WitnessCategory;
 use App\Form\WitnessCategoryType;
+use App\Repository\WitnessCategoryRepository;
+use App\Repository\WitnessRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +30,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/witness_category")
  */
-class WitnessCategoryController extends AbstractController {
+class WitnessCategoryController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all WitnessCategory entities.
      *
@@ -35,8 +42,8 @@ class WitnessCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(WitnessCategory::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -57,13 +64,12 @@ class WitnessCategoryController extends AbstractController {
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request) {
+    public function typeahead(Request $request, WitnessRepository $repo) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
         }
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(WitnessCategory::class);
+
         $data = [];
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
@@ -97,9 +103,8 @@ class WitnessCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:WitnessCategory');
+    public function searchAction(Request $request, WitnessCategoryRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -125,13 +130,13 @@ class WitnessCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $witnessCategory = new WitnessCategory();
         $form = $this->createForm(WitnessCategoryType::class, $witnessCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($witnessCategory);
             $em->flush();
 
@@ -185,12 +190,12 @@ class WitnessCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, WitnessCategory $witnessCategory) {
+    public function editAction(Request $request, EntityManagerInterface $em, WitnessCategory $witnessCategory) {
         $editForm = $this->createForm(WitnessCategoryType::class, $witnessCategory);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The witnessCategory has been updated.');
 
@@ -211,8 +216,8 @@ class WitnessCategoryController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="witness_category_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, WitnessCategory $witnessCategory) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, WitnessCategory $witnessCategory) {
+
         $em->remove($witnessCategory);
         $em->flush();
         $this->addFlash('success', 'The witnessCategory was deleted.');

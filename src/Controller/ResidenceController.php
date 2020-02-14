@@ -9,9 +9,13 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
+use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Residence;
 use App\Form\ResidenceType;
+use App\Repository\ResidenceRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +28,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/residence")
  */
-class ResidenceController extends AbstractController {
+class ResidenceController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all Residence entities.
      *
@@ -34,8 +40,8 @@ class ResidenceController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Residence::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -69,9 +75,8 @@ class ResidenceController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:Residence');
+    public function searchAction(Request $request, ResidenceRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -97,13 +102,13 @@ class ResidenceController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $residence = new Residence();
         $form = $this->createForm(ResidenceType::class, $residence);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($residence);
             $em->flush();
 
@@ -157,12 +162,12 @@ class ResidenceController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, Residence $residence) {
+    public function editAction(Request $request, EntityManagerInterface $em, Residence $residence) {
         $editForm = $this->createForm(ResidenceType::class, $residence);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The residence has been updated.');
 
@@ -183,8 +188,8 @@ class ResidenceController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="residence_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, Residence $residence) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, Residence $residence) {
+
         $em->remove($residence);
         $em->flush();
         $this->addFlash('success', 'The residence was deleted.');

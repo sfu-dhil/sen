@@ -9,9 +9,14 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
+use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\LocationCategory;
 use App\Form\LocationCategoryType;
+use App\Repository\LocationCategoryRepository;
+use App\Repository\LocationRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +30,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/location_category")
  */
-class LocationCategoryController extends AbstractController {
+class LocationCategoryController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all LocationCategory entities.
      *
@@ -35,8 +42,8 @@ class LocationCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(LocationCategory::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -57,13 +64,12 @@ class LocationCategoryController extends AbstractController {
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request) {
+    public function typeahead(Request $request, LocationRepository $repo) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
         }
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(LocationCategory::class);
+
         $data = [];
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
@@ -97,9 +103,8 @@ class LocationCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:LocationCategory');
+    public function searchAction(Request $request, LocationCategoryRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -125,13 +130,13 @@ class LocationCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $locationCategory = new LocationCategory();
         $form = $this->createForm(LocationCategoryType::class, $locationCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($locationCategory);
             $em->flush();
 
@@ -185,12 +190,12 @@ class LocationCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, LocationCategory $locationCategory) {
+    public function editAction(Request $request, EntityManagerInterface $em, LocationCategory $locationCategory) {
         $editForm = $this->createForm(LocationCategoryType::class, $locationCategory);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The locationCategory has been updated.');
 
@@ -211,8 +216,8 @@ class LocationCategoryController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="location_category_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, LocationCategory $locationCategory) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, LocationCategory $locationCategory) {
+
         $em->remove($locationCategory);
         $em->flush();
         $this->addFlash('success', 'The locationCategory was deleted.');

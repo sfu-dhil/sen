@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Relationship;
+use Doctrine\Persistence\ManagerRegistry;
+
 /**
  * RelationshipRepository.
  *
@@ -17,4 +20,7 @@ namespace App\Repository;
  * repository methods below.
  */
 class RelationshipRepository extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository {
+    public function __construct(ManagerRegistry $registry) {
+        parent::__construct($registry, Relationship::class);
+    }
 }

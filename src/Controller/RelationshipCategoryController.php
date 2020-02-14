@@ -10,8 +10,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+
+
 use App\Entity\RelationshipCategory;
 use App\Form\RelationshipCategoryType;
+use App\Repository\RelationshipCategoryRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +31,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/relationship_category")
  */
-class RelationshipCategoryController extends AbstractController {
+class RelationshipCategoryController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all RelationshipCategory entities.
      *
@@ -35,8 +43,8 @@ class RelationshipCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(RelationshipCategory::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -57,13 +65,12 @@ class RelationshipCategoryController extends AbstractController {
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request) {
+    public function typeahead(Request $request, RelationshipCategoryRepository $repo) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
         }
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(RelationshipCategory::class);
+
         $data = [];
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
@@ -97,9 +104,8 @@ class RelationshipCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:RelationshipCategory');
+    public function searchAction(Request $request, RelationshipCategoryRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -125,13 +131,13 @@ class RelationshipCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $relationshipCategory = new RelationshipCategory();
         $form = $this->createForm(RelationshipCategoryType::class, $relationshipCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($relationshipCategory);
             $em->flush();
 
@@ -185,12 +191,12 @@ class RelationshipCategoryController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, RelationshipCategory $relationshipCategory) {
+    public function editAction(Request $request, EntityManagerInterface $em, RelationshipCategory $relationshipCategory) {
         $editForm = $this->createForm(RelationshipCategoryType::class, $relationshipCategory);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The relationshipCategory has been updated.');
 
@@ -211,8 +217,8 @@ class RelationshipCategoryController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="relationship_category_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, RelationshipCategory $relationshipCategory) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, RelationshipCategory $relationshipCategory) {
+
         $em->remove($relationshipCategory);
         $em->flush();
         $this->addFlash('success', 'The relationshipCategory was deleted.');

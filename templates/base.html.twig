@@ -7,10 +7,21 @@
         <meta name="google" content="notranslate"/>
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-        <link rel="stylesheet" href="{{ asset('bower/bootstrap/dist/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('bower/bootstrap/dist/css/bootstrap-theme.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('bundles/app/css/base.css') }}">
-        <script src="{{ asset('bower/jquery/dist/jquery.min.js') }}"></script>
+        <link rel="stylesheet" href="{{ asset('yarn/bootstrap3/dist/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('yarn/bootstrap3/dist/css/bootstrap-theme.min.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+
+        <script src="{{ asset('yarn/jquery/dist/jquery.min.js') }}"></script>
+
+        <script src="{{ asset('yarn/select2/dist/js/select2.full.min.js') }}"></script>
+        <link href="{{ asset('yarn/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('yarn/select2-bootstrap-css/select2-bootstrap.min.css') }}" rel="stylesheet">
+
+        <script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
+        <script src="{{ asset('yarn/symfony-collection/jquery.collection.js') }}"></script>
+
+        <script src="{{ asset('js/form.js') }}"></script>
         {% block htmlhead %}{% endblock %}
         {% block styles %}{% endblock -%}
     </head>
@@ -28,9 +39,9 @@
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     {{ knp_menu_render('main') }}
-                    {{ knp_menu_render('pages') }}
-                    {{ knp_menu_render('posts') }}
-                    {{ knp_menu_render('user') }}
+                    {{ knp_menu_render('nines_blog_pages') }}
+                    {{ knp_menu_render('nines_blog_pages') }}
+                    {{ knp_menu_render('nines_user_nav') }}
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
@@ -70,8 +81,7 @@
             </div>
         </footer>
 
-        <script src="{{ asset('bower/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-        <script src="{{ asset('bundles/app/js/form.js') }}"></script>
+        <script src="{{ asset('yarn/bootstrap3/dist/js/bootstrap.min.js') }}"></script>
         {% block javascripts %}
         {% endblock %}
 

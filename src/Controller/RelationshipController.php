@@ -9,9 +9,13 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
+use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Relationship;
 use App\Form\RelationshipType;
+use App\Repository\RelationshipRepository;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +28,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/relationship")
  */
-class RelationshipController extends AbstractController {
+class RelationshipController extends AbstractController  implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
     /**
      * Lists all Relationship entities.
      *
@@ -34,8 +40,8 @@ class RelationshipController extends AbstractController {
      *
      * @Template()
      */
-    public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request, EntityManagerInterface $em) {
+
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Relationship::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -69,9 +75,8 @@ class RelationshipController extends AbstractController {
      *
      * @Template()
      */
-    public function searchAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('App:Relationship');
+    public function searchAction(Request $request, RelationshipRepository $repo) {
+
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -97,13 +102,13 @@ class RelationshipController extends AbstractController {
      *
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, EntityManagerInterface $em) {
         $relationship = new Relationship();
         $form = $this->createForm(RelationshipType::class, $relationship);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($relationship);
             $em->flush();
 
@@ -157,12 +162,12 @@ class RelationshipController extends AbstractController {
      *
      * @Template()
      */
-    public function editAction(Request $request, Relationship $relationship) {
+    public function editAction(Request $request, EntityManagerInterface $em, Relationship $relationship) {
         $editForm = $this->createForm(RelationshipType::class, $relationship);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->flush();
             $this->addFlash('success', 'The relationship has been updated.');
 
@@ -183,8 +188,8 @@ class RelationshipController extends AbstractController {
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
      * @Route("/{id}/delete", name="relationship_delete", methods={"GET"})
      */
-    public function deleteAction(Request $request, Relationship $relationship) {
-        $em = $this->getDoctrine()->getManager();
+    public function deleteAction(Request $request, EntityManagerInterface $em, Relationship $relationship) {
+
         $em->remove($relationship);
         $em->flush();
         $this->addFlash('success', 'The relationship was deleted.');

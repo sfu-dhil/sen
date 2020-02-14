@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use Doctrine\Persistence\ManagerRegistry;
+
 /**
  * WitnessRepository.
  *
@@ -17,4 +19,7 @@ namespace App\Repository;
  * repository methods below.
  */
 class WitnessRepository extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository {
+    public function __construct(ManagerRegistry $registry) {
+        parent::__construct($registry, Witness::class);
+    }
 }
