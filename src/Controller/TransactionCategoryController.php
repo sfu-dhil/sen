@@ -157,8 +157,8 @@ class TransactionCategoryController extends AbstractController implements Pagina
      *
      * @Template()
      */
-    public function newPopupAction(Request $request) {
-        return $this->newAction($request);
+    public function newPopupAction(Request $request, EntityManagerInterface $em) {
+        return $this->newAction($request, $em);
     }
 
     /**

@@ -130,8 +130,8 @@ class TransactionController extends AbstractController implements PaginatorAware
      *
      * @Template()
      */
-    public function newPopupAction(Request $request) {
-        return $this->newAction($request);
+    public function newPopupAction(Request $request, EntityManagerInterface $em) {
+        return $this->newAction($request, $em);
     }
 
     /**

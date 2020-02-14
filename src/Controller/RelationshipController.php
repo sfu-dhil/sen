@@ -130,8 +130,8 @@ class RelationshipController extends AbstractController implements PaginatorAwar
      *
      * @Template()
      */
-    public function newPopupAction(Request $request) {
-        return $this->newAction($request);
+    public function newPopupAction(Request $request, EntityManagerInterface $em) {
+        return $this->newAction($request, $em);
     }
 
     /**

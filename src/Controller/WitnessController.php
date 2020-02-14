@@ -157,8 +157,8 @@ class WitnessController extends AbstractController implements PaginatorAwareInte
      *
      * @Template()
      */
-    public function newPopupAction(Request $request) {
-        return $this->newAction($request);
+    public function newPopupAction(Request $request, EntityManagerInterface $em) {
+        return $this->newAction($request, $em);
     }
 
     /**

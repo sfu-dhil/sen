@@ -157,9 +157,10 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
      *
      * @Template()
      */
-    public function newPopupAction(Request $request) {
-        return $this->newAction($request);
+    public function newPopupAction(Request $request, EntityManagerInterface $em) {
+        return $this->newAction($request, $em);
     }
+
 
     /**
      * Finds and displays a EventCategory entity.

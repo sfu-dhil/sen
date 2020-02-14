@@ -62,7 +62,7 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request, CityRepository $repository) {
+    public function typeahead(Request $request, CityRepository $repo) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -157,8 +157,8 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
      *
      * @Template()
      */
-    public function newPopupAction(Request $request) {
-        return $this->newAction($request);
+    public function newPopupAction(Request $request, EntityManagerInterface $em) {
+        return $this->newAction($request, $em);
     }
 
     /**

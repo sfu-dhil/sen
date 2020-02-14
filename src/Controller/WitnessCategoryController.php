@@ -63,7 +63,7 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request, WitnessRepository $repo) {
+    public function typeahead(Request $request, WitnessCategoryRepository $repo) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -158,8 +158,8 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
      *
      * @Template()
      */
-    public function newPopupAction(Request $request) {
-        return $this->newAction($request);
+    public function newPopupAction(Request $request, EntityManagerInterface $em) {
+        return $this->newAction($request, $em);
     }
 
     /**

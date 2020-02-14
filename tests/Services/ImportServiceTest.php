@@ -32,11 +32,12 @@ use App\Entity\RelationshipCategory;
 use App\Entity\Transaction;
 use App\Entity\TransactionCategory;
 use App\Services\ImportService;
+use Nines\UtilBundle\Tests\ServiceBaseCase;
 use const MB_CASE_UPPER;
 use function mb_convert_case;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 
-class ImportServiceTest extends ControllerBaseCase {
+class ImportServiceTest extends ServiceBaseCase {
     /**
      * @var ImportService
      */
@@ -72,7 +73,7 @@ class ImportServiceTest extends ControllerBaseCase {
     public function testNewFindNotary() : void {
         $notary = $this->importer->findNotary('Bobby Terwilliger');
         $this->assertInstanceOf(Notary::class, $notary);
-        $this->assertNull($notary->getId());
+
         $this->assertSame('Bobby Terwilliger', $notary->getName());
     }
 
@@ -88,8 +89,8 @@ class ImportServiceTest extends ControllerBaseCase {
         $notary = $this->getReference('notary.1');
         $ledger = $this->importer->findLedger($notary, '11; 12', '1795');
         $this->assertInstanceOf(Ledger::class, $ledger);
-        $this->assertNull($ledger->getId());
-        $this->assertSame(1795, $ledger->getYear());
+
+        $this->assertSame('1795', $ledger->getYear());
     }
 
     public function testFindRace() : void {
@@ -102,7 +103,7 @@ class ImportServiceTest extends ControllerBaseCase {
     public function testNewFindRace() : void {
         $race = $this->importer->findRace('non-indian');
         $this->assertInstanceOf(Race::class, $race);
-        $this->assertNull($race->getId());
+
         $this->assertSame('non-indian', $race->getName());
     }
 
@@ -143,7 +144,7 @@ class ImportServiceTest extends ControllerBaseCase {
     public function testFindNewPerson($given, $family, $raceName, $status) : void {
         $found = $this->importer->findPerson($given, $family, $raceName, $status);
         $this->assertInstanceOf(Person::class, $found);
-        $this->assertNull($found->getId());
+
         $this->assertSame(mb_convert_case($family, MB_CASE_UPPER), $found->getLastName());
     }
 
@@ -171,7 +172,7 @@ class ImportServiceTest extends ControllerBaseCase {
     public function testNewFindCity() : void {
         $city = $this->importer->findCity('Ogdenville');
         $this->assertInstanceOf(City::class, $city);
-        $this->assertNull($city->getId());
+
     }
 
     public function testFindRelationshipCategory() : void {
@@ -183,7 +184,7 @@ class ImportServiceTest extends ControllerBaseCase {
     public function testNewFindRelationshipCategory() : void {
         $category = $this->importer->findRelationshipCategory('accomplice');
         $this->assertInstanceOf(RelationshipCategory::class, $category);
-        $this->assertNull($category->getId());
+
     }
 
     public function testFindTransactionCategory() : void {
@@ -195,7 +196,7 @@ class ImportServiceTest extends ControllerBaseCase {
     public function testNewFindTransactionCategory() : void {
         $category = $this->importer->findTransactionCategory('Sale of stuff');
         $this->assertInstanceOf(TransactionCategory::class, $category);
-        $this->assertNull($category->getId());
+
     }
 
     public function testNewFindRelationshipCategoryChars() : void {
@@ -275,7 +276,7 @@ class ImportServiceTest extends ControllerBaseCase {
     public function testNewFindLocationCategory() : void {
         $category = $this->importer->findLocationCategory('chancery');
         $this->assertInstanceOf(LocationCategory::class, $category);
-        $this->assertNull($category->getId());
+
     }
 
     public function testFindLocation() : void {
@@ -287,7 +288,7 @@ class ImportServiceTest extends ControllerBaseCase {
     public function testNewFindLocation() : void {
         $location = $this->importer->findLocation('Saint Johns Church', 'church');
         $this->assertInstanceOf(Location::class, $location);
-        $this->assertNull($location->getId());
+
     }
 
     public function testAddNullManumission() : void {
@@ -394,6 +395,6 @@ class ImportServiceTest extends ControllerBaseCase {
 
     protected function setUp() : void {
         parent::setUp();
-        $this->importer = $this->container->get(ImportService::class);
+        $this->importer = $this->getContainer()->get(ImportService::class);
     }
 }
