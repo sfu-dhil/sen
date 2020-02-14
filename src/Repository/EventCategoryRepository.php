@@ -23,6 +23,7 @@ class EventCategoryRepository extends \Doctrine\Bundle\DoctrineBundle\Repository
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, EventCategory::class);
     }
+
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->andWhere('e.label LIKE :q');

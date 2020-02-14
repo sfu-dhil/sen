@@ -9,11 +9,11 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
-use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Ledger;
 use App\Form\LedgerType;
 use App\Repository\LedgerRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/ledger")
  */
-class LedgerController extends AbstractController  implements PaginatorAwareInterface {
+class LedgerController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
@@ -42,7 +42,6 @@ class LedgerController extends AbstractController  implements PaginatorAwareInte
      * @Template()
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
-
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Ledger::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -103,7 +102,6 @@ class LedgerController extends AbstractController  implements PaginatorAwareInte
      * @Template()
      */
     public function searchAction(Request $request, LedgerRepository $repo) {
-
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -135,7 +133,6 @@ class LedgerController extends AbstractController  implements PaginatorAwareInte
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $em->persist($ledger);
             $em->flush();
 
@@ -194,7 +191,6 @@ class LedgerController extends AbstractController  implements PaginatorAwareInte
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-
             $em->flush();
             $this->addFlash('success', 'The ledger has been updated.');
 
@@ -216,7 +212,6 @@ class LedgerController extends AbstractController  implements PaginatorAwareInte
      * @Route("/{id}/delete", name="ledger_delete", methods={"GET"})
      */
     public function deleteAction(Request $request, EntityManagerInterface $em, Ledger $ledger) {
-
         $em->remove($ledger);
         $em->flush();
         $this->addFlash('success', 'The ledger was deleted.');

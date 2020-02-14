@@ -13,15 +13,6 @@ namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Nines\BlogBundle\DataFixtures\LoadPage;
-use Nines\BlogBundle\DataFixtures\LoadPost;
-use Nines\BlogBundle\DataFixtures\LoadPostCategory;
-use Nines\BlogBundle\DataFixtures\LoadPostStatus;
-use Nines\DublinCoreBundle\DataFixtures\LoadElement;
-use Nines\FeedbackBundle\DataFixtures\LoadComment;
-use Nines\FeedbackBundle\DataFixtures\LoadCommentNote;
-use Nines\FeedbackBundle\DataFixtures\LoadCommentStatus;
-use Nines\UserBundle\DataFixtures\LoadUser;
 
 /**
  * Description of LoadAll.

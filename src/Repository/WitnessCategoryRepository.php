@@ -23,6 +23,7 @@ class WitnessCategoryRepository extends \Doctrine\Bundle\DoctrineBundle\Reposito
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, WitnessCategory::class);
     }
+
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->andWhere('e.label LIKE :q');

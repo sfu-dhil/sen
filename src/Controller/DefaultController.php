@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Handles the home page.
  */
-class DefaultController extends AbstractController  implements PaginatorAwareInterface {
+class DefaultController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**

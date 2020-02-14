@@ -24,6 +24,7 @@ class LedgerRepository extends ServiceEntityRepository {
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Ledger::class);
     }
+
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->innerJoin('e.notary', 'n');

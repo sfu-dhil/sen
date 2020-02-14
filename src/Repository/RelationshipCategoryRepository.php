@@ -23,6 +23,7 @@ class RelationshipCategoryRepository extends \Doctrine\Bundle\DoctrineBundle\Rep
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, RelationshipCategory::class);
     }
+
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->andWhere('e.label LIKE :q');

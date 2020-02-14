@@ -8,25 +8,25 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace AppBundle\Tests\Controller;
+namespace App\Tests\Controller;
 
-use AppBundle\DataFixtures\ORM\LoadAll;
-use AppBundle\DataFixtures\ORM\LoadNotary;
-use AppBundle\Entity\Notary;
-use Nines\UserBundle\DataFixtures\ORM\LoadUser;
-use Nines\UtilBundle\Tests\Util\BaseTestCase;
+use App\DataFixtures\AllFixtures;
+use App\DataFixtures\NotaryFixtures;
+use App\Entity\Notary;
+use Nines\UserBundle\DataFixtures\UserFixtures;
+use Nines\UtilBundle\Tests\ControllerBaseCase;
 
-class NotaryControllerTest extends BaseTestCase {
-    protected function getFixtures() {
+class NotaryControllerTest extends ControllerBaseCase {
+    protected function fixtures() : array {
         if (1 === getenv('SEN_ALL_FIXTURES')) {
             return [
-                LoadAll::class,
+                AllFixtures::class,
             ];
         }
 
         return [
-            LoadUser::class,
-            LoadNotary::class,
+            UserFixtures::class,
+            NotaryFixtures::class,
         ];
     }
 
@@ -35,9 +35,8 @@ class NotaryControllerTest extends BaseTestCase {
      * @group index
      */
     public function testAnonIndex() : void {
-        $client = $this->makeClient();
-        $crawler = $client->request('GET', '/notary/');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $crawler = $this->client->request('GET', '/notary/');
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(0, $crawler->selectLink('New')->count());
     }
 
@@ -46,9 +45,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group index
      */
     public function testUserIndex() : void {
-        $client = $this->makeClient(LoadUser::USER);
-        $crawler = $client->request('GET', '/notary/');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->login('user.user');
+        $crawler = $this->client->request('GET', '/notary/');
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(0, $crawler->selectLink('New')->count());
     }
 
@@ -57,9 +56,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group index
      */
     public function testAdminIndex() : void {
-        $client = $this->makeClient(LoadUser::ADMIN);
-        $crawler = $client->request('GET', '/notary/');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->login('user.admin');
+        $crawler = $this->client->request('GET', '/notary/');
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->selectLink('New')->count());
     }
 
@@ -68,9 +67,8 @@ class NotaryControllerTest extends BaseTestCase {
      * @group show
      */
     public function testAnonShow() : void {
-        $client = $this->makeClient();
-        $crawler = $client->request('GET', '/notary/1');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $crawler = $this->client->request('GET', '/notary/1');
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(0, $crawler->selectLink('Edit')->count());
         $this->assertSame(0, $crawler->selectLink('Delete')->count());
     }
@@ -80,9 +78,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group show
      */
     public function testUserShow() : void {
-        $client = $this->makeClient(LoadUser::USER);
-        $crawler = $client->request('GET', '/notary/1');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->login('user.user');
+        $crawler = $this->client->request('GET', '/notary/1');
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(0, $crawler->selectLink('Edit')->count());
         $this->assertSame(0, $crawler->selectLink('Delete')->count());
     }
@@ -92,9 +90,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group show
      */
     public function testAdminShow() : void {
-        $client = $this->makeClient(LoadUser::ADMIN);
-        $crawler = $client->request('GET', '/notary/1');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->login('user.admin');
+        $crawler = $this->client->request('GET', '/notary/1');
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->selectLink('Edit')->count());
         $this->assertSame(1, $crawler->selectLink('Delete')->count());
     }
@@ -104,9 +102,8 @@ class NotaryControllerTest extends BaseTestCase {
      * @group typeahead
      */
     public function testAnonTypeahead() : void {
-        $client = $this->makeClient();
-        $client->request('GET', '/notary/typeahead?q=STUFF');
-        $response = $client->getResponse();
+        $this->client->request('GET', '/notary/typeahead?q=STUFF');
+        $response = $this->client->getResponse();
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
@@ -121,9 +118,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group typeahead
      */
     public function testUserTypeahead() : void {
-        $client = $this->makeClient(LoadUser::USER);
-        $client->request('GET', '/notary/typeahead?q=STUFF');
-        $response = $client->getResponse();
+        $this->login('user.user');
+        $this->client->request('GET', '/notary/typeahead?q=STUFF');
+        $response = $this->client->getResponse();
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
@@ -138,9 +135,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group typeahead
      */
     public function testAdminTypeahead() : void {
-        $client = $this->makeClient(LoadUser::ADMIN);
-        $client->request('GET', '/notary/typeahead?q=STUFF');
-        $response = $client->getResponse();
+        $this->login('user.admin');
+        $this->client->request('GET', '/notary/typeahead?q=STUFF');
+        $response = $this->client->getResponse();
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/json', $response->headers->get('content-type'));
         $this->markTestIncomplete(
@@ -155,10 +152,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group edit
      */
     public function testAnonEdit() : void {
-        $client = $this->makeClient();
-        $crawler = $client->request('GET', '/notary/1/edit');
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
-        $this->assertTrue($client->getResponse()->isRedirect());
+        $crawler = $this->client->request('GET', '/notary/1/edit');
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
@@ -166,9 +162,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group edit
      */
     public function testUserEdit() : void {
-        $client = $this->makeClient(LoadUser::USER);
-        $crawler = $client->request('GET', '/notary/1/edit');
-        $this->assertSame(403, $client->getResponse()->getStatusCode());
+        $this->login('user.user');
+        $crawler = $this->client->request('GET', '/notary/1/edit');
+        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -176,9 +172,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group edit
      */
     public function testAdminEdit() : void {
-        $client = $this->makeClient(LoadUser::ADMIN);
-        $formCrawler = $client->request('GET', '/notary/1/edit');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->login('user.admin');
+        $formCrawler = $this->client->request('GET', '/notary/1/edit');
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
             'This test has not been implemented yet.'
@@ -188,10 +184,10 @@ class NotaryControllerTest extends BaseTestCase {
             // 'notarys[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
-        $client->submit($form);
-        $this->assertTrue($client->getResponse()->isRedirect('/notary/1'));
-        $responseCrawler = $client->followRedirect();
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->client->submit($form);
+        $this->assertTrue($this->client->getResponse()->isRedirect('/notary/1'));
+        $responseCrawler = $this->client->followRedirect();
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
 
@@ -200,10 +196,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group new
      */
     public function testAnonNew() : void {
-        $client = $this->makeClient();
-        $crawler = $client->request('GET', '/notary/new');
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
-        $this->assertTrue($client->getResponse()->isRedirect());
+        $crawler = $this->client->request('GET', '/notary/new');
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
@@ -211,10 +206,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group new
      */
     public function testAnonNewPopup() : void {
-        $client = $this->makeClient();
-        $crawler = $client->request('GET', '/notary/new_popup');
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
-        $this->assertTrue($client->getResponse()->isRedirect());
+        $crawler = $this->client->request('GET', '/notary/new_popup');
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
@@ -222,9 +216,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group new
      */
     public function testUserNew() : void {
-        $client = $this->makeClient(LoadUser::USER);
-        $crawler = $client->request('GET', '/notary/new');
-        $this->assertSame(403, $client->getResponse()->getStatusCode());
+        $this->login('user.user');
+        $crawler = $this->client->request('GET', '/notary/new');
+        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -232,9 +226,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group new
      */
     public function testUserNewPopup() : void {
-        $client = $this->makeClient(LoadUser::USER);
-        $crawler = $client->request('GET', '/notary/new_popup');
-        $this->assertSame(403, $client->getResponse()->getStatusCode());
+        $this->login('user.user');
+        $crawler = $this->client->request('GET', '/notary/new_popup');
+        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -242,9 +236,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group new
      */
     public function testAdminNew() : void {
-        $client = $this->makeClient(LoadUser::ADMIN);
-        $formCrawler = $client->request('GET', '/notary/new');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->login('user.admin');
+        $formCrawler = $this->client->request('GET', '/notary/new');
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
             'This test has not been implemented yet.'
@@ -254,10 +248,10 @@ class NotaryControllerTest extends BaseTestCase {
             // 'notarys[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
-        $client->submit($form);
-        $this->assertTrue($client->getResponse()->isRedirect());
-        $responseCrawler = $client->followRedirect();
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->client->submit($form);
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $responseCrawler = $this->client->followRedirect();
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
 
@@ -266,9 +260,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group new
      */
     public function testAdminNewPopup() : void {
-        $client = $this->makeClient(LoadUser::ADMIN);
-        $formCrawler = $client->request('GET', '/notary/new_popup');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->login('user.admin');
+        $formCrawler = $this->client->request('GET', '/notary/new_popup');
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
         $this->markTestIncomplete(
             'This test has not been implemented yet.'
@@ -278,10 +272,10 @@ class NotaryControllerTest extends BaseTestCase {
             // 'notarys[FIELDNAME]' => 'FIELDVALUE',
         ]);
 
-        $client->submit($form);
-        $this->assertTrue($client->getResponse()->isRedirect());
-        $responseCrawler = $client->followRedirect();
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->client->submit($form);
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $responseCrawler = $this->client->followRedirect();
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         // $this->assertEquals(1, $responseCrawler->filter('td:contains("FIELDVALUE")')->count());
     }
 
@@ -290,10 +284,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group delete
      */
     public function testAnonDelete() : void {
-        $client = $this->makeClient();
-        $crawler = $client->request('GET', '/notary/1/delete');
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
-        $this->assertTrue($client->getResponse()->isRedirect());
+        $crawler = $this->client->request('GET', '/notary/1/delete');
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
@@ -301,9 +294,9 @@ class NotaryControllerTest extends BaseTestCase {
      * @group delete
      */
     public function testUserDelete() : void {
-        $client = $this->makeClient(LoadUser::USER);
-        $crawler = $client->request('GET', '/notary/1/delete');
-        $this->assertSame(403, $client->getResponse()->getStatusCode());
+        $this->login('user.user');
+        $crawler = $this->client->request('GET', '/notary/1/delete');
+        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -311,16 +304,16 @@ class NotaryControllerTest extends BaseTestCase {
      * @group delete
      */
     public function testAdminDelete() : void {
-        $preCount = count($this->em->getRepository(Notary::class)->findAll());
-        $client = $this->makeClient(LoadUser::ADMIN);
-        $crawler = $client->request('GET', '/notary/1/delete');
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
-        $this->assertTrue($client->getResponse()->isRedirect());
-        $responseCrawler = $client->followRedirect();
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $preCount = count($this->entityManager->getRepository(Notary::class)->findAll());
+        $this->login('user.admin');
+        $crawler = $this->client->request('GET', '/notary/1/delete');
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $responseCrawler = $this->client->followRedirect();
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
-        $this->em->clear();
-        $postCount = count($this->em->getRepository(Notary::class)->findAll());
+        $this->entityManager->clear();
+        $postCount = count($this->entityManager->getRepository(Notary::class)->findAll());
         $this->assertSame($preCount - 1, $postCount);
     }
 }

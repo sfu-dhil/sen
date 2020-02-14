@@ -8,12 +8,12 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace AppBundle\Tests\Entity;
+namespace App\Tests\Entity;
 
-use AppBundle\Entity\Person;
-use Nines\UtilBundle\Tests\Util\BaseTestCase;
+use App\Entity\Person;
+use Nines\UtilBundle\Tests\ControllerBaseCase;
 
-class PersonTest extends BaseTestCase {
+class PersonTest extends ControllerBaseCase {
     /**
      * @dataProvider setLastNameData
      *

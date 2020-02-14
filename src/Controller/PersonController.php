@@ -9,11 +9,11 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
-use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Person;
 use App\Form\PersonType;
 use App\Repository\PersonRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/person")
  */
-class PersonController extends AbstractController  implements PaginatorAwareInterface {
+class PersonController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
@@ -42,7 +42,6 @@ class PersonController extends AbstractController  implements PaginatorAwareInte
      * @Template()
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
-
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Person::class, 'e')->orderBy('e.lastName', 'ASC');
         $query = $qb->getQuery();
@@ -101,7 +100,6 @@ class PersonController extends AbstractController  implements PaginatorAwareInte
      * @Template()
      */
     public function searchAction(Request $request, PersonRepository $repo) {
-
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -133,7 +131,6 @@ class PersonController extends AbstractController  implements PaginatorAwareInte
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $em->persist($person);
             $em->flush();
 
@@ -192,7 +189,6 @@ class PersonController extends AbstractController  implements PaginatorAwareInte
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-
             $em->flush();
             $this->addFlash('success', 'The person has been updated.');
 
@@ -214,7 +210,6 @@ class PersonController extends AbstractController  implements PaginatorAwareInte
      * @Route("/{id}/delete", name="person_delete", methods={"GET"})
      */
     public function deleteAction(Request $request, EntityManagerInterface $em, Person $person) {
-
         $em->remove($person);
         $em->flush();
         $this->addFlash('success', 'The person was deleted.');

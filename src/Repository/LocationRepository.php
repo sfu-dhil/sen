@@ -23,6 +23,7 @@ class LocationRepository extends \Doctrine\Bundle\DoctrineBundle\Repository\Serv
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Location::class);
     }
+
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->andWhere('e.name LIKE :q');

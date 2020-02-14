@@ -23,6 +23,7 @@ class PersonRepository extends \Doctrine\Bundle\DoctrineBundle\Repository\Servic
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Person::class);
     }
+
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->andWhere('e.firstName LIKE :q');

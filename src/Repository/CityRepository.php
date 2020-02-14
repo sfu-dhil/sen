@@ -23,6 +23,7 @@ class CityRepository extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceE
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, City::class);
     }
+
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->andWhere('e.name LIKE :q');

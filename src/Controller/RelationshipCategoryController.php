@@ -10,12 +10,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Doctrine\ORM\EntityManagerInterface;
-
-
 use App\Entity\RelationshipCategory;
 use App\Form\RelationshipCategoryType;
 use App\Repository\RelationshipCategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -31,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/relationship_category")
  */
-class RelationshipCategoryController extends AbstractController  implements PaginatorAwareInterface {
+class RelationshipCategoryController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
@@ -44,7 +42,6 @@ class RelationshipCategoryController extends AbstractController  implements Pagi
      * @Template()
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
-
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(RelationshipCategory::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -105,7 +102,6 @@ class RelationshipCategoryController extends AbstractController  implements Pagi
      * @Template()
      */
     public function searchAction(Request $request, RelationshipCategoryRepository $repo) {
-
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -137,7 +133,6 @@ class RelationshipCategoryController extends AbstractController  implements Pagi
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $em->persist($relationshipCategory);
             $em->flush();
 
@@ -196,7 +191,6 @@ class RelationshipCategoryController extends AbstractController  implements Pagi
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-
             $em->flush();
             $this->addFlash('success', 'The relationshipCategory has been updated.');
 
@@ -218,7 +212,6 @@ class RelationshipCategoryController extends AbstractController  implements Pagi
      * @Route("/{id}/delete", name="relationship_category_delete", methods={"GET"})
      */
     public function deleteAction(Request $request, EntityManagerInterface $em, RelationshipCategory $relationshipCategory) {
-
         $em->remove($relationshipCategory);
         $em->flush();
         $this->addFlash('success', 'The relationshipCategory was deleted.');

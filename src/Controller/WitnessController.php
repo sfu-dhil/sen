@@ -13,6 +13,7 @@ namespace App\Controller;
 use App\Entity\Witness;
 use App\Form\WitnessType;
 use App\Repository\WitnessRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -22,14 +23,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Witness controller.
  *
  * @Route("/witness")
  */
-class WitnessController extends AbstractController  implements PaginatorAwareInterface {
+class WitnessController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
@@ -42,7 +42,6 @@ class WitnessController extends AbstractController  implements PaginatorAwareInt
      * @Template()
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
-
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Witness::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -103,7 +102,6 @@ class WitnessController extends AbstractController  implements PaginatorAwareInt
      * @Template()
      */
     public function searchAction(Request $request, WitnessRepository $repo) {
-
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -135,7 +133,6 @@ class WitnessController extends AbstractController  implements PaginatorAwareInt
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $em->persist($witness);
             $em->flush();
 
@@ -194,7 +191,6 @@ class WitnessController extends AbstractController  implements PaginatorAwareInt
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-
             $em->flush();
             $this->addFlash('success', 'The witness has been updated.');
 
@@ -216,7 +212,6 @@ class WitnessController extends AbstractController  implements PaginatorAwareInt
      * @Route("/{id}/delete", name="witness_delete", methods={"GET"})
      */
     public function deleteAction(Request $request, EntityManagerInterface $em, Witness $witness) {
-
         $em->remove($witness);
         $em->flush();
         $this->addFlash('success', 'The witness was deleted.');

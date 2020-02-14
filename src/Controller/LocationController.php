@@ -9,11 +9,11 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
-use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Location;
 use App\Form\LocationType;
 use App\Repository\LocationRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/location")
  */
-class LocationController extends AbstractController  implements PaginatorAwareInterface {
+class LocationController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
@@ -42,7 +42,6 @@ class LocationController extends AbstractController  implements PaginatorAwareIn
      * @Template()
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
-
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Location::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -103,7 +102,6 @@ class LocationController extends AbstractController  implements PaginatorAwareIn
      * @Template()
      */
     public function searchAction(Request $request, LocationRepository $repo) {
-
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -135,7 +133,6 @@ class LocationController extends AbstractController  implements PaginatorAwareIn
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $em->persist($location);
             $em->flush();
 
@@ -194,7 +191,6 @@ class LocationController extends AbstractController  implements PaginatorAwareIn
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-
             $em->flush();
             $this->addFlash('success', 'The location has been updated.');
 
@@ -216,7 +212,6 @@ class LocationController extends AbstractController  implements PaginatorAwareIn
      * @Route("/{id}/delete", name="location_delete", methods={"GET"})
      */
     public function deleteAction(Request $request, EntityManagerInterface $em, Location $location) {
-
         $em->remove($location);
         $em->flush();
         $this->addFlash('success', 'The location was deleted.');

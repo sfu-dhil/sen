@@ -23,6 +23,7 @@ class TransactionCategoryRepository extends \Doctrine\Bundle\DoctrineBundle\Repo
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, TransactionCategory::class);
     }
+
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->andWhere('e.label LIKE :q');

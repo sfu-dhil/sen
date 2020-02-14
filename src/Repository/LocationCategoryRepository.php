@@ -23,6 +23,7 @@ class LocationCategoryRepository extends \Doctrine\Bundle\DoctrineBundle\Reposit
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, LocationCategory::class);
     }
+
     public function typeaheadQuery($q) {
         $qb = $this->createQueryBuilder('e');
         $qb->andWhere('e.label LIKE :q');

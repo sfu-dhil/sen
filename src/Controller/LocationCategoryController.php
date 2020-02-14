@@ -9,12 +9,12 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
-use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\LocationCategory;
 use App\Form\LocationCategoryType;
 use App\Repository\LocationCategoryRepository;
 use App\Repository\LocationRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -30,7 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/location_category")
  */
-class LocationCategoryController extends AbstractController  implements PaginatorAwareInterface {
+class LocationCategoryController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
@@ -43,7 +43,6 @@ class LocationCategoryController extends AbstractController  implements Paginato
      * @Template()
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
-
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(LocationCategory::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -104,7 +103,6 @@ class LocationCategoryController extends AbstractController  implements Paginato
      * @Template()
      */
     public function searchAction(Request $request, LocationCategoryRepository $repo) {
-
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -136,7 +134,6 @@ class LocationCategoryController extends AbstractController  implements Paginato
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $em->persist($locationCategory);
             $em->flush();
 
@@ -195,7 +192,6 @@ class LocationCategoryController extends AbstractController  implements Paginato
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-
             $em->flush();
             $this->addFlash('success', 'The locationCategory has been updated.');
 
@@ -217,7 +213,6 @@ class LocationCategoryController extends AbstractController  implements Paginato
      * @Route("/{id}/delete", name="location_category_delete", methods={"GET"})
      */
     public function deleteAction(Request $request, EntityManagerInterface $em, LocationCategory $locationCategory) {
-
         $em->remove($locationCategory);
         $em->flush();
         $this->addFlash('success', 'The locationCategory was deleted.');

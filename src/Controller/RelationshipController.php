@@ -9,11 +9,11 @@ declare(strict_types=1);
  */
 
 namespace App\Controller;
-use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Relationship;
 use App\Form\RelationshipType;
 use App\Repository\RelationshipRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -28,7 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/relationship")
  */
-class RelationshipController extends AbstractController  implements PaginatorAwareInterface {
+class RelationshipController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
@@ -41,7 +41,6 @@ class RelationshipController extends AbstractController  implements PaginatorAwa
      * @Template()
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
-
         $qb = $em->createQueryBuilder();
         $qb->select('e')->from(Relationship::class, 'e')->orderBy('e.id', 'ASC');
         $query = $qb->getQuery();
@@ -76,7 +75,6 @@ class RelationshipController extends AbstractController  implements PaginatorAwa
      * @Template()
      */
     public function searchAction(Request $request, RelationshipRepository $repo) {
-
         $q = $request->query->get('q');
         if ($q) {
             $query = $repo->searchQuery($q);
@@ -108,7 +106,6 @@ class RelationshipController extends AbstractController  implements PaginatorAwa
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $em->persist($relationship);
             $em->flush();
 
@@ -167,7 +164,6 @@ class RelationshipController extends AbstractController  implements PaginatorAwa
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-
             $em->flush();
             $this->addFlash('success', 'The relationship has been updated.');
 
@@ -189,7 +185,6 @@ class RelationshipController extends AbstractController  implements PaginatorAwa
      * @Route("/{id}/delete", name="relationship_delete", methods={"GET"})
      */
     public function deleteAction(Request $request, EntityManagerInterface $em, Relationship $relationship) {
-
         $em->remove($relationship);
         $em->flush();
         $this->addFlash('success', 'The relationship was deleted.');

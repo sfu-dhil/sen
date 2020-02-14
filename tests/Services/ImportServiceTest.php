@@ -8,53 +8,53 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace AppBundle\Tests\Services;
+namespace App\Tests\Services;
 
-use AppBundle\DataFixtures\ORM\LoadCity;
-use AppBundle\DataFixtures\ORM\LoadEvent;
-use AppBundle\DataFixtures\ORM\LoadEventCategory;
-use AppBundle\DataFixtures\ORM\LoadLedger;
-use AppBundle\DataFixtures\ORM\LoadLocation;
-use AppBundle\DataFixtures\ORM\LoadLocationCategory;
-use AppBundle\DataFixtures\ORM\LoadNotary;
-use AppBundle\DataFixtures\ORM\LoadPerson;
-use AppBundle\DataFixtures\ORM\LoadRace;
-use AppBundle\DataFixtures\ORM\LoadRelationshipCategory;
-use AppBundle\DataFixtures\ORM\LoadTransactionCategory;
-use AppBundle\Entity\City;
-use AppBundle\Entity\Ledger;
-use AppBundle\Entity\Location;
-use AppBundle\Entity\LocationCategory;
-use AppBundle\Entity\Notary;
-use AppBundle\Entity\Person;
-use AppBundle\Entity\Race;
-use AppBundle\Entity\RelationshipCategory;
-use AppBundle\Entity\Transaction;
-use AppBundle\Entity\TransactionCategory;
-use AppBundle\Services\ImportService;
+use App\DataFixtures\CityFixtures;
+use App\DataFixtures\EventCategoryFixtures;
+use App\DataFixtures\EventFixtures;
+use App\DataFixtures\LedgerFixtures;
+use App\DataFixtures\LocationCategoryFixtures;
+use App\DataFixtures\LocationFixtures;
+use App\DataFixtures\NotaryFixtures;
+use App\DataFixtures\PersonFixtures;
+use App\DataFixtures\RaceFixtures;
+use App\DataFixtures\RelationshipCategoryFixtures;
+use App\DataFixtures\TransactionCategoryFixtures;
+use App\Entity\City;
+use App\Entity\Ledger;
+use App\Entity\Location;
+use App\Entity\LocationCategory;
+use App\Entity\Notary;
+use App\Entity\Person;
+use App\Entity\Race;
+use App\Entity\RelationshipCategory;
+use App\Entity\Transaction;
+use App\Entity\TransactionCategory;
+use App\Services\ImportService;
 use const MB_CASE_UPPER;
 use function mb_convert_case;
-use Nines\UtilBundle\Tests\Util\BaseTestCase;
+use Nines\UtilBundle\Tests\ControllerBaseCase;
 
-class ImportServiceTest extends BaseTestCase {
+class ImportServiceTest extends ControllerBaseCase {
     /**
      * @var ImportService
      */
     private $importer;
 
-    protected function getFixtures() {
+    protected function fixtures() : array {
         return [
-            LoadNotary::class,
-            LoadLedger::class,
-            LoadRace::class,
-            LoadPerson::class,
-            LoadCity::class,
-            LoadRelationshipCategory::class,
-            LoadTransactionCategory::class,
-            LoadLocationCategory::class,
-            LoadLocation::class,
-            LoadEventCategory::class,
-            LoadEvent::class,
+            NotaryFixtures::class,
+            LedgerFixtures::class,
+            RaceFixtures::class,
+            PersonFixtures::class,
+            CityFixtures::class,
+            RelationshipCategoryFixtures::class,
+            TransactionCategoryFixtures::class,
+            LocationCategoryFixtures::class,
+            LocationFixtures::class,
+            EventCategoryFixtures::class,
+            EventFixtures::class,
         ];
     }
 
