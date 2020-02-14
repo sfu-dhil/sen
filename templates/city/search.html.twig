@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}City List{% endblock %}
+
+{% block pageheader %}
+    <h1>City List</h1>
+    {% if q %}
+        <p class="count">
+            Displaying {{ cities|length }} cities of {{ cities.getTotalItemCount }} total.
+        </p>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+    <div class='btn-toolbar pull-right'>
+        <div class='btn-group'>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('city_new') }}" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span> New
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include 'partial/search-form.html.twig' with {'path': path('city_search')} %}
+
+    {% if q %}
+    <table class="table table-bordered table-condensed table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for city in cities %}
+                <tr>
+                    <td>
+                        <a href="{{ path('city_show', { 'id': city.id }) }}">
+                            {{ city.name }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(cities) }}
+    </div>
+    {%  endif %}
+
+{% endblock %}
