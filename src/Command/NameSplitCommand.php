@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -19,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * AppImportNotaryCommand command.
  */
-class NameSplitCommand extends ContainerAwareCommand {
+class NameSplitCommand extends Command {
     public function __construct($name = null) {
         parent::__construct($name);
     }

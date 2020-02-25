@@ -13,6 +13,7 @@ namespace App\Command;
 use App\Services\ImportService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -21,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * AppImportNotaryCommand command.
  */
-class ImportNotaryCommand extends ContainerAwareCommand {
+class ImportNotaryCommand extends Command {
     /**
      * @var EntityManagerInterface
      */
