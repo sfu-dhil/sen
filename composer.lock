@@ -906,16 +906,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.7.0",
+            "version": "v2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "4d763ca4c925f647b248b9fa01b5f47aa3685d62"
+                "reference": "445796af0e873d9bd04f2502d322a7d5009b6846"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/4d763ca4c925f647b248b9fa01b5f47aa3685d62",
-                "reference": "4d763ca4c925f647b248b9fa01b5f47aa3685d62",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/445796af0e873d9bd04f2502d322a7d5009b6846",
+                "reference": "445796af0e873d9bd04f2502d322a7d5009b6846",
                 "shasum": ""
             },
             "require": {
@@ -928,6 +928,7 @@
                 "doctrine/instantiator": "^1.3",
                 "doctrine/persistence": "^1.2",
                 "ext-pdo": "*",
+                "ocramius/package-versions": "^1.2",
                 "php": "^7.1",
                 "symfony/console": "^3.0|^4.0|^5.0"
             },
@@ -985,7 +986,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2019-11-19T08:38:05+00:00"
+            "time": "2020-02-15T14:35:56+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -1258,16 +1259,16 @@
         },
         {
             "name": "knplabs/knp-components",
-            "version": "v2.3.2",
+            "version": "v2.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/knp-components.git",
-                "reference": "f4465d77d87f56b132ce23bb5fc6300265e6b889"
+                "reference": "5a89e60dfe93179f329e35f92ed9348d52143f7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/knp-components/zipball/f4465d77d87f56b132ce23bb5fc6300265e6b889",
-                "reference": "f4465d77d87f56b132ce23bb5fc6300265e6b889",
+                "url": "https://api.github.com/repos/KnpLabs/knp-components/zipball/5a89e60dfe93179f329e35f92ed9348d52143f7b",
+                "reference": "5a89e60dfe93179f329e35f92ed9348d52143f7b",
                 "shasum": ""
             },
             "require": {
@@ -1329,7 +1330,7 @@
                 "pager",
                 "paginator"
             ],
-            "time": "2020-02-11T09:47:37+00:00"
+            "time": "2020-02-24T15:11:24+00:00"
         },
         {
             "name": "knplabs/knp-menu",
@@ -6370,12 +6371,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ubermichael/nines-bundles.git",
-                "reference": "86e351a3b25ba9f971baf94beeca5d3d844447cd"
+                "reference": "c9706f457affbfe8ff05c171fca7eaf26acd9953"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ubermichael/nines-bundles/zipball/86e351a3b25ba9f971baf94beeca5d3d844447cd",
-                "reference": "86e351a3b25ba9f971baf94beeca5d3d844447cd",
+                "url": "https://api.github.com/repos/ubermichael/nines-bundles/zipball/c9706f457affbfe8ff05c171fca7eaf26acd9953",
+                "reference": "c9706f457affbfe8ff05c171fca7eaf26acd9953",
                 "shasum": ""
             },
             "require": {
@@ -6418,7 +6419,7 @@
                 "source": "https://github.com/ubermichael/nines-bundles/tree/4.x",
                 "issues": "https://github.com/ubermichael/nines-bundles/issues"
             },
-            "time": "2020-02-10T19:03:08+00:00"
+            "time": "2020-02-26T17:26:52+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -6766,16 +6767,16 @@
         },
         {
             "name": "liip/test-fixtures-bundle",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liip/LiipTestFixturesBundle.git",
-                "reference": "8bcf792fcc0d3f790fd48141df5991be1cf35932"
+                "reference": "664e155cf57c3f6a376d1d7a8e426d5468bbd0de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liip/LiipTestFixturesBundle/zipball/8bcf792fcc0d3f790fd48141df5991be1cf35932",
-                "reference": "8bcf792fcc0d3f790fd48141df5991be1cf35932",
+                "url": "https://api.github.com/repos/liip/LiipTestFixturesBundle/zipball/664e155cf57c3f6a376d1d7a8e426d5468bbd0de",
+                "reference": "664e155cf57c3f6a376d1d7a8e426d5468bbd0de",
                 "shasum": ""
             },
             "require": {
@@ -6833,7 +6834,7 @@
                 "symfony",
                 "testing"
             ],
-            "time": "2019-12-02T16:06:04+00:00"
+            "time": "2020-02-16T18:43:29+00:00"
         },
         {
             "name": "nikic/php-parser",
