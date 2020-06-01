@@ -28,7 +28,7 @@ class City extends AbstractEntity {
      */
     private $name;
 
-    public function __toString() {
+    public function __toString() : string {
         return $this->name;
     }
 

@@ -62,7 +62,7 @@ class Relationship extends AbstractEntity {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString() : string {
         return $this->person . ' ' . $this->category . ' ' . $this->relation;
     }
 

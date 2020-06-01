@@ -77,7 +77,7 @@ class Event extends AbstractEntity {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString() : string {
         return $this->category . ' ' . $this->date;
     }
 
