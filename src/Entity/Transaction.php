@@ -94,7 +94,7 @@ class Transaction extends AbstractEntity {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString() : string {
         return $this->firstParty . ' ' . $this->conjunction . ' ' . $this->secondParty;
     }
 
