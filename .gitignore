@@ -28,3 +28,4 @@ public/yarn
 config/deploy.yml
 *.sql
 config/deploy.yaml
+src/.preload.php
