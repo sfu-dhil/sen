@@ -2,3 +2,5 @@
 	path = deployment
 	url = https://github.com/ubermichael/deployment.git
 	branch = master
+[submodule "deployment/"]
+	branch = main
