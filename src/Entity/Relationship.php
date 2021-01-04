@@ -48,7 +48,7 @@ class Relationship extends AbstractEntity {
 
     /**
      * @var Person
-     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="relations")
      * @ORM\JoinColumn(nullable=false)
      */
     private $relation;
