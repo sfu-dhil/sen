@@ -19,9 +19,9 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * Person.
  *
  * @ORM\Table(name="person",
- *  indexes={
- *      @ORM\Index(name="person_ft_idx", columns={"first_name","last_name"}, flags={"fulltext"})
- *  }
+ *     indexes={
+ *         @ORM\Index(name="person_ft_idx", columns={"first_name", "last_name"}, flags={"fulltext"})
+ *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  */
@@ -163,8 +163,6 @@ class Person extends AbstractEntity {
 
     /**
      * Returns a string representation of this entity.
-     *
-     * @return string
      */
     public function __toString() : string {
         return $this->lastName . ', ' . $this->firstName;
@@ -184,7 +182,7 @@ class Person extends AbstractEntity {
      *
      * @return Person
      */
-    public function setRace(Race $race = null) {
+    public function setRace(?Race $race = null) {
         $this->race = $race;
 
         return $this;
@@ -564,7 +562,7 @@ class Person extends AbstractEntity {
      *
      * @return Person
      */
-    public function setBirthPlace(City $birthPlace = null) {
+    public function setBirthPlace(?City $birthPlace = null) {
         $this->birthPlace = $birthPlace;
 
         return $this;

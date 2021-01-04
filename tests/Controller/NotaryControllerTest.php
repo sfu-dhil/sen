@@ -110,7 +110,7 @@ class NotaryControllerTest extends ControllerBaseCase {
             'This test has not been implemented yet.'
         );
         $json = json_decode($response->getContent());
-        $this->assertSame(4, count($json));
+        $this->assertCount(4, $json);
     }
 
     /**
@@ -127,7 +127,7 @@ class NotaryControllerTest extends ControllerBaseCase {
             'This test has not been implemented yet.'
         );
         $json = json_decode($response->getContent());
-        $this->assertSame(4, count($json));
+        $this->assertCount(4, $json);
     }
 
     /**
@@ -144,7 +144,7 @@ class NotaryControllerTest extends ControllerBaseCase {
             'This test has not been implemented yet.'
         );
         $json = json_decode($response->getContent());
-        $this->assertSame(4, count($json));
+        $this->assertCount(4, $json);
     }
 
     /**

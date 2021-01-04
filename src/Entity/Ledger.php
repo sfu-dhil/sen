@@ -54,8 +54,6 @@ class Ledger extends AbstractEntity {
 
     /**
      * Returns a string representation of this entity.
-     *
-     * @return string
      */
     public function __toString() : string {
         return $this->notary . ' ' . $this->volume;
@@ -70,7 +68,7 @@ class Ledger extends AbstractEntity {
      *
      * @return Ledger
      */
-    public function setNotary(Notary $notary = null) {
+    public function setNotary(?Notary $notary = null) {
         $this->notary = $notary;
 
         return $this;

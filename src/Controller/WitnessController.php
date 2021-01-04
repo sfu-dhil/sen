@@ -39,7 +39,7 @@ class WitnessController extends AbstractController implements PaginatorAwareInte
      *
      * @Route("/", name="witness_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -69,6 +69,7 @@ class WitnessController extends AbstractController implements PaginatorAwareInte
         }
 
         $data = [];
+
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
@@ -99,7 +100,7 @@ class WitnessController extends AbstractController implements PaginatorAwareInte
      *
      * @Route("/search", name="witness_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, WitnessRepository $repo) {
         $q = $request->query->get('q');
@@ -123,9 +124,9 @@ class WitnessController extends AbstractController implements PaginatorAwareInte
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="witness_new", methods={"GET","POST"})
+     * @Route("/new", name="witness_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $witness = new Witness();
@@ -153,9 +154,9 @@ class WitnessController extends AbstractController implements PaginatorAwareInte
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="witness_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="witness_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
@@ -168,7 +169,7 @@ class WitnessController extends AbstractController implements PaginatorAwareInte
      *
      * @Route("/{id}", name="witness_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(Witness $witness) {
         return [
@@ -182,9 +183,9 @@ class WitnessController extends AbstractController implements PaginatorAwareInte
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="witness_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="witness_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, Witness $witness) {
         $editForm = $this->createForm(WitnessType::class, $witness);

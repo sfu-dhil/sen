@@ -38,7 +38,7 @@ class RelationshipController extends AbstractController implements PaginatorAwar
      *
      * @Route("/", name="relationship_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -72,7 +72,7 @@ class RelationshipController extends AbstractController implements PaginatorAwar
      *
      * @Route("/search", name="relationship_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, RelationshipRepository $repo) {
         $q = $request->query->get('q');
@@ -96,9 +96,9 @@ class RelationshipController extends AbstractController implements PaginatorAwar
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="relationship_new", methods={"GET","POST"})
+     * @Route("/new", name="relationship_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $relationship = new Relationship();
@@ -126,9 +126,9 @@ class RelationshipController extends AbstractController implements PaginatorAwar
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="relationship_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="relationship_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
@@ -141,7 +141,7 @@ class RelationshipController extends AbstractController implements PaginatorAwar
      *
      * @Route("/{id}", name="relationship_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(Relationship $relationship) {
         return [
@@ -155,9 +155,9 @@ class RelationshipController extends AbstractController implements PaginatorAwar
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="relationship_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="relationship_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, Relationship $relationship) {
         $editForm = $this->createForm(RelationshipType::class, $relationship);

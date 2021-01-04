@@ -39,7 +39,7 @@ class PersonController extends AbstractController implements PaginatorAwareInter
      *
      * @Route("/", name="person_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -67,6 +67,7 @@ class PersonController extends AbstractController implements PaginatorAwareInter
         }
 
         $data = [];
+
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
@@ -97,7 +98,7 @@ class PersonController extends AbstractController implements PaginatorAwareInter
      *
      * @Route("/search", name="person_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, PersonRepository $repo) {
         $q = $request->query->get('q');
@@ -121,9 +122,9 @@ class PersonController extends AbstractController implements PaginatorAwareInter
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="person_new", methods={"GET","POST"})
+     * @Route("/new", name="person_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $person = new Person();
@@ -151,14 +152,13 @@ class PersonController extends AbstractController implements PaginatorAwareInter
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="person_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="person_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
     }
-
 
     /**
      * Finds and displays a Person entity.
@@ -167,7 +167,7 @@ class PersonController extends AbstractController implements PaginatorAwareInter
      *
      * @Route("/{id}", name="person_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(Person $person) {
         return [
@@ -181,9 +181,9 @@ class PersonController extends AbstractController implements PaginatorAwareInter
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="person_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="person_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, Person $person) {
         $editForm = $this->createForm(PersonType::class, $person);

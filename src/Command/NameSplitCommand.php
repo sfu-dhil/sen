@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,6 +46,7 @@ class NameSplitCommand extends Command {
         }
         while ($row = fgetcsv($handle)) {
             $new = [];
+
             foreach ($row as $i => $data) {
                 $new[] = $data;
                 if (in_array($i, $cols, true)) {

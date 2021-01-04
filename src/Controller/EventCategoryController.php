@@ -39,7 +39,7 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
      *
      * @Route("/", name="event_category_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -69,6 +69,7 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
         }
 
         $data = [];
+
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
@@ -99,7 +100,7 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
      *
      * @Route("/search", name="event_category_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, EventCategoryRepository $repo) {
         $q = $request->query->get('q');
@@ -123,9 +124,9 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="event_category_new", methods={"GET","POST"})
+     * @Route("/new", name="event_category_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $eventCategory = new EventCategory();
@@ -153,14 +154,13 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="event_category_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="event_category_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
     }
-
 
     /**
      * Finds and displays a EventCategory entity.
@@ -169,7 +169,7 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
      *
      * @Route("/{id}", name="event_category_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(EventCategory $eventCategory) {
         return [
@@ -183,9 +183,9 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="event_category_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="event_category_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, EventCategory $eventCategory) {
         $editForm = $this->createForm(EventCategoryType::class, $eventCategory);

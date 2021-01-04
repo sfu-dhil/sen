@@ -39,7 +39,7 @@ class RelationshipCategoryController extends AbstractController implements Pagin
      *
      * @Route("/", name="relationship_category_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -69,6 +69,7 @@ class RelationshipCategoryController extends AbstractController implements Pagin
         }
 
         $data = [];
+
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
@@ -99,7 +100,7 @@ class RelationshipCategoryController extends AbstractController implements Pagin
      *
      * @Route("/search", name="relationship_category_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, RelationshipCategoryRepository $repo) {
         $q = $request->query->get('q');
@@ -123,9 +124,9 @@ class RelationshipCategoryController extends AbstractController implements Pagin
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="relationship_category_new", methods={"GET","POST"})
+     * @Route("/new", name="relationship_category_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $relationshipCategory = new RelationshipCategory();
@@ -153,9 +154,9 @@ class RelationshipCategoryController extends AbstractController implements Pagin
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="relationship_category_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="relationship_category_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
@@ -168,7 +169,7 @@ class RelationshipCategoryController extends AbstractController implements Pagin
      *
      * @Route("/{id}", name="relationship_category_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(RelationshipCategory $relationshipCategory) {
         return [
@@ -182,9 +183,9 @@ class RelationshipCategoryController extends AbstractController implements Pagin
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="relationship_category_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="relationship_category_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, RelationshipCategory $relationshipCategory) {
         $editForm = $this->createForm(RelationshipCategoryType::class, $relationshipCategory);

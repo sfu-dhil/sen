@@ -38,7 +38,7 @@ class EventController extends AbstractController implements PaginatorAwareInterf
      *
      * @Route("/", name="event_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -72,7 +72,7 @@ class EventController extends AbstractController implements PaginatorAwareInterf
      *
      * @Route("/search", name="event_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, EventRepository $repo) {
         $q = $request->query->get('q');
@@ -96,9 +96,9 @@ class EventController extends AbstractController implements PaginatorAwareInterf
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="event_new", methods={"GET","POST"})
+     * @Route("/new", name="event_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $event = new Event();
@@ -126,14 +126,13 @@ class EventController extends AbstractController implements PaginatorAwareInterf
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="event_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="event_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
     }
-
 
     /**
      * Finds and displays a Event entity.
@@ -142,7 +141,7 @@ class EventController extends AbstractController implements PaginatorAwareInterf
      *
      * @Route("/{id}", name="event_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(Event $event) {
         return [
@@ -156,9 +155,9 @@ class EventController extends AbstractController implements PaginatorAwareInterf
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="event_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="event_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, Event $event) {
         $editForm = $this->createForm(EventType::class, $event);

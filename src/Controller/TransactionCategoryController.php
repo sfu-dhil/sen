@@ -39,7 +39,7 @@ class TransactionCategoryController extends AbstractController implements Pagina
      *
      * @Route("/", name="transaction_category_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -69,6 +69,7 @@ class TransactionCategoryController extends AbstractController implements Pagina
         }
 
         $data = [];
+
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
@@ -99,7 +100,7 @@ class TransactionCategoryController extends AbstractController implements Pagina
      *
      * @Route("/search", name="transaction_category_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, TransactionCategoryRepository $repo) {
         $q = $request->query->get('q');
@@ -123,9 +124,9 @@ class TransactionCategoryController extends AbstractController implements Pagina
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="transaction_category_new", methods={"GET","POST"})
+     * @Route("/new", name="transaction_category_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $transactionCategory = new TransactionCategory();
@@ -153,9 +154,9 @@ class TransactionCategoryController extends AbstractController implements Pagina
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="transaction_category_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="transaction_category_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
@@ -168,7 +169,7 @@ class TransactionCategoryController extends AbstractController implements Pagina
      *
      * @Route("/{id}", name="transaction_category_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(TransactionCategory $transactionCategory) {
         return [
@@ -182,9 +183,9 @@ class TransactionCategoryController extends AbstractController implements Pagina
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="transaction_category_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="transaction_category_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, TransactionCategory $transactionCategory) {
         $editForm = $this->createForm(TransactionCategoryType::class, $transactionCategory);

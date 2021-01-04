@@ -73,7 +73,7 @@ class Residence extends AbstractEntity {
      *
      * @return Residence
      */
-    public function setPerson(Person $person = null) {
+    public function setPerson(?Person $person = null) {
         $this->person = $person;
 
         return $this;
@@ -95,7 +95,7 @@ class Residence extends AbstractEntity {
      *
      * @return Residence
      */
-    public function setCity(City $city = null) {
+    public function setCity(?City $city = null) {
         $this->city = $city;
 
         return $this;

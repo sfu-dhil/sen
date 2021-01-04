@@ -39,7 +39,7 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
      *
      * @Route("/", name="city_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -69,6 +69,7 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
         }
 
         $data = [];
+
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
@@ -99,7 +100,7 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
      *
      * @Route("/search", name="city_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, CityRepository $repo) {
         $q = $request->query->get('q');
@@ -123,9 +124,9 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="city_new", methods={"GET","POST"})
+     * @Route("/new", name="city_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $city = new City();
@@ -153,9 +154,9 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="city_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="city_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
@@ -168,7 +169,7 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
      *
      * @Route("/{id}", name="city_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(City $city) {
         return [
@@ -182,9 +183,9 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="city_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="city_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, City $city) {
         $editForm = $this->createForm(CityType::class, $city);

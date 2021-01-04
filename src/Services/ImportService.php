@@ -24,7 +24,7 @@ use App\Entity\RelationshipCategory;
 use App\Entity\Residence;
 use App\Entity\Transaction;
 use App\Entity\TransactionCategory;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -258,7 +258,7 @@ class ImportService {
         }
         $transaction->setSecondPartyNote($row[16]);
         $transaction->setCategory($this->findTransactionCategory($row[17]));
-        $transaction->setDate(new DateTime($row[18] . '-' . $row[3]));
+        $transaction->setDate(new DateTimeImmutable($row[18] . '-' . $row[3]));
         $transaction->setPage($row[19]);
         $transaction->setNotes($row[20]);
         $this->em->persist($transaction);

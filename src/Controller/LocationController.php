@@ -39,7 +39,7 @@ class LocationController extends AbstractController implements PaginatorAwareInt
      *
      * @Route("/", name="location_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -69,6 +69,7 @@ class LocationController extends AbstractController implements PaginatorAwareInt
         }
 
         $data = [];
+
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
@@ -99,7 +100,7 @@ class LocationController extends AbstractController implements PaginatorAwareInt
      *
      * @Route("/search", name="location_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, LocationRepository $repo) {
         $q = $request->query->get('q');
@@ -123,9 +124,9 @@ class LocationController extends AbstractController implements PaginatorAwareInt
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="location_new", methods={"GET","POST"})
+     * @Route("/new", name="location_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $location = new Location();
@@ -153,14 +154,13 @@ class LocationController extends AbstractController implements PaginatorAwareInt
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="location_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="location_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
     }
-
 
     /**
      * Finds and displays a Location entity.
@@ -169,7 +169,7 @@ class LocationController extends AbstractController implements PaginatorAwareInt
      *
      * @Route("/{id}", name="location_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(Location $location) {
         return [
@@ -183,9 +183,9 @@ class LocationController extends AbstractController implements PaginatorAwareInt
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="location_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="location_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, Location $location) {
         $editForm = $this->createForm(LocationType::class, $location);

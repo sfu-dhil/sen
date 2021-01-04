@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use DateTimeImmutable;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
@@ -91,8 +92,6 @@ class Transaction extends AbstractEntity {
 
     /**
      * Returns a string representation of this entity.
-     *
-     * @return string
      */
     public function __toString() : string {
         return $this->firstParty . ' ' . $this->conjunction . ' ' . $this->secondParty;
@@ -103,7 +102,7 @@ class Transaction extends AbstractEntity {
      *
      * @return Transaction
      */
-    public function setCategory(TransactionCategory $category = null) {
+    public function setCategory(?TransactionCategory $category = null) {
         $this->category = $category;
 
         return $this;
@@ -123,7 +122,7 @@ class Transaction extends AbstractEntity {
      *
      * @return Transaction
      */
-    public function setLedger(Ledger $ledger = null) {
+    public function setLedger(?Ledger $ledger = null) {
         $this->ledger = $ledger;
 
         return $this;
@@ -209,7 +208,7 @@ class Transaction extends AbstractEntity {
      *
      * @return Transaction
      */
-    public function setFirstParty(Person $firstParty = null) {
+    public function setFirstParty(?Person $firstParty = null) {
         $this->firstParty = $firstParty;
 
         return $this;
@@ -229,7 +228,7 @@ class Transaction extends AbstractEntity {
      *
      * @return Transaction
      */
-    public function setSecondParty(Person $secondParty = null) {
+    public function setSecondParty(?Person $secondParty = null) {
         $this->secondParty = $secondParty;
 
         return $this;
@@ -251,7 +250,7 @@ class Transaction extends AbstractEntity {
      *
      * @return Transaction
      */
-    public function setDate(\DateTime $date) {
+    public function setDate(DateTimeImmutable $date) {
         $this->date = $date;
 
         return $this;
