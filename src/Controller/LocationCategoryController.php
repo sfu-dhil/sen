@@ -40,7 +40,7 @@ class LocationCategoryController extends AbstractController implements Paginator
      *
      * @Route("/", name="location_category_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -70,6 +70,7 @@ class LocationCategoryController extends AbstractController implements Paginator
         }
 
         $data = [];
+
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
@@ -100,7 +101,7 @@ class LocationCategoryController extends AbstractController implements Paginator
      *
      * @Route("/search", name="location_category_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, LocationCategoryRepository $repo) {
         $q = $request->query->get('q');
@@ -124,9 +125,9 @@ class LocationCategoryController extends AbstractController implements Paginator
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="location_category_new", methods={"GET","POST"})
+     * @Route("/new", name="location_category_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $locationCategory = new LocationCategory();
@@ -154,14 +155,13 @@ class LocationCategoryController extends AbstractController implements Paginator
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="location_category_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="location_category_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
     }
-
 
     /**
      * Finds and displays a LocationCategory entity.
@@ -170,7 +170,7 @@ class LocationCategoryController extends AbstractController implements Paginator
      *
      * @Route("/{id}", name="location_category_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(LocationCategory $locationCategory) {
         return [
@@ -184,9 +184,9 @@ class LocationCategoryController extends AbstractController implements Paginator
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="location_category_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="location_category_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, LocationCategory $locationCategory) {
         $editForm = $this->createForm(LocationCategoryType::class, $locationCategory);

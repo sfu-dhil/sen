@@ -38,7 +38,7 @@ class TransactionController extends AbstractController implements PaginatorAware
      *
      * @Route("/", name="transaction_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -72,7 +72,7 @@ class TransactionController extends AbstractController implements PaginatorAware
      *
      * @Route("/search", name="transaction_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, TransactionRepository $repo) {
         $q = $request->query->get('q');
@@ -96,9 +96,9 @@ class TransactionController extends AbstractController implements PaginatorAware
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="transaction_new", methods={"GET","POST"})
+     * @Route("/new", name="transaction_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $transaction = new Transaction();
@@ -126,9 +126,9 @@ class TransactionController extends AbstractController implements PaginatorAware
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="transaction_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="transaction_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
@@ -141,7 +141,7 @@ class TransactionController extends AbstractController implements PaginatorAware
      *
      * @Route("/{id}", name="transaction_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(Transaction $transaction) {
         return [
@@ -155,9 +155,9 @@ class TransactionController extends AbstractController implements PaginatorAware
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="transaction_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="transaction_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, Transaction $transaction) {
         $editForm = $this->createForm(TransactionType::class, $transaction);

@@ -33,9 +33,6 @@ use App\Entity\Transaction;
 use App\Entity\TransactionCategory;
 use App\Services\ImportService;
 use Nines\UtilBundle\Tests\ServiceBaseCase;
-use const MB_CASE_UPPER;
-use function mb_convert_case;
-use Nines\UtilBundle\Tests\ControllerBaseCase;
 
 class ImportServiceTest extends ServiceBaseCase {
     /**
@@ -119,7 +116,7 @@ class ImportServiceTest extends ServiceBaseCase {
         $found = $this->importer->findPerson($given, $family, $raceName, $status);
         $this->assertInstanceOf(Person::class, $found);
         $this->assertNotNull($found->getId());
-        $this->assertSame(mb_convert_case($family, MB_CASE_UPPER), $found->getLastName());
+        $this->assertSame(\mb_convert_case($family, \MB_CASE_UPPER), $found->getLastName());
     }
 
     public function findPersonData() {
@@ -145,7 +142,7 @@ class ImportServiceTest extends ServiceBaseCase {
         $found = $this->importer->findPerson($given, $family, $raceName, $status);
         $this->assertInstanceOf(Person::class, $found);
 
-        $this->assertSame(mb_convert_case($family, MB_CASE_UPPER), $found->getLastName());
+        $this->assertSame(\mb_convert_case($family, \MB_CASE_UPPER), $found->getLastName());
     }
 
     public function findNewPersonData() {
@@ -172,7 +169,6 @@ class ImportServiceTest extends ServiceBaseCase {
     public function testNewFindCity() : void {
         $city = $this->importer->findCity('Ogdenville');
         $this->assertInstanceOf(City::class, $city);
-
     }
 
     public function testFindRelationshipCategory() : void {
@@ -184,7 +180,6 @@ class ImportServiceTest extends ServiceBaseCase {
     public function testNewFindRelationshipCategory() : void {
         $category = $this->importer->findRelationshipCategory('accomplice');
         $this->assertInstanceOf(RelationshipCategory::class, $category);
-
     }
 
     public function testFindTransactionCategory() : void {
@@ -196,7 +191,6 @@ class ImportServiceTest extends ServiceBaseCase {
     public function testNewFindTransactionCategory() : void {
         $category = $this->importer->findTransactionCategory('Sale of stuff');
         $this->assertInstanceOf(TransactionCategory::class, $category);
-
     }
 
     public function testNewFindRelationshipCategoryChars() : void {
@@ -276,7 +270,6 @@ class ImportServiceTest extends ServiceBaseCase {
     public function testNewFindLocationCategory() : void {
         $category = $this->importer->findLocationCategory('chancery');
         $this->assertInstanceOf(LocationCategory::class, $category);
-
     }
 
     public function testFindLocation() : void {
@@ -288,7 +281,6 @@ class ImportServiceTest extends ServiceBaseCase {
     public function testNewFindLocation() : void {
         $location = $this->importer->findLocation('Saint Johns Church', 'church');
         $this->assertInstanceOf(Location::class, $location);
-
     }
 
     public function testAddNullManumission() : void {

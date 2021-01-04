@@ -48,7 +48,7 @@ class Relationship extends AbstractEntity {
 
     /**
      * @var Person
-     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="relations")
      * @ORM\JoinColumn(nullable=false)
      */
     private $relation;
@@ -59,8 +59,6 @@ class Relationship extends AbstractEntity {
 
     /**
      * Returns a string representation of this entity.
-     *
-     * @return string
      */
     public function __toString() : string {
         return $this->person . ' ' . $this->category . ' ' . $this->relation;

@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\WitnessCategory;
 use App\Form\WitnessCategoryType;
 use App\Repository\WitnessCategoryRepository;
-use App\Repository\WitnessRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
@@ -40,7 +39,7 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
      *
      * @Route("/", name="witness_category_index", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function indexAction(Request $request, EntityManagerInterface $em) {
         $qb = $em->createQueryBuilder();
@@ -70,6 +69,7 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
         }
 
         $data = [];
+
         foreach ($repo->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
@@ -100,7 +100,7 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
      *
      * @Route("/search", name="witness_category_search", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function searchAction(Request $request, WitnessCategoryRepository $repo) {
         $q = $request->query->get('q');
@@ -124,9 +124,9 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="witness_category_new", methods={"GET","POST"})
+     * @Route("/new", name="witness_category_new", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newAction(Request $request, EntityManagerInterface $em) {
         $witnessCategory = new WitnessCategory();
@@ -154,9 +154,9 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="witness_category_new_popup", methods={"GET","POST"})
+     * @Route("/new_popup", name="witness_category_new_popup", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function newPopupAction(Request $request, EntityManagerInterface $em) {
         return $this->newAction($request, $em);
@@ -169,7 +169,7 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
      *
      * @Route("/{id}", name="witness_category_show", methods={"GET"})
      *
-     * @Template()
+     * @Template
      */
     public function showAction(WitnessCategory $witnessCategory) {
         return [
@@ -183,9 +183,9 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
      * @return array|RedirectResponse
      *
      * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/edit", name="witness_category_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="witness_category_edit", methods={"GET", "POST"})
      *
-     * @Template()
+     * @Template
      */
     public function editAction(Request $request, EntityManagerInterface $em, WitnessCategory $witnessCategory) {
         $editForm = $this->createForm(WitnessCategoryType::class, $witnessCategory);

@@ -41,8 +41,6 @@ class Notary extends AbstractEntity {
 
     /**
      * Returns a string representation of this entity.
-     *
-     * @return string
      */
     public function __toString() : string {
         return $this->name;

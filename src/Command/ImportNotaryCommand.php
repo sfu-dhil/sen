@@ -12,7 +12,6 @@ namespace App\Command;
 
 use App\Services\ImportService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -53,6 +52,7 @@ class ImportNotaryCommand extends Command {
 
     protected function import($file, $skip) : void {
         $handle = fopen($file, 'r');
+
         for ($i = 1; $i <= $skip; $i++) {
             fgetcsv($handle);
         }
@@ -77,6 +77,7 @@ class ImportNotaryCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) : void {
         $files = $input->getArgument('files');
         $skip = $input->getOption('skip');
+
         foreach ($files as $file) {
             $this->import($file, $skip);
         }

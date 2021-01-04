@@ -46,8 +46,6 @@ class Witness extends AbstractEntity {
 
     /**
      * Returns a string representation of this entity.
-     *
-     * @return string
      */
     public function __toString() : string {
         return $this->person . ' ' . $this->event . ' ' . $this->category;
@@ -58,7 +56,7 @@ class Witness extends AbstractEntity {
      *
      * @return Witness
      */
-    public function setCategory(WitnessCategory $category = null) {
+    public function setCategory(?WitnessCategory $category = null) {
         $this->category = $category;
 
         return $this;
@@ -78,7 +76,7 @@ class Witness extends AbstractEntity {
      *
      * @return Witness
      */
-    public function setPerson(Person $person = null) {
+    public function setPerson(?Person $person = null) {
         $this->person = $person;
 
         return $this;
@@ -98,7 +96,7 @@ class Witness extends AbstractEntity {
      *
      * @return Witness
      */
-    public function setEvent(Event $event = null) {
+    public function setEvent(?Event $event = null) {
         $this->event = $event;
 
         return $this;

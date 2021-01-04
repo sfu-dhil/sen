@@ -48,8 +48,6 @@ class Location extends AbstractEntity {
 
     /**
      * Returns a string representation of this entity.
-     *
-     * @return string
      */
     public function __toString() : string {
         return $this->name;
@@ -60,7 +58,7 @@ class Location extends AbstractEntity {
      *
      * @return Location
      */
-    public function setCategory(LocationCategory $category = null) {
+    public function setCategory(?LocationCategory $category = null) {
         $this->category = $category;
 
         return $this;

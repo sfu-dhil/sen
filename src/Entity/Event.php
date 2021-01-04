@@ -74,8 +74,6 @@ class Event extends AbstractEntity {
 
     /**
      * Returns a string representation of this entity.
-     *
-     * @return string
      */
     public function __toString() : string {
         return $this->category . ' ' . $this->date;
@@ -94,7 +92,7 @@ class Event extends AbstractEntity {
      *
      * @return Event
      */
-    public function setCategory(EventCategory $category = null) {
+    public function setCategory(?EventCategory $category = null) {
         $this->category = $category;
 
         return $this;
@@ -172,7 +170,7 @@ class Event extends AbstractEntity {
      *
      * @return Event
      */
-    public function setLocation(Location $location = null) {
+    public function setLocation(?Location $location = null) {
         $this->location = $location;
 
         return $this;
