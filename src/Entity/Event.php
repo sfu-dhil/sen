@@ -90,6 +90,8 @@ class Event extends AbstractEntity {
     /**
      * Set category.
      *
+     * @param ?EventCategory $category
+     *
      * @return Event
      */
     public function setCategory(?EventCategory $category = null) {
@@ -167,6 +169,8 @@ class Event extends AbstractEntity {
 
     /**
      * Set location.
+     *
+     * @param ?Location $location
      *
      * @return Event
      */

@@ -66,6 +66,8 @@ class Ledger extends AbstractEntity {
     /**
      * Set notary.
      *
+     * @param ?Notary $notary
+     *
      * @return Ledger
      */
     public function setNotary(?Notary $notary = null) {

@@ -56,6 +56,8 @@ class Location extends AbstractEntity {
     /**
      * Set category.
      *
+     * @param ?LocationCategory $category
+     *
      * @return Location
      */
     public function setCategory(?LocationCategory $category = null) {

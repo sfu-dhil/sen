@@ -180,6 +180,8 @@ class Person extends AbstractEntity {
     /**
      * Set race.
      *
+     * @param ?Race $race
+     *
      * @return Person
      */
     public function setRace(?Race $race = null) {
@@ -559,6 +561,8 @@ class Person extends AbstractEntity {
 
     /**
      * Set birthPlace.
+     *
+     * @param ?City $birthPlace
      *
      * @return Person
      */

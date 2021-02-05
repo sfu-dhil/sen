@@ -54,6 +54,8 @@ class Witness extends AbstractEntity {
     /**
      * Set category.
      *
+     * @param ?WitnessCategory $category
+     *
      * @return Witness
      */
     public function setCategory(?WitnessCategory $category = null) {
@@ -74,6 +76,8 @@ class Witness extends AbstractEntity {
     /**
      * Set person.
      *
+     * @param ?Person $person
+     *
      * @return Witness
      */
     public function setPerson(?Person $person = null) {
@@ -93,6 +97,8 @@ class Witness extends AbstractEntity {
 
     /**
      * Set event.
+     *
+     * @param ?Event $event
      *
      * @return Witness
      */
