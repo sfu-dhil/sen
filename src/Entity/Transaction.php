@@ -100,6 +100,8 @@ class Transaction extends AbstractEntity {
     /**
      * Set category.
      *
+     * @param ?TransactionCategory $category
+     *
      * @return Transaction
      */
     public function setCategory(?TransactionCategory $category = null) {
@@ -119,6 +121,8 @@ class Transaction extends AbstractEntity {
 
     /**
      * Set ledger.
+     *
+     * @param ?Ledger $ledger
      *
      * @return Transaction
      */
@@ -206,6 +210,8 @@ class Transaction extends AbstractEntity {
     /**
      * Set firstParty.
      *
+     * @param ?Person $firstParty
+     *
      * @return Transaction
      */
     public function setFirstParty(?Person $firstParty = null) {
@@ -225,6 +231,8 @@ class Transaction extends AbstractEntity {
 
     /**
      * Set secondParty.
+     *
+     * @param ?Person $secondParty
      *
      * @return Transaction
      */
