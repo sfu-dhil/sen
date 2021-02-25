@@ -11,7 +11,10 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Services\ImportService;
+use App\Util\ColumnDefinitions as D;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,6 +53,12 @@ class ImportNotaryCommand extends Command {
         ;
     }
 
+    /**
+     * @param $file
+     * @param $skip
+     *
+     * @throws Exception
+     */
     protected function import($file, $skip) : void {
         $handle = fopen($file, 'r');
 
@@ -57,10 +66,24 @@ class ImportNotaryCommand extends Command {
             fgetcsv($handle);
         }
         while ($row = fgetcsv($handle)) {
-            $notary = $this->importer->findNotary($row[1]);
-            $ledger = $this->importer->findLedger($notary, $row[2], $row[3]);
-            $firstParty = $this->importer->findPerson($row[5], $row[4], $row[6], $row[7]);
-            $secondParty = $this->importer->findPerson($row[11], $row[12], $row[13], $row[14]);
+            $date = new DateTimeImmutable($row[D::transaction_date]);
+            $notary = $this->importer->findNotary($row[D::notary_name]);
+            $ledger = $this->importer->findLedger($notary, $row[D::ledger_volume], $date->format('Y'));
+
+            $firstParty = $this->importer->findPerson(
+                $row[D::first_party_first_name],
+                $row[D::first_party_last_name],
+                $row[D::first_party_race],
+                $row[D::first_party_status]
+            );
+
+            $secondParty = $this->importer->findPerson(
+                $row[D::second_party_first_name],
+                $row[D::second_party_last_name],
+                $row[D::second_party_race],
+                $row[D::second_party_status]
+            );
+
             $transaction = $this->importer->createTransaction($ledger, $firstParty, $secondParty, $row);
             $this->em->flush();
         }

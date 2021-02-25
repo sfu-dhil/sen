@@ -24,6 +24,7 @@ use App\Entity\RelationshipCategory;
 use App\Entity\Residence;
 use App\Entity\Transaction;
 use App\Entity\TransactionCategory;
+use App\Util\ColumnDefinitions as D;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -237,30 +238,31 @@ class ImportService {
         $transaction = new Transaction();
         $transaction->setLedger($ledger);
         $transaction->setFirstParty($firstParty);
-        $transaction->setFirstPartyNote($row[9]);
-        if ($row[8]) {
-            $firstSpouse = $this->findPerson($row[8], $firstParty->getLastName());
+        $transaction->setFirstPartyNote($row[D::first_party_notes]);
+        if ($row[D::first_party_spouse]) {
+            $firstSpouse = $this->findPerson($row[D::first_party_status], $firstParty->getLastName());
             $firstRelationship = new Relationship();
             $firstRelationship->setCategory($this->findRelationshipCategory('spouse'));
             $firstRelationship->setPerson($firstParty);
             $firstRelationship->setRelation($firstSpouse);
             $this->em->persist($firstRelationship);
         }
-        $transaction->setConjunction($row[10]);
+        $transaction->setConjunction($row[D::transaction_conjunction]);
         $transaction->setSecondParty($secondParty);
-        if ($row[15]) {
-            $secondSpouse = $this->findPerson($row[15], $secondParty->getLastName());
+        if ($row[D::second_party_spouse]) {
+            $secondSpouse = $this->findPerson($row[D::second_party_spouse], $secondParty->getLastName());
             $secondRelationship = new Relationship();
             $secondRelationship->setCategory($this->findRelationshipCategory('spouse'));
             $secondRelationship->setPerson($secondParty);
             $secondRelationship->setRelation($secondSpouse);
             $this->em->persist($secondRelationship);
         }
-        $transaction->setSecondPartyNote($row[16]);
-        $transaction->setCategory($this->findTransactionCategory($row[17]));
-        $transaction->setDate(new DateTimeImmutable($row[18] . '-' . $row[3]));
-        $transaction->setPage($row[19]);
-        $transaction->setNotes($row[20]);
+        $transaction->setSecondPartyNote($row[D::second_party_notes]);
+        $transaction->setCategory($this->findTransactionCategory($row[D::transaction_category]));
+        $date = new DateTimeImmutable($row[D::transaction_date]);
+        $transaction->setDate($date);
+        $transaction->setPage($row[D::ledger_page]);
+        $transaction->setNotes($row[D::transaction_notes]);
         $this->em->persist($transaction);
 
         return $transaction;
