@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Services\ImportService;
-use App\Util\ColumnDefinitions as D;
+use App\Util\NotaryColumnDefinitions as N;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -66,22 +66,22 @@ class ImportNotaryCommand extends Command {
             fgetcsv($handle);
         }
         while ($row = fgetcsv($handle)) {
-            $date = new DateTimeImmutable($row[D::transaction_date]);
-            $notary = $this->importer->findNotary($row[D::notary_name]);
-            $ledger = $this->importer->findLedger($notary, $row[D::ledger_volume], $date->format('Y'));
+            $date = new DateTimeImmutable($row[N::transaction_date]);
+            $notary = $this->importer->findNotary($row[N::notary_name]);
+            $ledger = $this->importer->findLedger($notary, $row[N::ledger_volume], $date->format('Y'));
 
             $firstParty = $this->importer->findPerson(
-                $row[D::first_party_first_name],
-                $row[D::first_party_last_name],
-                $row[D::first_party_race],
-                $row[D::first_party_status]
+                $row[N::first_party_first_name],
+                $row[N::first_party_last_name],
+                $row[N::first_party_race],
+                $row[N::first_party_status]
             );
 
             $secondParty = $this->importer->findPerson(
-                $row[D::second_party_first_name],
-                $row[D::second_party_last_name],
-                $row[D::second_party_race],
-                $row[D::second_party_status]
+                $row[N::second_party_first_name],
+                $row[N::second_party_last_name],
+                $row[N::second_party_race],
+                $row[N::second_party_status]
             );
 
             $transaction = $this->importer->createTransaction($ledger, $firstParty, $secondParty, $row);

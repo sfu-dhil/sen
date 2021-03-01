@@ -10,8 +10,7 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-class ColumnDefinitions {
-    // Notarial data spreadsheets.
+class NotaryColumnDefinitions {
     public const notary_name = 0;
 
     public const ledger_volume = 1;
