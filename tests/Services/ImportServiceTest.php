@@ -34,6 +34,8 @@ use App\Entity\TransactionCategory;
 use App\Services\ImportService;
 use Nines\UtilBundle\Tests\ServiceBaseCase;
 
+use App\Util\NotaryColumnDefinitions as N;
+
 class ImportServiceTest extends ServiceBaseCase {
     /**
      * @var ImportService
@@ -204,16 +206,15 @@ class ImportServiceTest extends ServiceBaseCase {
         $first = $this->getReference('person.1');
         $second = $this->getReference('person.2');
         $row = [
-            8 => null,
-            9 => 'and wife',
-            10 => 'from',
-            15 => null,
-            16 => 'and husband',
-            17 => 'sale of property',
-            18 => '01-03',
-            3 => 1790,
-            19 => 3,
-            20 => 'Test transaction',
+            N::first_party_spouse => null,
+            N::first_party_notes => 'and wife',
+            N::transaction_conjunction => 'from',
+            N::second_party_spouse => null,
+            N::second_party_notes => 'and husband',
+            N::transaction_category => 'sale of property',
+            N::transaction_date => '1790-04-20',
+            N::ledger_page => 3,
+            N::transaction_notes => 'Test transaction',
         ];
 
         $transaction = $this->importer->createTransaction($ledger, $first, $second, $row);
