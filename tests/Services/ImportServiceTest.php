@@ -32,9 +32,8 @@ use App\Entity\RelationshipCategory;
 use App\Entity\Transaction;
 use App\Entity\TransactionCategory;
 use App\Services\ImportService;
-use Nines\UtilBundle\Tests\ServiceBaseCase;
-
 use App\Util\NotaryColumnDefinitions as N;
+use Nines\UtilBundle\Tests\ServiceBaseCase;
 
 class ImportServiceTest extends ServiceBaseCase {
     /**
