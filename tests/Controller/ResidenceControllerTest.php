@@ -16,7 +16,8 @@ use App\Entity\Residence;
 use Nines\UserBundle\DataFixtures\UserFixtures;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 
-class ResidenceControllerTest extends ControllerBaseCase {
+class ResidenceControllerTest extends ControllerBaseCase
+{
     protected function fixtures() : array {
         if (1 === getenv('SEN_ALL_FIXTURES')) {
             return [

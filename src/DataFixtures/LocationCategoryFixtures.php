@@ -19,7 +19,8 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class LocationCategoryFixtures extends Fixture {
+class LocationCategoryFixtures extends Fixture
+{
     //put your code here
     public function load(ObjectManager $manager) : void {
         $category = new LocationCategory();

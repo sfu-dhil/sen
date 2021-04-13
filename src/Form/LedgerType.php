@@ -19,7 +19,8 @@ use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 /**
  * LedgerType form.
  */
-class LedgerType extends AbstractType {
+class LedgerType extends AbstractType
+{
     /**
      * Add form fields to $builder.
      */

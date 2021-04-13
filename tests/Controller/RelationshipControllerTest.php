@@ -15,7 +15,8 @@ use App\Entity\Relationship;
 use Nines\UserBundle\DataFixtures\UserFixtures;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 
-class RelationshipControllerTest extends ControllerBaseCase {
+class RelationshipControllerTest extends ControllerBaseCase
+{
     protected function fixtures() : array {
         return [
             UserFixtures::class,

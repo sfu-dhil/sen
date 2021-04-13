@@ -17,7 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * LocationType form.
  */
-class LocationType extends AbstractType {
+class LocationType extends AbstractType
+{
     /**
      * Add form fields to $builder.
      */

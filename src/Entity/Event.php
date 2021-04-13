@@ -21,7 +21,8 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * @ORM\Table(name="event")
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  */
-class Event extends AbstractEntity {
+class Event extends AbstractEntity
+{
     /**
      * @var string
      * @ORM\Column(type="string", nullable=true)

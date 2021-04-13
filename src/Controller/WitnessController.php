@@ -29,7 +29,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/witness")
  */
-class WitnessController extends AbstractController implements PaginatorAwareInterface {
+class WitnessController extends AbstractController implements PaginatorAwareInterface
+{
     use PaginatorTrait;
 
     /**

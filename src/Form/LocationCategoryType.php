@@ -17,7 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * LocationCategoryType form.
  */
-class LocationCategoryType extends TermType {
+class LocationCategoryType extends TermType
+{
     /**
      * Add form fields to $builder.
      */

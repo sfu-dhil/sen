@@ -17,7 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * EventCategoryType form.
  */
-class EventCategoryType extends TermType {
+class EventCategoryType extends TermType
+{
     /**
      * Add form fields to $builder.
      */

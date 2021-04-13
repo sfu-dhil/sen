@@ -18,7 +18,8 @@ use Doctrine\Persistence\ObjectManager;
 /**
  * Description of LoadEventCategory.
  */
-class LocationFixtures extends Fixture implements DependentFixtureInterface {
+class LocationFixtures extends Fixture implements DependentFixtureInterface
+{
     //put your code here
     public function load(ObjectManager $manager) : void {
         $location = new Location();

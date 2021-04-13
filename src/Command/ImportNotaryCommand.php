@@ -24,7 +24,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * AppImportNotaryCommand command.
  */
-class ImportNotaryCommand extends Command {
+class ImportNotaryCommand extends Command
+{
     /**
      * @var EntityManagerInterface
      */

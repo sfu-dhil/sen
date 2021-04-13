@@ -17,7 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * EventType form.
  */
-class EventType extends AbstractType {
+class EventType extends AbstractType
+{
     /**
      * Add form fields to $builder.
      */

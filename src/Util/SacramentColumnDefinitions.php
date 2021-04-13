@@ -10,7 +10,8 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-class SacramentColumnDefinitions {
+class SacramentColumnDefinitions
+{
     public const first_name = 0;
 
     public const last_name = 1;

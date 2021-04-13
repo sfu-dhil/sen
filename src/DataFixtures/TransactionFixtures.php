@@ -21,7 +21,8 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class TransactionFixtures extends Fixture implements DependentFixtureInterface {
+class TransactionFixtures extends Fixture implements DependentFixtureInterface
+{
     //put your code here
     public function load(ObjectManager $manager) : void {
         $transaction = new Transaction();

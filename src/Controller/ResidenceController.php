@@ -28,7 +28,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/residence")
  */
-class ResidenceController extends AbstractController implements PaginatorAwareInterface {
+class ResidenceController extends AbstractController implements PaginatorAwareInterface
+{
     use PaginatorTrait;
 
     /**

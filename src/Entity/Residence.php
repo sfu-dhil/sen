@@ -19,7 +19,8 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * @ORM\Table(name="residence")
  * @ORM\Entity(repositoryClass="App\Repository\ResidenceRepository")
  */
-class Residence extends AbstractEntity {
+class Residence extends AbstractEntity
+{
     /**
      * @var string
      * @ORM\Column(type="string", nullable=true)

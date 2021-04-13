@@ -22,7 +22,8 @@ use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 /**
  * WitnessType form.
  */
-class WitnessType extends AbstractType {
+class WitnessType extends AbstractType
+{
     /**
      * Add form fields to $builder.
      */

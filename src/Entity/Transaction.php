@@ -21,7 +21,8 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * @ORM\Table(name="transactions")
  * @ORM\Entity(repositoryClass="App\Repository\TransactionRepository")
  */
-class Transaction extends AbstractEntity {
+class Transaction extends AbstractEntity
+{
     /**
      * @var DateTime
      * @ORM\Column(type="date", nullable=false)

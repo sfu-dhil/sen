@@ -35,7 +35,8 @@ use App\Services\ImportService;
 use App\Util\NotaryColumnDefinitions as N;
 use Nines\UtilBundle\Tests\ServiceBaseCase;
 
-class ImportServiceTest extends ServiceBaseCase {
+class ImportServiceTest extends ServiceBaseCase
+{
     /**
      * @var ImportService
      */

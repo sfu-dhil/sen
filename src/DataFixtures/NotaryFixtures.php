@@ -19,7 +19,8 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class NotaryFixtures extends Fixture {
+class NotaryFixtures extends Fixture
+{
     //put your code here
     public function load(ObjectManager $manager) : void {
         $notary = new Notary();

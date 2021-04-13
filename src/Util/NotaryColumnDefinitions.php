@@ -10,7 +10,8 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-class NotaryColumnDefinitions {
+class NotaryColumnDefinitions
+{
     public const notary_name = 0;
 
     public const ledger_volume = 1;
