@@ -21,7 +21,8 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * @ORM\Table(name="ledger")
  * @ORM\Entity(repositoryClass="App\Repository\LedgerRepository")
  */
-class Ledger extends AbstractEntity {
+class Ledger extends AbstractEntity
+{
     /**
      * @var string
      * @ORM\Column(type="string", length=24, nullable=false)

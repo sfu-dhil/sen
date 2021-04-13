@@ -19,7 +19,8 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class TransactionCategoryFixtures extends Fixture {
+class TransactionCategoryFixtures extends Fixture
+{
     public function load(ObjectManager $manager) : void {
         $category = new TransactionCategory();
         $category->setName('sale-property');

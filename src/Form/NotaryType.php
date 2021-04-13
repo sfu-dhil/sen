@@ -17,7 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * NotaryType form.
  */
-class NotaryType extends AbstractType {
+class NotaryType extends AbstractType
+{
     /**
      * Add form fields to $builder.
      */

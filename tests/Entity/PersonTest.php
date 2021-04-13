@@ -13,7 +13,8 @@ namespace App\Tests\Entity;
 use App\Entity\Person;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 
-class PersonTest extends ControllerBaseCase {
+class PersonTest extends ControllerBaseCase
+{
     /**
      * @dataProvider setLastNameData
      *

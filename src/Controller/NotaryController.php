@@ -29,7 +29,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/notary")
  */
-class NotaryController extends AbstractController implements PaginatorAwareInterface {
+class NotaryController extends AbstractController implements PaginatorAwareInterface
+{
     use PaginatorTrait;
 
     /**

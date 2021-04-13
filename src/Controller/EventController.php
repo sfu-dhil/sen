@@ -28,7 +28,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/event")
  */
-class EventController extends AbstractController implements PaginatorAwareInterface {
+class EventController extends AbstractController implements PaginatorAwareInterface
+{
     use PaginatorTrait;
 
     /**

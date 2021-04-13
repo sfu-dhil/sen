@@ -19,7 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * AppImportNotaryCommand command.
  */
-class NameSplitCommand extends Command {
+class NameSplitCommand extends Command
+{
     public function __construct($name = null) {
         parent::__construct($name);
     }

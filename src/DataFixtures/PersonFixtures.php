@@ -20,7 +20,8 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class PersonFixtures extends Fixture implements DependentFixtureInterface {
+class PersonFixtures extends Fixture implements DependentFixtureInterface
+{
     //put your code here
     public function load(ObjectManager $manager) : void {
         $person1 = new Person();

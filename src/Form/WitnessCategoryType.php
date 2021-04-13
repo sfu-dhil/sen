@@ -17,7 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * WitnessCategoryType form.
  */
-class WitnessCategoryType extends TermType {
+class WitnessCategoryType extends TermType
+{
     /**
      * Add form fields to $builder.
      */

@@ -16,7 +16,8 @@ use App\Entity\Notary;
 use Nines\UserBundle\DataFixtures\UserFixtures;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 
-class NotaryControllerTest extends ControllerBaseCase {
+class NotaryControllerTest extends ControllerBaseCase
+{
     protected function fixtures() : array {
         if (1 === getenv('SEN_ALL_FIXTURES')) {
             return [

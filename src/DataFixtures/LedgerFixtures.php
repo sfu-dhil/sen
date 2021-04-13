@@ -20,7 +20,8 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class LedgerFixtures extends Fixture implements DependentFixtureInterface {
+class LedgerFixtures extends Fixture implements DependentFixtureInterface
+{
     //put your code here
     public function load(ObjectManager $manager) : void {
         $ledger = new Ledger();

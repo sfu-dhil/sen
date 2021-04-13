@@ -19,7 +19,8 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class EventCategoryFixtures extends Fixture {
+class EventCategoryFixtures extends Fixture
+{
     //put your code here
     public function load(ObjectManager $manager) : void {
         $baptism = new EventCategory();

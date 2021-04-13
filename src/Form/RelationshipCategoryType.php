@@ -17,7 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * RelationshipCategoryType form.
  */
-class RelationshipCategoryType extends TermType {
+class RelationshipCategoryType extends TermType
+{
     /**
      * Add form fields to $builder.
      */

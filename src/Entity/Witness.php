@@ -19,7 +19,8 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * @ORM\Table(name="witness")
  * @ORM\Entity(repositoryClass="App\Repository\WitnessRepository")
  */
-class Witness extends AbstractEntity {
+class Witness extends AbstractEntity
+{
     /**
      * @var WitnessCategory
      * @ORM\ManyToOne(targetEntity="WitnessCategory", inversedBy="witnesses")

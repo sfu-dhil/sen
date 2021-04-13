@@ -16,7 +16,8 @@ use App\Entity\Location;
 use Nines\UserBundle\DataFixtures\UserFixtures;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 
-class LocationControllerTest extends ControllerBaseCase {
+class LocationControllerTest extends ControllerBaseCase
+{
     protected function fixtures() : array {
         if (1 === getenv('SEN_ALL_FIXTURES')) {
             return [

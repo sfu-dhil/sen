@@ -29,7 +29,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/ledger")
  */
-class LedgerController extends AbstractController implements PaginatorAwareInterface {
+class LedgerController extends AbstractController implements PaginatorAwareInterface
+{
     use PaginatorTrait;
 
     /**
