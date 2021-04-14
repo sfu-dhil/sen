@@ -19,5 +19,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
-	  templates: ["bug_report.md"]	
+          templates: ["bug_report.md"]
 
