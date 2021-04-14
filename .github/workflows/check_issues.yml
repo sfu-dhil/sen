@@ -15,9 +15,9 @@ jobs:
         with:
           node-version: '14'
       - name: Test Issue-checker
-        uses: sfu-dhil/issue-templates
+        uses: sfu-dhil/issue-templates@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
-          templates: ["bug_report.md"]
+          templates: '["bug_report.md"]'
 
