@@ -21,8 +21,7 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  * @ORM\Table(name="location_category")
  * @ORM\Entity(repositoryClass="App\Repository\LocationCategoryRepository")
  */
-class LocationCategory extends AbstractTerm
-{
+class LocationCategory extends AbstractTerm {
     /**
      * @var Collection|Location[]
      * @ORM\OneToMany(targetEntity="Location", mappedBy="category")

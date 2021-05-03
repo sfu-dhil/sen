@@ -21,8 +21,7 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * @ORM\Table(name="location")
  * @ORM\Entity(repositoryClass="App\Repository\LocationRepository")
  */
-class Location extends AbstractEntity
-{
+class Location extends AbstractEntity {
     /**
      * @var string
      * @ORM\Column(type="string", nullable=false)

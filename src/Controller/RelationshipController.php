@@ -28,8 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/relationship")
  */
-class RelationshipController extends AbstractController implements PaginatorAwareInterface
-{
+class RelationshipController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**

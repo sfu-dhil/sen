@@ -17,8 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * RaceType form.
  */
-class RaceType extends TermType
-{
+class RaceType extends TermType {
     /**
      * Add form fields to $builder.
      */

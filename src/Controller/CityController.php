@@ -29,8 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/city")
  */
-class CityController extends AbstractController implements PaginatorAwareInterface
-{
+class CityController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**

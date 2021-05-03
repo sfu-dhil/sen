@@ -35,8 +35,7 @@ use Psr\Log\LoggerInterface;
  *
  * @author michael
  */
-class ImportService
-{
+class ImportService {
     public const MONTHS = [
         'jan', 'feb', 'mar', 'apr', 'may', 'jun',
         'jul', 'aug', 'sep', 'oct', 'nov', 'dec',

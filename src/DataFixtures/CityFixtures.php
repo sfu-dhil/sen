@@ -19,8 +19,7 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class CityFixtures extends Fixture
-{
+class CityFixtures extends Fixture {
     //put your code here
     public function load(ObjectManager $manager) : void {
         $neworleans = new City();

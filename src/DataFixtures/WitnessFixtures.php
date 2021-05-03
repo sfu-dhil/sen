@@ -20,8 +20,7 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class WitnessFixtures extends Fixture implements DependentFixtureInterface
-{
+class WitnessFixtures extends Fixture implements DependentFixtureInterface {
     //put your code here
     public function load(ObjectManager $manager) : void {
         $witness = new Witness();

@@ -21,8 +21,7 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  * @ORM\Table(name="transaction_category")
  * @ORM\Entity(repositoryClass="App\Repository\TransactionCategoryRepository")
  */
-class TransactionCategory extends AbstractTerm
-{
+class TransactionCategory extends AbstractTerm {
     /**
      * @var Collection|Transaction[]
      * @ORM\OneToMany(targetEntity="Transaction", mappedBy="category")

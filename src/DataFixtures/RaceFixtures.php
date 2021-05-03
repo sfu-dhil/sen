@@ -19,8 +19,7 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class RaceFixtures extends Fixture
-{
+class RaceFixtures extends Fixture {
     //put your code here
     public function load(ObjectManager $manager) : void {
         $race = new Race();

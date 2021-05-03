@@ -16,8 +16,7 @@ use App\Entity\TransactionCategory;
 use Nines\UserBundle\DataFixtures\UserFixtures;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 
-class TransactionCategoryControllerTest extends ControllerBaseCase
-{
+class TransactionCategoryControllerTest extends ControllerBaseCase {
     protected function fixtures() : array {
         if (1 === getenv('SEN_ALL_FIXTURES')) {
             return [

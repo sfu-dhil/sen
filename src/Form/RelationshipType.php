@@ -20,8 +20,7 @@ use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 /**
  * RelationshipType form.
  */
-class RelationshipType extends AbstractType
-{
+class RelationshipType extends AbstractType {
     /**
      * Add form fields to $builder.
      */

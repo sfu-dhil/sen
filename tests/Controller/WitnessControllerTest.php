@@ -16,8 +16,7 @@ use App\Entity\Witness;
 use Nines\UserBundle\DataFixtures\UserFixtures;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 
-class WitnessControllerTest extends ControllerBaseCase
-{
+class WitnessControllerTest extends ControllerBaseCase {
     protected function fixtures() : array {
         if (1 === getenv('SEN_ALL_FIXTURES')) {
             return [

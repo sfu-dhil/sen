@@ -30,8 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/location_category")
  */
-class LocationCategoryController extends AbstractController implements PaginatorAwareInterface
-{
+class LocationCategoryController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
