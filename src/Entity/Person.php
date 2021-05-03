@@ -25,8 +25,7 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  */
-class Person extends AbstractEntity
-{
+class Person extends AbstractEntity {
     public const MALE = 'M';
 
     public const FEMALE = 'F';

@@ -21,8 +21,7 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * @ORM\Table(name="notary")
  * @ORM\Entity(repositoryClass="App\Repository\NotaryRepository")
  */
-class Notary extends AbstractEntity
-{
+class Notary extends AbstractEntity {
     /**
      * @var string
      * @ORM\Column(type="string", nullable=false)

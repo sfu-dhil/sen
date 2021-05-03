@@ -21,8 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * AppImportSacramentCommand command.
  */
-class ImportSacramentCommand extends Command
-{
+class ImportSacramentCommand extends Command {
     /**
      * @var EntityManagerInterface
      */

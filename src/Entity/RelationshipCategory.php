@@ -21,8 +21,7 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  * @ORM\Table(name="relationship_category")
  * @ORM\Entity(repositoryClass="App\Repository\RelationshipCategoryRepository")
  */
-class RelationshipCategory extends AbstractTerm
-{
+class RelationshipCategory extends AbstractTerm {
     /**
      * @var Collection|Relationship[]
      * @ORM\OneToMany(targetEntity="Relationship", mappedBy="category")

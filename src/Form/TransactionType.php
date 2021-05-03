@@ -21,8 +21,7 @@ use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 /**
  * TransactionType form.
  */
-class TransactionType extends AbstractType
-{
+class TransactionType extends AbstractType {
     /**
      * Add form fields to $builder.
      */

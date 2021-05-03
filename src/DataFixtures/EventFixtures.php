@@ -20,8 +20,7 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class EventFixtures extends Fixture implements DependentFixtureInterface
-{
+class EventFixtures extends Fixture implements DependentFixtureInterface {
     public function load(ObjectManager $manager) : void {
         $event1 = new Event();
         $event1->setWrittenDate('21 Feb 1792');

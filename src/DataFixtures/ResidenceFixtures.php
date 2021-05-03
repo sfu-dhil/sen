@@ -20,8 +20,7 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @author michael
  */
-class ResidenceFixtures extends Fixture implements DependentFixtureInterface
-{
+class ResidenceFixtures extends Fixture implements DependentFixtureInterface {
     //put your code here
     public function load(ObjectManager $manager) : void {
         $residence = new Residence();

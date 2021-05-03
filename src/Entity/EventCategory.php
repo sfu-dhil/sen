@@ -21,8 +21,7 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  * @ORM\Table(name="event_category")
  * @ORM\Entity(repositoryClass="App\Repository\EventCategoryRepository")
  */
-class EventCategory extends AbstractTerm
-{
+class EventCategory extends AbstractTerm {
     /**
      * @var Collection|Event[]
      * @ORM\OneToMany(targetEntity="Event", mappedBy="category")

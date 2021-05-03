@@ -29,8 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/transaction_category")
  */
-class TransactionCategoryController extends AbstractController implements PaginatorAwareInterface
-{
+class TransactionCategoryController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**

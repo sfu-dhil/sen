@@ -19,8 +19,7 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  * @ORM\Table(name="relationship")
  * @ORM\Entity(repositoryClass="App\Repository\RelationshipRepository")
  */
-class Relationship extends AbstractEntity
-{
+class Relationship extends AbstractEntity {
     /**
      * @var string
      * @ORM\Column(type="string", length=10, nullable=true)

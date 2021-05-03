@@ -21,8 +21,7 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  * @ORM\Table(name="witness_category")
  * @ORM\Entity(repositoryClass="App\Repository\WitnessCategoryRepository")
  */
-class WitnessCategory extends AbstractTerm
-{
+class WitnessCategory extends AbstractTerm {
     /**
      * @var Collection|Witness[]
      * @ORM\OneToMany(targetEntity="Witness", mappedBy="category")

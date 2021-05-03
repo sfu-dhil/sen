@@ -29,8 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/race")
  */
-class RaceController extends AbstractController implements PaginatorAwareInterface
-{
+class RaceController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
