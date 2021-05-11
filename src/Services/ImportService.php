@@ -145,19 +145,29 @@ class ImportService {
      *
      * @return Person
      */
-    public function findPerson($given, $family, $raceName = '', $status = '') {
+    public function findPerson($given, $family, $raceName = '', $status = '', $sex = '') {
         $repo = $this->em->getRepository(Person::class);
         $person = $repo->findOneBy([
             'firstName' => $given,
-            'lastName' => mb_convert_case($family, MB_CASE_UPPER),
+            'lastName' => mb_convert_case($family, MB_CASE_TITLE),
         ]);
         $race = $this->findRace($raceName);
+        $s = null;
+        switch(mb_convert_case($sex, MB_CASE_LOWER)) {
+            case 'male':
+                $s = 'M';
+                break;
+            case 'female':
+                $s = 'F';
+                break;
+        }
         if ( ! $person) {
             $person = new Person();
             $person->setFirstName($given);
             $person->setLastName($family);
             $person->setRace($race);
             $person->setStatus($status);
+            $person->setSex($s);
             $this->em->persist($person);
         }
         if ($person->getRace() && $person->getRace()->getName() !== $raceName) {

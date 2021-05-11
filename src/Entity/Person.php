@@ -165,7 +165,7 @@ class Person extends AbstractEntity {
      * Returns a string representation of this entity.
      */
     public function __toString() : string {
-        return $this->lastName . ', ' . $this->firstName;
+        return ($this->lastName ?: '?') . ', ' . ($this->firstName ?: '?');
     }
 
     /**
