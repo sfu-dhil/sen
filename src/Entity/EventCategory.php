@@ -33,32 +33,4 @@ class EventCategory extends AbstractTerm {
         $this->events = new ArrayCollection();
     }
 
-    /**
-     * Add event.
-     *
-     * @return EventCategory
-     */
-    public function addEvent(Event $event) {
-        $this->events[] = $event;
-
-        return $this;
-    }
-
-    /**
-     * Remove event.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeEvent(Event $event) {
-        return $this->events->removeElement($event);
-    }
-
-    /**
-     * Get events.
-     *
-     * @return Collection
-     */
-    public function getEvents() {
-        return $this->events;
-    }
 }

@@ -33,32 +33,4 @@ class LocationCategory extends AbstractTerm {
         $this->locations = new ArrayCollection();
     }
 
-    /**
-     * Add location.
-     *
-     * @return LocationCategory
-     */
-    public function addLocation(Location $location) {
-        $this->locations[] = $location;
-
-        return $this;
-    }
-
-    /**
-     * Remove location.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeLocation(Location $location) {
-        return $this->locations->removeElement($location);
-    }
-
-    /**
-     * Get locations.
-     *
-     * @return Collection
-     */
-    public function getLocations() {
-        return $this->locations;
-    }
 }

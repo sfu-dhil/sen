@@ -33,32 +33,4 @@ class RelationshipCategory extends AbstractTerm {
         $this->relationships = new ArrayCollection();
     }
 
-    /**
-     * Add relationship.
-     *
-     * @return RelationshipCategory
-     */
-    public function addRelationship(Relationship $relationship) {
-        $this->relationships[] = $relationship;
-
-        return $this;
-    }
-
-    /**
-     * Remove relationship.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeRelationship(Relationship $relationship) {
-        return $this->relationships->removeElement($relationship);
-    }
-
-    /**
-     * Get relationships.
-     *
-     * @return Collection
-     */
-    public function getRelationships() {
-        return $this->relationships;
-    }
 }

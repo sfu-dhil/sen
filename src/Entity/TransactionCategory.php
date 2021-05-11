@@ -33,32 +33,4 @@ class TransactionCategory extends AbstractTerm {
         $this->transactions = new ArrayCollection();
     }
 
-    /**
-     * Add transaction.
-     *
-     * @return TransactionCategory
-     */
-    public function addTransaction(Transaction $transaction) {
-        $this->transactions[] = $transaction;
-
-        return $this;
-    }
-
-    /**
-     * Remove transaction.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeTransaction(Transaction $transaction) {
-        return $this->transactions->removeElement($transaction);
-    }
-
-    /**
-     * Get transactions.
-     *
-     * @return Collection
-     */
-    public function getTransactions() {
-        return $this->transactions;
-    }
 }
