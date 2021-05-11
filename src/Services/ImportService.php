@@ -115,7 +115,7 @@ class ImportService {
      *
      * @param string $name
      *
-     * @return Race
+     * @return ?Race
      */
     public function findRace($name) {
         if ( ! $name) {
@@ -352,12 +352,12 @@ class ImportService {
         return $location;
     }
 
-    public function addManumission(Person $person, $row) {
+    public function addManumission(Person $person, $row, $name = 'manumission') {
         if ( ! isset($row[7]) || ! $row[7]) {
             return;
         }
         $category = $this->em->getRepository(EventCategory::class)->findOneBy([
-            'name' => 'manumission',
+            'name' => $name,
         ]);
         if ( ! $category) {
             throw new Exception('Manumission event category is missing.');
@@ -375,12 +375,12 @@ class ImportService {
         return $event;
     }
 
-    public function addBaptism(Person $person, $row) {
+    public function addBaptism(Person $person, $row, $name = 'baptism') {
         if ( ! isset($row[5]) || ! $row[5]) {
             return;
         }
         $category = $this->em->getRepository(EventCategory::class)->findOneBy([
-            'name' => 'baptism',
+            'name' => $name,
         ]);
         if ( ! $category) {
             throw new Exception('Baptism event category is missing.');

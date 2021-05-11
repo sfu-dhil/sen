@@ -62,47 +62,47 @@ class ImportServiceTest extends ServiceBaseCase {
     }
 
     public function testFindNotary() : void {
-        $notary = $this->importer->findNotary('Billy Terwilliger');
+        $notary = $this->importer->findNotary('Name 1');
         $this->assertInstanceOf(Notary::class, $notary);
         $this->assertNotNull($notary->getId());
-        $this->assertSame('Billy Terwilliger', $notary->getName());
+        $this->assertSame('Name 1', $notary->getName());
     }
 
     public function testNewFindNotary() : void {
-        $notary = $this->importer->findNotary('Bobby Terwilliger');
+        $notary = $this->importer->findNotary('Name 5');
         $this->assertInstanceOf(Notary::class, $notary);
 
-        $this->assertSame('Bobby Terwilliger', $notary->getName());
+        $this->assertSame('Name 5', $notary->getName());
     }
 
     public function testFindLedger() : void {
         $notary = $this->getReference('notary.1');
-        $ledger = $this->importer->findLedger($notary, '9; 10', '1794');
+        $ledger = $this->importer->findLedger($notary, 'Volume 1', 1801);
         $this->assertInstanceOf(Ledger::class, $ledger);
         $this->assertNotNull($ledger->getId());
-        $this->assertSame(1794, $ledger->getYear());
+        $this->assertSame(1801, $ledger->getYear());
     }
 
     public function testNewFindLedger() : void {
         $notary = $this->getReference('notary.1');
-        $ledger = $this->importer->findLedger($notary, '11; 12', '1795');
+        $ledger = $this->importer->findLedger($notary, 'Volume 3', 1801);
         $this->assertInstanceOf(Ledger::class, $ledger);
 
-        $this->assertSame('1795', $ledger->getYear());
+        $this->assertSame(1801, $ledger->getYear());
     }
 
     public function testFindRace() : void {
-        $race = $this->importer->findRace('indian');
+        $race = $this->importer->findRace('Name 1');
         $this->assertInstanceOf(Race::class, $race);
         $this->assertNotNull($race->getId());
-        $this->assertSame('indian', $race->getName());
+        $this->assertSame('Name 1', $race->getName());
     }
 
     public function testNewFindRace() : void {
-        $race = $this->importer->findRace('non-indian');
+        $race = $this->importer->findRace('Name 6');
         $this->assertInstanceOf(Race::class, $race);
 
-        $this->assertSame('non-indian', $race->getName());
+        $this->assertSame('Name 6', $race->getName());
     }
 
     /**
@@ -121,12 +121,10 @@ class ImportServiceTest extends ServiceBaseCase {
 
     public function findPersonData() {
         return [
-            ['Emery', 'Ville', 'indian', 'free'],
-            ['Emery', 'Ville', 'non-indian', 'free'],
-            ['Emery', 'Ville', null, 'free'],
-            ['Emery', 'Ville', 'indian', 'nonfree'],
-            ['Emery', 'Ville', null, null],
-            ['Emery', 'Ville', 'non-indian', 'non-free'],
+            ['FirstName 1', 'LastName 1', 'Name 1', 'free'],
+            ['FirstName 1', 'LastName 1', null, 'free'],
+            ['FirstName 1', 'LastName 1', 'Name 1', 'nonfree'],
+            ['FirstName 1', 'LastName 1', null, null],
         ];
     }
 
@@ -142,7 +140,7 @@ class ImportServiceTest extends ServiceBaseCase {
         $found = $this->importer->findPerson($given, $family, $raceName, $status);
         $this->assertInstanceOf(Person::class, $found);
 
-        $this->assertSame(\mb_convert_case($family, \MB_CASE_UPPER), $found->getLastName());
+        $this->assertSame(mb_convert_case($family, MB_CASE_TITLE), $found->getLastName());
     }
 
     public function findNewPersonData() {
@@ -161,35 +159,35 @@ class ImportServiceTest extends ServiceBaseCase {
     }
 
     public function testFindCity() : void {
-        $cify = $this->importer->findCity('Abbeville');
+        $cify = $this->importer->findCity('Name 1');
         $this->assertInstanceOf(City::class, $cify);
         $this->assertNotNull($cify->getId());
     }
 
     public function testNewFindCity() : void {
-        $city = $this->importer->findCity('Ogdenville');
+        $city = $this->importer->findCity('Name 5');
         $this->assertInstanceOf(City::class, $city);
     }
 
     public function testFindRelationshipCategory() : void {
-        $category = $this->importer->findRelationshipCategory('rel');
+        $category = $this->importer->findRelationshipCategory('Name 1');
         $this->assertInstanceOf(RelationshipCategory::class, $category);
         $this->assertNotNull($category->getId());
     }
 
     public function testNewFindRelationshipCategory() : void {
-        $category = $this->importer->findRelationshipCategory('accomplice');
+        $category = $this->importer->findRelationshipCategory('Name 5');
         $this->assertInstanceOf(RelationshipCategory::class, $category);
     }
 
     public function testFindTransactionCategory() : void {
-        $category = $this->importer->findTransactionCategory('Sale of property');
+        $category = $this->importer->findTransactionCategory('Label 1');
         $this->assertInstanceOf(TransactionCategory::class, $category);
         $this->assertNotNull($category->getId());
     }
 
     public function testNewFindTransactionCategory() : void {
-        $category = $this->importer->findTransactionCategory('Sale of stuff');
+        $category = $this->importer->findTransactionCategory('Label 5');
         $this->assertInstanceOf(TransactionCategory::class, $category);
     }
 
@@ -261,18 +259,18 @@ class ImportServiceTest extends ServiceBaseCase {
     }
 
     public function testFindLocationCategory() : void {
-        $category = $this->importer->findLocationCategory('church');
+        $category = $this->importer->findLocationCategory('Name 1');
         $this->assertInstanceOf(LocationCategory::class, $category);
         $this->assertNotNull($category->getId());
     }
 
     public function testNewFindLocationCategory() : void {
-        $category = $this->importer->findLocationCategory('chancery');
+        $category = $this->importer->findLocationCategory('Name 5');
         $this->assertInstanceOf(LocationCategory::class, $category);
     }
 
     public function testFindLocation() : void {
-        $location = $this->importer->findLocation('Saint Barnabas Church', 'church');
+        $location = $this->importer->findLocation('Name 1', 'Name 1');
         $this->assertInstanceOf(Location::class, $location);
         $this->assertNotNull($location->getId());
     }
@@ -293,7 +291,7 @@ class ImportServiceTest extends ServiceBaseCase {
         $row = [
             7 => '5 Jun 1771',
         ];
-        $event = $this->importer->addManumission($person, $row);
+        $event = $this->importer->addManumission($person, $row, 'Name 1');
         $this->assertNotNull($event);
         $this->assertSame('1771-06-05', $event->getDate());
         $this->assertSame('5 Jun 1771', $event->getWrittenDate());
@@ -310,7 +308,7 @@ class ImportServiceTest extends ServiceBaseCase {
         $row = [
             5 => '5 Jun 1771',
         ];
-        $event = $this->importer->addBaptism($person, $row);
+        $event = $this->importer->addBaptism($person, $row, 'Name 2');
         $this->assertNotNull($event);
         $this->assertSame('1771-06-05', $event->getDate());
         $this->assertSame('5 Jun 1771', $event->getWrittenDate());

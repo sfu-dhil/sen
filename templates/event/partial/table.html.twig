@@ -1,0 +1,34 @@
+<table class="table table-bordered table-condensed table-hover table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Written Date</th>
+            <th>Date</th>
+            <th>Note</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+            <tr>
+                <td>
+                    <a href="{{ path('event_show', { 'id': event.id }) }}">
+                        {{ event.id }}
+                    </a>
+                </td>
+                <td>
+                    {{ event.writtenDate }}
+                </td>
+
+                <td>
+                    {{ event.date }}
+                </td>
+
+                <td>
+                    {{ event.note }}
+                </td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

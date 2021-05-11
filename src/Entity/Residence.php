@@ -44,4 +44,33 @@ class Residence extends AbstractEntity {
         return $this->date . ' ' . $this->city;
     }
 
+    public function getDate() : ?string {
+        return $this->date;
+    }
+
+    public function setDate(?string $date) : self {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function getPerson() : ?Person {
+        return $this->person;
+    }
+
+    public function setPerson(?Person $person) : self {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    public function getCity() : ?City {
+        return $this->city;
+    }
+
+    public function setCity(?City $city) : self {
+        $this->city = $city;
+
+        return $this;
+    }
 }

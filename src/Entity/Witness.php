@@ -51,4 +51,33 @@ class Witness extends AbstractEntity {
         return $this->person . ' ' . $this->event . ' ' . $this->category;
     }
 
+    public function getCategory() : ?WitnessCategory {
+        return $this->category;
+    }
+
+    public function setCategory(?WitnessCategory $category) : self {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getPerson() : ?Person {
+        return $this->person;
+    }
+
+    public function setPerson(?Person $person) : self {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    public function getEvent() : ?Event {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event) : self {
+        $this->event = $event;
+
+        return $this;
+    }
 }

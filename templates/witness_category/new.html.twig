@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+    {% block title %}New Witness Category {% endblock %}
+
+    {% block body %}
+        <h1>New Witness Category</h1>
+
+        {% embed 'witness_category/partial/form.html.twig' %}
+        {% endembed %}
+
+    {% endblock %}
+
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

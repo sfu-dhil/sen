@@ -58,4 +58,61 @@ class Ledger extends AbstractEntity {
     public function __toString() : string {
         return $this->notary . ' ' . $this->volume;
     }
+
+    public function getVolume() : ?string {
+        return $this->volume;
+    }
+
+    public function setVolume(string $volume) : self {
+        $this->volume = $volume;
+
+        return $this;
+    }
+
+    public function getYear() : ?int {
+        return $this->year;
+    }
+
+    public function setYear(int $year) : self {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    public function getNotary() : ?Notary {
+        return $this->notary;
+    }
+
+    public function setNotary(?Notary $notary) : self {
+        $this->notary = $notary;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Transaction[]
+     */
+    public function getTransactions() : Collection {
+        return $this->transactions;
+    }
+
+    public function addTransaction(Transaction $transaction) : self {
+        if ( ! $this->transactions->contains($transaction)) {
+            $this->transactions[] = $transaction;
+            $transaction->setLedger($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTransaction(Transaction $transaction) : self {
+        if ($this->transactions->removeElement($transaction)) {
+            // set the owning side to null (unless already changed)
+            if ($transaction->getLedger() === $this) {
+                $transaction->setLedger(null);
+            }
+        }
+
+        return $this;
+    }
 }

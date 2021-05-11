@@ -78,4 +78,102 @@ class Event extends AbstractEntity {
     public function __toString() : string {
         return $this->category . ' ' . $this->date;
     }
+
+    public function getWrittenDate() : ?string {
+        return $this->writtenDate;
+    }
+
+    public function setWrittenDate(?string $writtenDate) : self {
+        $this->writtenDate = $writtenDate;
+
+        return $this;
+    }
+
+    public function getDate() : ?string {
+        return $this->date;
+    }
+
+    public function setDate(?string $date) : self {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function getNote() : ?string {
+        return $this->note;
+    }
+
+    public function setNote(?string $note) : self {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    public function getCategory() : ?EventCategory {
+        return $this->category;
+    }
+
+    public function setCategory(?EventCategory $category) : self {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Person[]
+     */
+    public function getParticipants() : Collection {
+        return $this->participants;
+    }
+
+    public function addParticipant(Person $participant) : self {
+        if ( ! $this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(Person $participant) : self {
+        $this->participants->removeElement($participant);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Witness[]
+     */
+    public function getWitnesses() : Collection {
+        return $this->witnesses;
+    }
+
+    public function addWitness(Witness $witness) : self {
+        if ( ! $this->witnesses->contains($witness)) {
+            $this->witnesses[] = $witness;
+            $witness->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWitness(Witness $witness) : self {
+        if ($this->witnesses->removeElement($witness)) {
+            // set the owning side to null (unless already changed)
+            if ($witness->getEvent() === $this) {
+                $witness->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLocation() : ?Location {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location) : self {
+        $this->location = $location;
+
+        return $this;
+    }
 }

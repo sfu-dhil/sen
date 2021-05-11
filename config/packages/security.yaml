@@ -53,3 +53,6 @@ security:
         - { path: ^/dublin_core/element, roles: ROLE_USER }
         - { path: ^/feedback/comment_note, roles: ROLE_USER }
         - { path: ^/feedback/comment_status, roles: ROLE_USER }
+
+        # Keep the site password protected for now.
+        - { path: ^/, roles: ROLE_USER }

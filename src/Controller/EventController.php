@@ -1,0 +1,138 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * (c) 2021 Michael Joyce <mjoyce@sfu.ca>
+ * This source file is subject to the GPL v2, bundled
+ * with this source code in the file LICENSE.
+ */
+
+namespace App\Controller;
+
+use App\Entity\Event;
+use App\Form\EventType;
+use App\Repository\EventRepository;
+
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Nines\UtilBundle\Controller\PaginatorTrait;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+
+/**
+ * @Route("/event")
+ */
+class EventController extends AbstractController implements PaginatorAwareInterface {
+    use PaginatorTrait;
+
+    /**
+     * @Route("/", name="event_index", methods={"GET"})
+     *
+     * @Template
+     */
+    public function index(Request $request, EventRepository $eventRepository) : array {
+        $query = $eventRepository->indexQuery();
+        $pageSize = (int) $this->getParameter('page_size');
+        $page = $request->query->getint('page', 1);
+
+        return [
+            'events' => $this->paginator->paginate($query, $page, $pageSize),
+        ];
+    }
+
+    /**
+     * @Route("/new", name="event_new", methods={"GET", "POST"})
+     * @Template
+     * @IsGranted("ROLE_CONTENT_ADMIN")
+     *
+     * @return array|RedirectResponse
+     */
+    public function new(Request $request) {
+        $event = new Event();
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($event);
+            $entityManager->flush();
+            $this->addFlash('success', 'The new event has been saved.');
+
+            return $this->redirectToRoute('event_show', ['id' => $event->getId()]);
+        }
+
+        return [
+            'event' => $event,
+            'form' => $form->createView(),
+        ];
+    }
+
+    /**
+     * @Route("/new_popup", name="event_new_popup", methods={"GET", "POST"})
+     * @Template
+     * @IsGranted("ROLE_CONTENT_ADMIN")
+     *
+     * @return array|RedirectResponse
+     */
+    public function new_popup(Request $request) {
+        return $this->new($request);
+    }
+
+    /**
+     * @Route("/{id}", name="event_show", methods={"GET"})
+     * @Template
+     *
+     * @return array
+     */
+    public function show(Event $event) {
+        return [
+            'event' => $event,
+        ];
+    }
+
+    /**
+     * @IsGranted("ROLE_CONTENT_ADMIN")
+     * @Route("/{id}/edit", name="event_edit", methods={"GET", "POST"})
+     *
+     * @Template
+     *
+     * @return array|RedirectResponse
+     */
+    public function edit(Request $request, Event $event) {
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'The updated event has been saved.');
+
+            return $this->redirectToRoute('event_show', ['id' => $event->getId()]);
+        }
+
+        return [
+            'event' => $event,
+            'form' => $form->createView(),
+        ];
+    }
+
+    /**
+     * @IsGranted("ROLE_CONTENT_ADMIN")
+     * @Route("/{id}", name="event_delete", methods={"DELETE"})
+     *
+     * @return RedirectResponse
+     */
+    public function delete(Request $request, Event $event) {
+        if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($event);
+            $entityManager->flush();
+            $this->addFlash('success', 'The event has been deleted.');
+        }
+
+        return $this->redirectToRoute('event_index');
+    }
+}

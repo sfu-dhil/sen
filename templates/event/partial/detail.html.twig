@@ -1,0 +1,81 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        <tr>
+            <th>Written Date</th>
+            <td>
+                {{ event.writtenDate }}
+            </td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>
+                {{ event.date }}
+            </td>
+        </tr>
+        <tr>
+            <th>Note</th>
+            <td>
+                {{ event.note }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>EventCategory</th>
+            <td>
+                {% if event.category %}
+                    <a href='{{ path("event_category_show", {"id": event.category.id}) }}'>{{ event.category }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Location</th>
+            <td>
+                {% if event.location %}
+                    <a href='{{ path("location_show", {"id": event.location.id}) }}'>{{ event.location }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Person</th>
+            <td>
+                {% if event.participants|length > 0 %}
+                    <ul>
+                        {% for person in event.participants %}
+                            <li>
+                                <a href='{{ path("person_show", {"id":person.id }) }}'>
+                                    {{ person }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Witness</th>
+            <td>
+                {% if event.witnesses|length > 0 %}
+                    <ul>
+                        {% for witness in event.witnesses %}
+                            <li>
+                                <a href='{{ path("witness_show", {"id":witness.id }) }}'>
+                                    {{ witness }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ event.created|date }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ event.updated|date }}</td>
+        </tr>
+    </tbody>
+</table>
+
+

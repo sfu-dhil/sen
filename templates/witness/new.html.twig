@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+    {% block title %}New Witness {% endblock %}
+
+    {% block body %}
+        <h1>New Witness</h1>
+
+        {% embed 'witness/partial/form.html.twig' %}
+        {% endembed %}
+
+    {% endblock %}
+
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

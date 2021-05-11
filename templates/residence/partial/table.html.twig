@@ -1,0 +1,24 @@
+<table class="table table-bordered table-condensed table-hover table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for residence in residences %}
+            <tr>
+                <td>
+                    <a href="{{ path('residence_show', { 'id': residence.id }) }}">
+                        {{ residence.id }}
+                    </a>
+                </td>
+                <td>
+                    {{ residence.date }}
+                </td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

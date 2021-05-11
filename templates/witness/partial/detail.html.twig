@@ -1,0 +1,39 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+
+        <tr>
+            <th>WitnessCategory</th>
+            <td>
+                {% if witness.category %}
+                    <a href='{{ path("witness_category_show", {"id": witness.category.id}) }}'>{{ witness.category }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Person</th>
+            <td>
+                {% if witness.person %}
+                    <a href='{{ path("person_show", {"id": witness.person.id}) }}'>{{ witness.person }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Event</th>
+            <td>
+                {% if witness.event %}
+                    <a href='{{ path("event_show", {"id": witness.event.id}) }}'>{{ witness.event }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ witness.created|date }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ witness.updated|date }}</td>
+        </tr>
+    </tbody>
+</table>
+
+

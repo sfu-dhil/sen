@@ -28,13 +28,19 @@ class PersonTest extends ControllerBaseCase {
 
     public function setLastNameData() {
         return [
-            ['CHARLIE', 'Charlie'],
-            ['BJÖRK', 'Björk'],
-            ['GUÐMUNDSDÓTTIR', 'Guðmundsdóttir'],
+            ['Charlie', 'Charlie'],
+            ['Björk', 'Björk'],
+            ['Guðmundsdóttir', 'Guðmundsdóttir'],
             ['毛', '毛'],
-            ['CARREÑO', 'Carreño'],
-            ['БОРИС', 'Борис'],
+            ['Carreño', 'Carreño'],
+            ['Борис', 'Борис'],
             ['แม้ว', 'แม้ว'],
+
+            ['Charlie', 'CHARLIE'],
+            ['Björk', 'BJÖRK'],
+            ['Guðmundsdóttir', 'GUÐMUNDSDÓTTIR'],
+            ['Carreño', 'CARREÑO'],
+            ['Борис', 'БОРИС'],
         ];
     }
 }

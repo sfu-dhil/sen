@@ -1,0 +1,51 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        <tr>
+            <th>Volume</th>
+            <td>
+                {{ ledger.volume }}
+            </td>
+        </tr>
+        <tr>
+            <th>Year</th>
+            <td>
+                {{ ledger.year }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Notary</th>
+            <td>
+                {% if ledger.notary %}
+                    <a href='{{ path("notary_show", {"id": ledger.notary.id}) }}'>{{ ledger.notary }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Transaction</th>
+            <td>
+                {% if ledger.transactions|length > 0 %}
+                    <ul>
+                        {% for transaction in ledger.transactions %}
+                            <li>
+                                <a href='{{ path("transaction_show", {"id":transaction.id }) }}'>
+                                    {{ transaction }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ ledger.created|date }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ ledger.updated|date }}</td>
+        </tr>
+    </tbody>
+</table>
+
+

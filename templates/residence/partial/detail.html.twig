@@ -1,0 +1,37 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        <tr>
+            <th>Date</th>
+            <td>
+                {{ residence.date }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Person</th>
+            <td>
+                {% if residence.person %}
+                    <a href='{{ path("person_show", {"id": residence.person.id}) }}'>{{ residence.person }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>City</th>
+            <td>
+                {% if residence.city %}
+                    <a href='{{ path("city_show", {"id": residence.city.id}) }}'>{{ residence.city }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ residence.created|date }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ residence.updated|date }}</td>
+        </tr>
+    </tbody>
+</table>
+
+

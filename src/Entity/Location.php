@@ -53,4 +53,50 @@ class Location extends AbstractEntity {
         return $this->name;
     }
 
+    public function getName() : ?string {
+        return $this->name;
+    }
+
+    public function setName(string $name) : self {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCategory() : ?LocationCategory {
+        return $this->category;
+    }
+
+    public function setCategory(?LocationCategory $category) : self {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEvents() : Collection {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event) : self {
+        if ( ! $this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setLocation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event) : self {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getLocation() === $this) {
+                $event->setLocation(null);
+            }
+        }
+
+        return $this;
+    }
 }

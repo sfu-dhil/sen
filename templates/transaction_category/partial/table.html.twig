@@ -1,0 +1,34 @@
+<table class="table table-bordered table-condensed table-hover table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Label</th>
+            <th>Description</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction_category in transaction_categories %}
+            <tr>
+                <td>
+                    <a href="{{ path('transaction_category_show', { 'id': transaction_category.id }) }}">
+                        {{ transaction_category.id }}
+                    </a>
+                </td>
+                <td>
+                    {{ transaction_category.name }}
+                </td>
+
+                <td>
+                    {{ transaction_category.label }}
+                </td>
+
+                <td>
+                    {{ transaction_category.description|raw }}
+                </td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

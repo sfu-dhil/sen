@@ -1,0 +1,83 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        <tr>
+            <th>Date</th>
+            <td>
+                {% if transaction.date %}{{ transaction.date|date('Y-m-d') }}{% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Page</th>
+            <td>
+                {{ transaction.page }}
+            </td>
+        </tr>
+        <tr>
+            <th>Notes</th>
+            <td>
+                {{ transaction.notes }}
+            </td>
+        </tr>
+        <tr>
+            <th>First Party Note</th>
+            <td>
+                {{ transaction.firstPartyNote }}
+            </td>
+        </tr>
+        <tr>
+            <th>Conjunction</th>
+            <td>
+                {{ transaction.conjunction }}
+            </td>
+        </tr>
+        <tr>
+            <th>Second Party Note</th>
+            <td>
+                {{ transaction.secondPartyNote }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Person</th>
+            <td>
+                {% if transaction.firstParty %}
+                    <a href='{{ path("person_show", {"id": transaction.firstParty.id}) }}'>{{ transaction.firstParty }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Person</th>
+            <td>
+                {% if transaction.secondParty %}
+                    <a href='{{ path("person_show", {"id": transaction.secondParty.id}) }}'>{{ transaction.secondParty }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>TransactionCategory</th>
+            <td>
+                {% if transaction.category %}
+                    <a href='{{ path("transaction_category_show", {"id": transaction.category.id}) }}'>{{ transaction.category }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Ledger</th>
+            <td>
+                {% if transaction.ledger %}
+                    <a href='{{ path("ledger_show", {"id": transaction.ledger.id}) }}'>{{ transaction.ledger }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ transaction.created|date }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ transaction.updated|date }}</td>
+        </tr>
+    </tbody>
+</table>
+
+

@@ -1,0 +1,49 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <td>
+                {{ relationship_category.name }}
+            </td>
+        </tr>
+        <tr>
+            <th>Label</th>
+            <td>
+                {{ relationship_category.label }}
+            </td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>
+                {{ relationship_category.description|raw }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Relationship</th>
+            <td>
+                {% if relationship_category.relationships|length > 0 %}
+                    <ul>
+                        {% for relationship in relationship_category.relationships %}
+                            <li>
+                                <a href='{{ path("relationship_show", {"id":relationship.id }) }}'>
+                                    {{ relationship }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ relationship_category.created|date }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ relationship_category.updated|date }}</td>
+        </tr>
+    </tbody>
+</table>
+
+

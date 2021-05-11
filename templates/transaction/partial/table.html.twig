@@ -1,0 +1,47 @@
+<table class="table table-bordered table-condensed table-hover table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Page</th>
+            <th>Notes</th>
+            <th>First Party Note</th>
+            <th>Conjunction</th>
+            <th>Second Party Note</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+            <tr>
+                <td>
+                    <a href="{{ path('transaction_show', { 'id': transaction.id }) }}">
+                        {{ transaction.id }}
+                    </a>
+                </td>
+                <td>{% if transaction.date %}{{ transaction.date|date('Y-m-d') }}{% endif %}</td>
+
+                <td>
+                    {{ transaction.page }}
+                </td>
+
+                <td>
+                    {{ transaction.notes }}
+                </td>
+
+                <td>
+                    {{ transaction.firstPartyNote }}
+                </td>
+
+                <td>
+                    {{ transaction.conjunction }}
+                </td>
+
+                <td>
+                    {{ transaction.secondPartyNote }}
+                </td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,45 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <td>
+                {{ location.name }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>LocationCategory</th>
+            <td>
+                {% if location.category %}
+                    <a href='{{ path("location_category_show", {"id": location.category.id}) }}'>{{ location.category }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Event</th>
+            <td>
+                {% if location.events|length > 0 %}
+                    <ul>
+                        {% for event in location.events %}
+                            <li>
+                                <a href='{{ path("event_show", {"id":event.id }) }}'>
+                                    {{ event }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ location.created|date }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ location.updated|date }}</td>
+        </tr>
+    </tbody>
+</table>
+
+

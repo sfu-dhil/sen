@@ -1,0 +1,24 @@
+<table class="table table-bordered table-condensed table-hover table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for city in cities %}
+            <tr>
+                <td>
+                    <a href="{{ path('city_show', { 'id': city.id }) }}">
+                        {{ city.id }}
+                    </a>
+                </td>
+                <td>
+                    {{ city.name }}
+                </td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

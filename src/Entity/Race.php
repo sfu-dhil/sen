@@ -23,7 +23,6 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  * @ORM\Entity(repositoryClass="App\Repository\RaceRepository")
  */
 class Race extends AbstractTerm {
-
     /**
      * @var string
      * @ORM\Column(type="string", length=20)
@@ -71,76 +70,90 @@ class Race extends AbstractTerm {
         $this->people = new ArrayCollection();
     }
 
-    public function getSpanishUngendered(): ?string
-    {
+    public function getSpanishUngendered() : ?string {
         return $this->spanishUngendered;
     }
 
-    public function setSpanishUngendered(string $spanishUngendered): self
-    {
+    public function setSpanishUngendered(string $spanishUngendered) : self {
         $this->spanishUngendered = $spanishUngendered;
 
         return $this;
     }
 
-    public function getSpanishMale(): ?string
-    {
+    public function getSpanishMale() : ?string {
         return $this->spanishMale;
     }
 
-    public function setSpanishMale(string $spanishMale): self
-    {
+    public function setSpanishMale(string $spanishMale) : self {
         $this->spanishMale = $spanishMale;
 
         return $this;
     }
 
-    public function getSpanishFemale(): ?string
-    {
+    public function getSpanishFemale() : ?string {
         return $this->spanishFemale;
     }
 
-    public function setSpanishFemale(string $spanishFemale): self
-    {
+    public function setSpanishFemale(string $spanishFemale) : self {
         $this->spanishFemale = $spanishFemale;
 
         return $this;
     }
 
-    public function getFrenchUngendered(): ?string
-    {
+    public function getFrenchUngendered() : ?string {
         return $this->frenchUngendered;
     }
 
-    public function setFrenchUngendered(string $frenchUngendered): self
-    {
+    public function setFrenchUngendered(string $frenchUngendered) : self {
         $this->frenchUngendered = $frenchUngendered;
 
         return $this;
     }
 
-    public function getFrenchMale(): ?string
-    {
+    public function getFrenchMale() : ?string {
         return $this->frenchMale;
     }
 
-    public function setFrenchMale(string $frenchMale): self
-    {
+    public function setFrenchMale(string $frenchMale) : self {
         $this->frenchMale = $frenchMale;
 
         return $this;
     }
 
-    public function getFrenchFemale(): ?string
-    {
+    public function getFrenchFemale() : ?string {
         return $this->frenchFemale;
     }
 
-    public function setFrenchFemale(string $frenchFemale): self
-    {
+    public function setFrenchFemale(string $frenchFemale) : self {
         $this->frenchFemale = $frenchFemale;
 
         return $this;
     }
 
+    /**
+     * @return Collection|Person[]
+     */
+    public function getPeople() : Collection {
+        return $this->people;
+    }
+
+    public function addPerson(Person $person) : self {
+        if ( ! $this->people->contains($person)) {
+            $this->people[] = $person;
+            $person->setRace($this);
+        }
+
+        return $this;
+    }
+
+    public function removePerson(Person $person) : self {
+        if ($this->people->removeElement($person)) {
+            // set the owning side to null (unless already changed)
+            if ($person->getRace() === $this) {
+                $person->setRace(null);
+            }
+        }
+
+        return $this;
+    }
 }

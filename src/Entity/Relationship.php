@@ -64,4 +64,53 @@ class Relationship extends AbstractEntity {
         return $this->person . ' ' . $this->category . ' ' . $this->relation;
     }
 
+    public function getStartDate() : ?string {
+        return $this->startDate;
+    }
+
+    public function setStartDate(?string $startDate) : self {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    public function getEndDate() : ?string {
+        return $this->endDate;
+    }
+
+    public function setEndDate(?string $endDate) : self {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getCategory() : ?RelationshipCategory {
+        return $this->category;
+    }
+
+    public function setCategory(?RelationshipCategory $category) : self {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getPerson() : ?Person {
+        return $this->person;
+    }
+
+    public function setPerson(?Person $person) : self {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    public function getRelation() : ?Person {
+        return $this->relation;
+    }
+
+    public function setRelation(?Person $relation) : self {
+        $this->relation = $relation;
+
+        return $this;
+    }
 }
