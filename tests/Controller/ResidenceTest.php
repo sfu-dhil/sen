@@ -183,6 +183,8 @@ class ResidenceTest extends ControllerBaseCase {
         $form = $formCrawler->selectButton('Save')->form([
             'residence[date]' => 'New Date',
         ]);
+        $form['residence[person]']->disableValidation()->setValue(1);
+        $form['residence[city]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect());
@@ -203,6 +205,8 @@ class ResidenceTest extends ControllerBaseCase {
         $form = $formCrawler->selectButton('Save')->form([
             'residence[date]' => 'New Date',
         ]);
+        $form['residence[person]']->disableValidation()->setValue(1);
+        $form['residence[city]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect());

@@ -122,6 +122,9 @@ class WitnessTest extends ControllerBaseCase {
 
         $form = $formCrawler->selectButton('Save')->form([
         ]);
+        $form['witness[category]']->disableValidation()->setValue(1);
+        $form['witness[person]']->disableValidation()->setValue(1);
+        $form['witness[event]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect('/witness/1'));
@@ -180,6 +183,9 @@ class WitnessTest extends ControllerBaseCase {
 
         $form = $formCrawler->selectButton('Save')->form([
         ]);
+        $form['witness[category]']->disableValidation()->setValue(1);
+        $form['witness[person]']->disableValidation()->setValue(1);
+        $form['witness[event]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect());
@@ -198,6 +204,9 @@ class WitnessTest extends ControllerBaseCase {
 
         $form = $formCrawler->selectButton('Save')->form([
         ]);
+        $form['witness[category]']->disableValidation()->setValue(1);
+        $form['witness[person]']->disableValidation()->setValue(1);
+        $form['witness[event]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect());

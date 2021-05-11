@@ -123,8 +123,8 @@ class TransactionTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'transaction[date]' => 'Updated Date',
-            'transaction[page]' => 'Updated Page',
+            'transaction[date]' => '2020-02-02',
+            'transaction[page]' => 123,
             'transaction[notes]' => 'Updated Notes',
             'transaction[firstPartyNote]' => 'Updated FirstPartyNote',
             'transaction[conjunction]' => 'Updated Conjunction',
@@ -135,8 +135,8 @@ class TransactionTest extends ControllerBaseCase {
         $this->assertTrue($this->client->getResponse()->isRedirect('/transaction/1'));
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Date")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Page")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("2020-02-02")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Notes")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated FirstPartyNote")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Conjunction")')->count());
@@ -193,20 +193,24 @@ class TransactionTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'transaction[date]' => 'New Date',
-            'transaction[page]' => 'New Page',
+            'transaction[date]' => '2020-02-02',
+            'transaction[page]' => 123,
             'transaction[notes]' => 'New Notes',
             'transaction[firstPartyNote]' => 'New FirstPartyNote',
             'transaction[conjunction]' => 'New Conjunction',
             'transaction[secondPartyNote]' => 'New SecondPartyNote',
         ]);
+        $form['transaction[firstParty]']->disableValidation()->setValue(1);
+        $form['transaction[secondParty]']->disableValidation()->setValue(2);
+        $form['transaction[category]']->disableValidation()->setValue(1);
+        $form['transaction[ledger]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Date")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Page")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("2020-02-02")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Notes")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New FirstPartyNote")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Conjunction")')->count());
@@ -223,20 +227,24 @@ class TransactionTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'transaction[date]' => 'New Date',
-            'transaction[page]' => 'New Page',
+            'transaction[date]' => '2020-02-02',
+            'transaction[page]' => 123,
             'transaction[notes]' => 'New Notes',
             'transaction[firstPartyNote]' => 'New FirstPartyNote',
             'transaction[conjunction]' => 'New Conjunction',
             'transaction[secondPartyNote]' => 'New SecondPartyNote',
         ]);
+        $form['transaction[firstParty]']->disableValidation()->setValue(1);
+        $form['transaction[secondParty]']->disableValidation()->setValue(2);
+        $form['transaction[category]']->disableValidation()->setValue(1);
+        $form['transaction[ledger]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Date")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Page")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("2020-02-02")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Notes")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New FirstPartyNote")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Conjunction")')->count());

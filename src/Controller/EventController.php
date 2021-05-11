@@ -12,6 +12,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Form\EventType;
+use App\Repository\CityRepository;
 use App\Repository\EventRepository;
 
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
@@ -19,6 +20,7 @@ use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,6 +44,27 @@ class EventController extends AbstractController implements PaginatorAwareInterf
         return [
             'events' => $this->paginator->paginate($query, $page, $pageSize),
         ];
+    }
+
+    /**
+     * @Route("/typeahead", name="event_typeahead", methods={"GET"})
+     *
+     * @return JsonResponse
+     */
+    public function typeahead(Request $request, EventRepository $eventRepository) {
+        $q = $request->query->get('q');
+        if ( ! $q) {
+            return new JsonResponse([]);
+        }
+        $data = [];
+        foreach ($eventRepository->typeaheadQuery($q) as $result) {
+            $data[] = [
+                'id' => $result->getId(),
+                'text' => (string) $result,
+            ];
+        }
+
+        return new JsonResponse($data);
     }
 
     /**

@@ -218,6 +218,8 @@ class PersonTest extends ControllerBaseCase {
     /**
      * @group admin
      * @group edit
+     *
+     * @group dbg
      */
     public function testAdminEdit() : void {
         $this->login('user.admin');
@@ -227,26 +229,27 @@ class PersonTest extends ControllerBaseCase {
         $form = $formCrawler->selectButton('Save')->form([
             'person[firstName]' => 'Updated FirstName',
             'person[lastName]' => 'Updated LastName',
-            'person[alias]' => ['Updated Alias'],
             'person[native]' => 'Updated Native',
-            'person[occupation]' => ['Updated Occupation'],
-            'person[sex]' => 'Updated Sex',
+            'person[sex]' => 'M',
             'person[birthDate]' => 'Updated BirthDate',
             'person[writtenBirthDate]' => 'Updated WrittenBirthDate',
             'person[birthStatus]' => 'Updated BirthStatus',
             'person[status]' => 'Updated Status',
         ]);
+        $values = $form->getPhpValues();
+        $values['person']['alias'][0] = 'Updated Alias';
+        $values['person']['occupation'][0] = 'Updated Occupation';
+        $this->client->request($form->getMethod(), $form->getUri(), $values, $form->getPhpFiles());
 
-        $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect('/person/1'));
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated FirstName")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated LastName")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Lastname")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Alias")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Native")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Occupation")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Sex")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("M")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated BirthDate")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated WrittenBirthDate")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated BirthStatus")')->count());
@@ -321,7 +324,7 @@ class PersonTest extends ControllerBaseCase {
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New FirstName")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New LastName")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("New Lastname")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Alias")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Native")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Occupation")')->count());
@@ -360,7 +363,7 @@ class PersonTest extends ControllerBaseCase {
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New FirstName")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New LastName")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("New Lastname")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Alias")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Native")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Occupation")')->count());

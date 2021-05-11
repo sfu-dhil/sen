@@ -169,7 +169,7 @@ class LedgerTest extends ControllerBaseCase {
 
         $form = $formCrawler->selectButton('Save')->form([
             'ledger[volume]' => 'Updated Volume',
-            'ledger[year]' => 'Updated Year',
+            'ledger[year]' => 1805,
         ]);
 
         $this->client->submit($form);
@@ -177,7 +177,7 @@ class LedgerTest extends ControllerBaseCase {
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Volume")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Year")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("1805")')->count());
     }
 
     /**
@@ -231,15 +231,16 @@ class LedgerTest extends ControllerBaseCase {
 
         $form = $formCrawler->selectButton('Save')->form([
             'ledger[volume]' => 'New Volume',
-            'ledger[year]' => 'New Year',
+            'ledger[year]' => 1805,
         ]);
+        $form['ledger[notary]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Volume")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Year")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("1805")')->count());
     }
 
     /**
@@ -253,15 +254,16 @@ class LedgerTest extends ControllerBaseCase {
 
         $form = $formCrawler->selectButton('Save')->form([
             'ledger[volume]' => 'New Volume',
-            'ledger[year]' => 'New Year',
+            'ledger[year]' => 1805,
         ]);
+        $form['ledger[notary]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Volume")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Year")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("1805")')->count());
     }
 
     /**

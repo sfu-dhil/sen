@@ -230,6 +230,7 @@ class LocationTest extends ControllerBaseCase {
         $form = $formCrawler->selectButton('Save')->form([
             'location[name]' => 'New Name',
         ]);
+        $form['location[category]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect());
@@ -250,6 +251,7 @@ class LocationTest extends ControllerBaseCase {
         $form = $formCrawler->selectButton('Save')->form([
             'location[name]' => 'New Name',
         ]);
+        $form['location[category]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect());

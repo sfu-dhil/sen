@@ -35,4 +35,12 @@ class EventRepository extends ServiceEntityRepository {
             ->getQuery()
         ;
     }
+
+    public function typeaheadQuery($q) {
+        return $this->createQueryBuilder('event')
+            ->where('event.date LIKE :q')
+            ->setParameter('q', $q . '%')
+            ->orderBy('event.id')
+            ->getQuery();
+    }
 }

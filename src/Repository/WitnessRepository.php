@@ -31,7 +31,7 @@ class WitnessRepository extends ServiceEntityRepository {
      */
     public function indexQuery() {
         return $this->createQueryBuilder('witness')
-            ->orderBy('witness.idx')
+            ->orderBy('witness.id')
             ->getQuery()
         ;
     }
