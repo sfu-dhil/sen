@@ -6,9 +6,9 @@
 </table>
 
 <h2>Witnesses</h2>
-{% if witness_category.witnesss|length > 0 %}
+{% if witness_category.witnesses|length > 0 %}
     <ul>
-        {% for witness in witness_category.witnesss %}
+        {% for witness in witness_category.witnesses %}
             <li>
                 <a href='{{ path("witness_show", {"id":witness.id }) }}'>
                     {{ witness }}

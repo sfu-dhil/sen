@@ -225,7 +225,6 @@ class WitnessCategoryTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'witness_category[name]' => 'Updated Name',
             'witness_category[label]' => 'Updated Label',
             'witness_category[description]' => 'Updated Description',
         ]);
@@ -234,7 +233,6 @@ class WitnessCategoryTest extends ControllerBaseCase {
         $this->assertTrue($this->client->getResponse()->isRedirect('/witness_category/1'));
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Name")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Label")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Description")')->count());
     }
@@ -289,7 +287,6 @@ class WitnessCategoryTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'witness_category[name]' => 'New Name',
             'witness_category[label]' => 'New Label',
             'witness_category[description]' => 'New Description',
         ]);
@@ -298,7 +295,6 @@ class WitnessCategoryTest extends ControllerBaseCase {
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Name")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Label")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Description")')->count());
     }
@@ -313,7 +309,6 @@ class WitnessCategoryTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'witness_category[name]' => 'New Name',
             'witness_category[label]' => 'New Label',
             'witness_category[description]' => 'New Description',
         ]);
@@ -322,7 +317,6 @@ class WitnessCategoryTest extends ControllerBaseCase {
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Name")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Label")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Description")')->count());
     }

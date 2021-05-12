@@ -230,7 +230,7 @@ class PersonTest extends ControllerBaseCase {
             'person[firstName]' => 'Updated FirstName',
             'person[lastName]' => 'Updated LastName',
             'person[native]' => 'Updated Native',
-            'person[sex]' => 'M',
+            'person[sex]' => '1',
             'person[birthDate]' => 'Updated BirthDate',
             'person[writtenBirthDate]' => 'Updated WrittenBirthDate',
             'person[birthStatus]' => 'Updated BirthStatus',
@@ -309,7 +309,7 @@ class PersonTest extends ControllerBaseCase {
             'person[firstName]' => 'New FirstName',
             'person[lastName]' => 'New LastName',
             'person[native]' => 'New Native',
-            'person[sex]' => 'New Sex',
+            'person[sex]' => '1',
             'person[birthDate]' => 'New BirthDate',
             'person[writtenBirthDate]' => 'New WrittenBirthDate',
             'person[birthStatus]' => 'New BirthStatus',
@@ -328,7 +328,7 @@ class PersonTest extends ControllerBaseCase {
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Alias")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Native")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Occupation")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Sex")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("M")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New BirthDate")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New WrittenBirthDate")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New BirthStatus")')->count());
@@ -348,7 +348,7 @@ class PersonTest extends ControllerBaseCase {
             'person[firstName]' => 'New FirstName',
             'person[lastName]' => 'New LastName',
             'person[native]' => 'New Native',
-            'person[sex]' => 'New Sex',
+            'person[sex]' => '1',
             'person[birthDate]' => 'New BirthDate',
             'person[writtenBirthDate]' => 'New WrittenBirthDate',
             'person[birthStatus]' => 'New BirthStatus',
@@ -367,7 +367,7 @@ class PersonTest extends ControllerBaseCase {
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Alias")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Native")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Occupation")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Sex")')->count());
+        $this->assertSame(1, $responseCrawler->filter('td:contains("M")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New BirthDate")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New WrittenBirthDate")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New BirthStatus")')->count());

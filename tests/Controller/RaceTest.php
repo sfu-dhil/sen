@@ -225,7 +225,6 @@ class RaceTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'race[name]' => 'Updated Name',
             'race[label]' => 'Updated Label',
             'race[description]' => 'Updated Description',
             'race[spanishUngendered]' => 'Updated SpanishUngendered',
@@ -240,7 +239,6 @@ class RaceTest extends ControllerBaseCase {
         $this->assertTrue($this->client->getResponse()->isRedirect('/race/1'));
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Name")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Label")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Description")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated SpanishUngendered")')->count());
@@ -301,7 +299,6 @@ class RaceTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'race[name]' => 'New Name',
             'race[label]' => 'New Label',
             'race[description]' => 'New Description',
             'race[spanishUngendered]' => 'New SpanishUngendered',
@@ -316,7 +313,6 @@ class RaceTest extends ControllerBaseCase {
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Name")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Label")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Description")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New SpanishUngendered")')->count());
@@ -337,7 +333,6 @@ class RaceTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'race[name]' => 'New Name',
             'race[label]' => 'New Label',
             'race[description]' => 'New Description',
             'race[spanishUngendered]' => 'New SpanishUngendered',
@@ -352,7 +347,6 @@ class RaceTest extends ControllerBaseCase {
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Name")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Label")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Description")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New SpanishUngendered")')->count());

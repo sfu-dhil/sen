@@ -225,7 +225,6 @@ class RelationshipCategoryTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'relationship_category[name]' => 'Updated Name',
             'relationship_category[label]' => 'Updated Label',
             'relationship_category[description]' => 'Updated Description',
         ]);
@@ -234,7 +233,6 @@ class RelationshipCategoryTest extends ControllerBaseCase {
         $this->assertTrue($this->client->getResponse()->isRedirect('/relationship_category/1'));
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Name")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Label")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Description")')->count());
     }
@@ -289,7 +287,6 @@ class RelationshipCategoryTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'relationship_category[name]' => 'New Name',
             'relationship_category[label]' => 'New Label',
             'relationship_category[description]' => 'New Description',
         ]);
@@ -298,7 +295,6 @@ class RelationshipCategoryTest extends ControllerBaseCase {
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Name")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Label")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Description")')->count());
     }
@@ -313,7 +309,6 @@ class RelationshipCategoryTest extends ControllerBaseCase {
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
-            'relationship_category[name]' => 'New Name',
             'relationship_category[label]' => 'New Label',
             'relationship_category[description]' => 'New Description',
         ]);
@@ -322,7 +317,6 @@ class RelationshipCategoryTest extends ControllerBaseCase {
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Name")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Label")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Description")')->count());
     }
