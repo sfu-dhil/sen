@@ -36,14 +36,14 @@ class LocationType extends AbstractType {
         ]);
 
         $builder->add('category', Select2EntityType::class, [
-            'label' => 'LocationCategory',
+            'label' => 'Category',
             'class' => LocationCategory::class,
             'remote_route' => 'location_category_typeahead',
             'allow_clear' => true,
             'attr' => [
                 'help_block' => '',
                 'add_path' => 'location_category_new_popup',
-                'add_label' => 'Add LocationCategory',
+                'add_label' => 'Add Category',
             ],
         ]);
     }

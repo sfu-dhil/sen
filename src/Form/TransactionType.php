@@ -39,6 +39,29 @@ class TransactionType extends AbstractType {
                 'help_block' => '',
             ],
         ]);
+        $builder->add('category', Select2EntityType::class, [
+            'label' => 'Category',
+            'class' => TransactionCategory::class,
+            'remote_route' => 'transaction_category_typeahead',
+            'allow_clear' => true,
+            'attr' => [
+                'help_block' => '',
+                'add_path' => 'transaction_category_new_popup',
+                'add_label' => 'Add Category',
+            ],
+        ]);
+        $builder->add('ledger', Select2EntityType::class, [
+            'label' => 'Ledger',
+            'class' => Ledger::class,
+            'remote_route' => 'ledger_typeahead',
+            'allow_clear' => true,
+            'attr' => [
+                'help_block' => '',
+                'add_path' => 'ledger_new_popup',
+                'add_label' => 'Add Ledger',
+            ],
+        ]);
+
         $builder->add('page', null, [
             'label' => 'Page',
             'required' => true,
@@ -46,11 +69,15 @@ class TransactionType extends AbstractType {
                 'help_block' => '',
             ],
         ]);
-        $builder->add('notes', TextType::class, [
-            'label' => 'Notes',
-            'required' => false,
+        $builder->add('firstParty', Select2EntityType::class, [
+            'label' => 'First Party',
+            'class' => Person::class,
+            'remote_route' => 'person_typeahead',
+            'allow_clear' => true,
             'attr' => [
                 'help_block' => '',
+                'add_path' => 'person_new_popup',
+                'add_label' => 'Add Person',
             ],
         ]);
         $builder->add('firstPartyNote', TextType::class, [
@@ -67,6 +94,17 @@ class TransactionType extends AbstractType {
                 'help_block' => '',
             ],
         ]);
+        $builder->add('secondParty', Select2EntityType::class, [
+            'label' => 'Second Party',
+            'class' => Person::class,
+            'remote_route' => 'person_typeahead',
+            'allow_clear' => true,
+            'attr' => [
+                'help_block' => '',
+                'add_path' => 'person_new_popup',
+                'add_label' => 'Add Person',
+            ],
+        ]);
         $builder->add('secondPartyNote', TextType::class, [
             'label' => 'Second Party Note',
             'required' => true,
@@ -74,54 +112,14 @@ class TransactionType extends AbstractType {
                 'help_block' => '',
             ],
         ]);
-
-        $builder->add('firstParty', Select2EntityType::class, [
-            'label' => 'Person',
-            'class' => Person::class,
-            'remote_route' => 'person_typeahead',
-            'allow_clear' => true,
+        $builder->add('notes', TextType::class, [
+            'label' => 'Notes',
+            'required' => false,
             'attr' => [
                 'help_block' => '',
-                'add_path' => 'person_new_popup',
-                'add_label' => 'Add Person',
             ],
         ]);
 
-        $builder->add('secondParty', Select2EntityType::class, [
-            'label' => 'Person',
-            'class' => Person::class,
-            'remote_route' => 'person_typeahead',
-            'allow_clear' => true,
-            'attr' => [
-                'help_block' => '',
-                'add_path' => 'person_new_popup',
-                'add_label' => 'Add Person',
-            ],
-        ]);
-
-        $builder->add('category', Select2EntityType::class, [
-            'label' => 'TransactionCategory',
-            'class' => TransactionCategory::class,
-            'remote_route' => 'transaction_category_typeahead',
-            'allow_clear' => true,
-            'attr' => [
-                'help_block' => '',
-                'add_path' => 'transaction_category_new_popup',
-                'add_label' => 'Add TransactionCategory',
-            ],
-        ]);
-
-        $builder->add('ledger', Select2EntityType::class, [
-            'label' => 'Ledger',
-            'class' => Ledger::class,
-            'remote_route' => 'ledger_typeahead',
-            'allow_clear' => true,
-            'attr' => [
-                'help_block' => '',
-                'add_path' => 'ledger_new_popup',
-                'add_label' => 'Add Ledger',
-            ],
-        ]);
     }
 
     /**

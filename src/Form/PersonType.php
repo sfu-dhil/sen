@@ -15,6 +15,7 @@ use App\Entity\Person;
 use App\Entity\Race;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -44,7 +45,7 @@ class PersonType extends AbstractType {
             ],
         ]);
         $builder->add('alias', CollectionType::class, [
-            'label' => 'Alias',
+            'label' => 'Aliases',
             'required' => true,
             'allow_add' => true,
             'allow_delete' => true,
@@ -67,7 +68,7 @@ class PersonType extends AbstractType {
             ],
         ]);
         $builder->add('occupation', CollectionType::class, [
-            'label' => 'Occupation',
+            'label' => 'Occupations',
             'required' => false,
             'allow_add' => true,
             'allow_delete' => true,
@@ -79,28 +80,30 @@ class PersonType extends AbstractType {
             'by_reference' => false,
             'attr' => [
                 'class' => 'collection collection-simple',
-                'help_block' => '',
+                'help_block' => 'Format: Year (if known); Occupation',
             ],
         ]);
-        $builder->add('sex', TextType::class, [
-            'label' => 'Sex',
-            'required' => false,
-            'attr' => [
-                'help_block' => '',
+        $builder->add('sex', ChoiceType::class, [
+            'expanded' => true,
+            'multiple' => false,
+            'choices' => [
+                'Female' => Person::FEMALE,
+                'Male' => Person::MALE,
+                'Unknown' => null,
             ],
         ]);
         $builder->add('birthDate', TextType::class, [
             'label' => 'Birth Date',
             'required' => false,
             'attr' => [
-                'help_block' => '',
+                'help_block' => 'The closest date known for the date. YYYY-MM-DD. Use -00 for unknown month or day.',
             ],
         ]);
         $builder->add('writtenBirthDate', TextType::class, [
             'label' => 'Written Birth Date',
             'required' => false,
             'attr' => [
-                'help_block' => '',
+                'help_block' => 'Descriptive date. bef 1790, abt 2 Mar 1780.',
             ],
         ]);
         $builder->add('birthStatus', TextType::class, [
@@ -119,7 +122,7 @@ class PersonType extends AbstractType {
         ]);
 
         $builder->add('birthPlace', Select2EntityType::class, [
-            'label' => 'City',
+            'label' => 'Birth Place',
             'class' => City::class,
             'remote_route' => 'city_typeahead',
             'allow_clear' => true,

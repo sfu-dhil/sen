@@ -44,14 +44,14 @@ class RelationshipType extends AbstractType {
         ]);
 
         $builder->add('category', Select2EntityType::class, [
-            'label' => 'RelationshipCategory',
+            'label' => 'Category',
             'class' => RelationshipCategory::class,
             'remote_route' => 'relationship_category_typeahead',
             'allow_clear' => true,
             'attr' => [
                 'help_block' => '',
                 'add_path' => 'relationship_category_new_popup',
-                'add_label' => 'Add RelationshipCategory',
+                'add_label' => 'Add Category',
             ],
         ]);
 
@@ -68,7 +68,7 @@ class RelationshipType extends AbstractType {
         ]);
 
         $builder->add('relation', Select2EntityType::class, [
-            'label' => 'Person',
+            'label' => 'Relation',
             'class' => Person::class,
             'remote_route' => 'person_typeahead',
             'allow_clear' => true,

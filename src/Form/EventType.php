@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\Event;
+use App\Entity\Person;
 use App\Entity\EventCategory;
 use App\Entity\Location;
 
@@ -51,14 +52,14 @@ class EventType extends AbstractType {
         ]);
 
         $builder->add('category', Select2EntityType::class, [
-            'label' => 'EventCategory',
+            'label' => 'Category',
             'class' => EventCategory::class,
             'remote_route' => 'event_category_typeahead',
             'allow_clear' => true,
             'attr' => [
                 'help_block' => '',
                 'add_path' => 'event_category_new_popup',
-                'add_label' => 'Add EventCategory',
+                'add_label' => 'Add Category',
             ],
         ]);
 
@@ -72,6 +73,18 @@ class EventType extends AbstractType {
                 'add_path' => 'location_new_popup',
                 'add_label' => 'Add Location',
             ],
+        ]);
+        $builder->add('participants', Select2EntityType::class, [
+            'label' => 'Participants',
+            'class' => Person::class,
+            'remote_route' => 'person_typeahead',
+            'allow_clear' => true,
+            'multiple' => true,
+            'attr' => [
+                'help_block' => '',
+                'add_path' => 'person_new_popup',
+                'add_label' => 'Add Person',
+            ]
         ]);
     }
 

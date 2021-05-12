@@ -27,6 +27,17 @@ class LedgerType extends AbstractType {
      * Add form fields to $builder.
      */
     public function buildForm(FormBuilderInterface $builder, array $options) : void {
+        $builder->add('notary', Select2EntityType::class, [
+            'label' => 'Notary',
+            'class' => Notary::class,
+            'remote_route' => 'notary_typeahead',
+            'allow_clear' => true,
+            'attr' => [
+                'help_block' => '',
+                'add_path' => 'notary_new_popup',
+                'add_label' => 'Add Notary',
+            ],
+        ]);
         $builder->add('volume', TextType::class, [
             'label' => 'Volume',
             'required' => true,
@@ -39,18 +50,6 @@ class LedgerType extends AbstractType {
             'required' => true,
             'attr' => [
                 'help_block' => '',
-            ],
-        ]);
-
-        $builder->add('notary', Select2EntityType::class, [
-            'label' => 'Notary',
-            'class' => Notary::class,
-            'remote_route' => 'notary_typeahead',
-            'allow_clear' => true,
-            'attr' => [
-                'help_block' => '',
-                'add_path' => 'notary_new_popup',
-                'add_label' => 'Add Notary',
             ],
         ]);
     }

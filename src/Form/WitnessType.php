@@ -29,14 +29,14 @@ class WitnessType extends AbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) : void {
         $builder->add('category', Select2EntityType::class, [
-            'label' => 'WitnessCategory',
+            'label' => 'Category',
             'class' => WitnessCategory::class,
             'remote_route' => 'witness_category_typeahead',
             'allow_clear' => true,
             'attr' => [
                 'help_block' => '',
                 'add_path' => 'witness_category_new_popup',
-                'add_label' => 'Add WitnessCategory',
+                'add_label' => 'Add Category',
             ],
         ]);
 
