@@ -1,49 +1,19 @@
 <table class='table table-bordered table-condensed table-hover table-striped'>
     <tbody>
-        <tr>
-            <th>Name</th>
-            <td>
-                {{ witness_category.name }}
-            </td>
-        </tr>
-        <tr>
-            <th>Label</th>
-            <td>
-                {{ witness_category.label }}
-            </td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>
-                {{ witness_category.description|raw }}
-            </td>
-        </tr>
-
-        <tr>
-            <th>Witness</th>
-            <td>
-                {% if witness_category.witnesses|length > 0 %}
-                    <ul>
-                        {% for witness in witness_category.witnesses %}
-                            <li>
-                                <a href='{{ path("witness_show", {"id":witness.id }) }}'>
-                                    {{ witness }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>Created</th>
-            <td>{{ witness_category.created|date }}</td>
-        </tr>
-        <tr>
-            <th>Updated</th>
-            <td>{{ witness_category.updated|date }}</td>
-        </tr>
+        {% embed '@NinesUtil/term/partial/show.html.twig' with {'term': witness_category} %}
+        {% endembed %}
     </tbody>
 </table>
 
-
+<h2>Witnesses</h2>
+{% if witness_category.witnesss|length > 0 %}
+    <ul>
+        {% for witness in witness_category.witnesss %}
+            <li>
+                <a href='{{ path("witness_show", {"id":witness.id }) }}'>
+                    {{ witness }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

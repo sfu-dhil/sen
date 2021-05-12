@@ -1,49 +1,19 @@
 <table class='table table-bordered table-condensed table-hover table-striped'>
     <tbody>
-        <tr>
-            <th>Name</th>
-            <td>
-                {{ event_category.name }}
-            </td>
-        </tr>
-        <tr>
-            <th>Label</th>
-            <td>
-                {{ event_category.label }}
-            </td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>
-                {{ event_category.description|raw }}
-            </td>
-        </tr>
-
-        <tr>
-            <th>Event</th>
-            <td>
-                {% if event_category.events|length > 0 %}
-                    <ul>
-                        {% for event in event_category.events %}
-                            <li>
-                                <a href='{{ path("event_show", {"id":event.id }) }}'>
-                                    {{ event }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>Created</th>
-            <td>{{ event_category.created|date }}</td>
-        </tr>
-        <tr>
-            <th>Updated</th>
-            <td>{{ event_category.updated|date }}</td>
-        </tr>
+        {% embed '@NinesUtil/term/partial/show.html.twig' with {'term': event_category} %}
+        {% endembed %}
     </tbody>
 </table>
 
-
+<h2>Events</h2>
+{% if event_category.events|length > 0 %}
+    <ul>
+        {% for event in event_category.events %}
+            <li>
+                <a href='{{ path("event_show", {"id":event.id }) }}'>
+                    {{ event }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

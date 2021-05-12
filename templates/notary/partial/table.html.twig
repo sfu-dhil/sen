@@ -1,9 +1,8 @@
 <table class="table table-bordered table-condensed table-hover table-striped">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Name</th>
-
+            <th>Ledgers</th>
         </tr>
     </thead>
     <tbody>
@@ -11,13 +10,12 @@
             <tr>
                 <td>
                     <a href="{{ path('notary_show', { 'id': notary.id }) }}">
-                        {{ notary.id }}
+                        {{ notary.name }}
                     </a>
                 </td>
                 <td>
-                    {{ notary.name }}
+                    {{ notary.ledgers|length }}
                 </td>
-
             </tr>
         {% endfor %}
     </tbody>

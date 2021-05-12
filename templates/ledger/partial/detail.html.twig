@@ -1,6 +1,14 @@
 <table class='table table-bordered table-condensed table-hover table-striped'>
     <tbody>
         <tr>
+            <th>Notary</th>
+            <td>
+                {% if ledger.notary %}
+                    <a href='{{ path("notary_show", {"id": ledger.notary.id}) }}'>{{ ledger.notary }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
             <th>Volume</th>
             <td>
                 {{ ledger.volume }}
@@ -12,17 +20,8 @@
                 {{ ledger.year }}
             </td>
         </tr>
-
         <tr>
-            <th>Notary</th>
-            <td>
-                {% if ledger.notary %}
-                    <a href='{{ path("notary_show", {"id": ledger.notary.id}) }}'>{{ ledger.notary }}</a>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>Transaction</th>
+            <th>Transactions</th>
             <td>
                 {% if ledger.transactions|length > 0 %}
                     <ul>

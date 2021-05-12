@@ -1,7 +1,9 @@
 <table class="table table-bordered table-condensed table-hover table-striped">
     <thead>
         <tr>
-            <th>ID</th>
+            <th>Person</th>
+            <th>Category</th>
+            <th>Event</th>
         </tr>
     </thead>
     <tbody>
@@ -9,8 +11,14 @@
             <tr>
                 <td>
                     <a href="{{ path('witness_show', { 'id': witness.id }) }}">
-                        {{ witness.id }}
+                        {{ witness.person }}
                     </a>
+                </td>
+                <td>
+                    {{ witness.category }}
+                </td>
+                <td>
+                    {{ witness.event }}
                 </td>
             </tr>
         {% endfor %}

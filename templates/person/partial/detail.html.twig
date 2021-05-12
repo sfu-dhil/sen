@@ -13,7 +13,7 @@
             </td>
         </tr>
         <tr>
-            <th>Alias</th>
+            <th>Aliases</th>
             <td>
                 {% if person.alias %}{{ person.alias|join(', ') }}{% endif %}
             </td>
@@ -110,7 +110,7 @@
             </td>
         </tr>
         <tr>
-            <th>Relationship</th>
+            <th>Relations</th>
             <td>
                 {% if person.relations|length > 0 %}
                     <ul>
@@ -126,7 +126,7 @@
             </td>
         </tr>
         <tr>
-            <th>Witness</th>
+            <th>Events Witnessed</th>
             <td>
                 {% if person.witnesses|length > 0 %}
                     <ul>
@@ -142,7 +142,7 @@
             </td>
         </tr>
         <tr>
-            <th>Event</th>
+            <th>Events Participated</th>
             <td>
                 {% if person.events|length > 0 %}
                     <ul>
@@ -158,7 +158,7 @@
             </td>
         </tr>
         <tr>
-            <th>Transaction</th>
+            <th>First Party Transactions</th>
             <td>
                 {% if person.firstPartyTransactions|length > 0 %}
                     <ul>
@@ -174,7 +174,7 @@
             </td>
         </tr>
         <tr>
-            <th>Transaction</th>
+            <th>Second Party Transactions</th>
             <td>
                 {% if person.secondPartyTransactions|length > 0 %}
                     <ul>

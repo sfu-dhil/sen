@@ -20,7 +20,7 @@
         </tr>
 
         <tr>
-            <th>EventCategory</th>
+            <th>Category</th>
             <td>
                 {% if event.category %}
                     <a href='{{ path("event_category_show", {"id": event.category.id}) }}'>{{ event.category }}</a>
@@ -36,7 +36,7 @@
             </td>
         </tr>
         <tr>
-            <th>Person</th>
+            <th>Participants</th>
             <td>
                 {% if event.participants|length > 0 %}
                     <ul>
@@ -52,7 +52,7 @@
             </td>
         </tr>
         <tr>
-            <th>Witness</th>
+            <th>Witnesses</th>
             <td>
                 {% if event.witnesses|length > 0 %}
                     <ul>

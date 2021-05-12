@@ -1,49 +1,19 @@
 <table class='table table-bordered table-condensed table-hover table-striped'>
     <tbody>
-        <tr>
-            <th>Name</th>
-            <td>
-                {{ transaction_category.name }}
-            </td>
-        </tr>
-        <tr>
-            <th>Label</th>
-            <td>
-                {{ transaction_category.label }}
-            </td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>
-                {{ transaction_category.description|raw }}
-            </td>
-        </tr>
-
-        <tr>
-            <th>Transaction</th>
-            <td>
-                {% if transaction_category.transactions|length > 0 %}
-                    <ul>
-                        {% for transaction in transaction_category.transactions %}
-                            <li>
-                                <a href='{{ path("transaction_show", {"id":transaction.id }) }}'>
-                                    {{ transaction }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>Created</th>
-            <td>{{ transaction_category.created|date }}</td>
-        </tr>
-        <tr>
-            <th>Updated</th>
-            <td>{{ transaction_category.updated|date }}</td>
-        </tr>
+        {% embed '@NinesUtil/term/partial/show.html.twig' with {'term': transaction_category} %}
+        {% endembed %}
     </tbody>
 </table>
 
-
+<h2>Transactions</h2>
+{% if transaction_category.transactions|length > 0 %}
+    <ul>
+        {% for transaction in transaction_category.transactions %}
+            <li>
+                <a href='{{ path("transaction_show", {"id":transaction.id }) }}'>
+                    {{ transaction }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

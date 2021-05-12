@@ -1,9 +1,9 @@
 <table class="table table-bordered table-condensed table-hover table-striped">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Date</th>
-
+            <th>Person</th>
+            <th>City</th>
         </tr>
     </thead>
     <tbody>
@@ -11,13 +11,15 @@
             <tr>
                 <td>
                     <a href="{{ path('residence_show', { 'id': residence.id }) }}">
-                        {{ residence.id }}
+                        {{ residence.date }}
                     </a>
                 </td>
                 <td>
-                    {{ residence.date }}
+                    {{ residence.person }}
                 </td>
-
+                <td>
+                    {{ residence.city }}
+                </td>
             </tr>
         {% endfor %}
     </tbody>

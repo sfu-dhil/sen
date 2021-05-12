@@ -1,14 +1,11 @@
 <table class="table table-bordered table-condensed table-hover table-striped">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Date</th>
-            <th>Page</th>
-            <th>Notes</th>
-            <th>First Party Note</th>
-            <th>Conjunction</th>
-            <th>Second Party Note</th>
-
+            <th>First Party</th>
+            <th>Category</th>
+            <th>Conj</th>
+            <th>Second Party</th>
         </tr>
     </thead>
     <tbody>
@@ -16,21 +13,15 @@
             <tr>
                 <td>
                     <a href="{{ path('transaction_show', { 'id': transaction.id }) }}">
-                        {{ transaction.id }}
+                        {{ transaction.date|date('Y-m-d') }}
                     </a>
                 </td>
-                <td>{% if transaction.date %}{{ transaction.date|date('Y-m-d') }}{% endif %}</td>
-
                 <td>
-                    {{ transaction.page }}
+                    {{ transaction.firstParty }}
                 </td>
 
                 <td>
-                    {{ transaction.notes }}
-                </td>
-
-                <td>
-                    {{ transaction.firstPartyNote }}
+                    {{ transaction.category }}
                 </td>
 
                 <td>
@@ -38,9 +29,8 @@
                 </td>
 
                 <td>
-                    {{ transaction.secondPartyNote }}
+                    {{ transaction.secondParty }}
                 </td>
-
             </tr>
         {% endfor %}
     </tbody>

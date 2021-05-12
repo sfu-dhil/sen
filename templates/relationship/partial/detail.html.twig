@@ -14,7 +14,7 @@
         </tr>
 
         <tr>
-            <th>RelationshipCategory</th>
+            <th>Category</th>
             <td>
                 {% if relationship.category %}
                     <a href='{{ path("relationship_category_show", {"id": relationship.category.id}) }}'>{{ relationship.category }}</a>
@@ -30,7 +30,7 @@
             </td>
         </tr>
         <tr>
-            <th>Person</th>
+            <th>Relation</th>
             <td>
                 {% if relationship.relation %}
                     <a href='{{ path("person_show", {"id": relationship.relation.id}) }}'>{{ relationship.relation }}</a>
