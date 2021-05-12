@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2020 Michael Joyce <mjoyce@sfu.ca>
+ * (c) 2021 Michael Joyce <mjoyce@sfu.ca>
  * This source file is subject to the GPL v2, bundled
  * with this source code in the file LICENSE.
  */
@@ -57,9 +57,7 @@ class ImportSacramentCommand extends Command {
             fgetcsv($handle);
         }
         while ($row = fgetcsv($handle)) {
-            $row = array_map(function ($data) {
-                return mb_convert_encoding($data, 'UTF-8', 'UTF-8');
-            }, $row);
+            $row = array_map(fn ($data) => mb_convert_encoding($data, 'UTF-8', 'UTF-8'), $row);
             $person = $this->importer->findPerson($row[0], $row[1]);
             $person->setBirthDateDisplay($row[2]);
             $person->setBirthDate($this->importer->parseDate($row[2]));

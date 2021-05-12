@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2020 Michael Joyce <mjoyce@sfu.ca>
+ * (c) 2021 Michael Joyce <mjoyce@sfu.ca>
  * This source file is subject to the GPL v2, bundled
  * with this source code in the file LICENSE.
  */
@@ -74,14 +74,16 @@ class ImportNotaryCommand extends Command {
                 $row[N::first_party_first_name],
                 $row[N::first_party_last_name],
                 $row[N::first_party_race],
-                $row[N::first_party_status]
+                $row[N::first_party_status],
+                $row[N::first_party_sex]
             );
 
             $secondParty = $this->importer->findPerson(
                 $row[N::second_party_first_name],
                 $row[N::second_party_last_name],
                 $row[N::second_party_race],
-                $row[N::second_party_status]
+                $row[N::second_party_status],
+                $row[N::second_party_sex]
             );
 
             $transaction = $this->importer->createTransaction($ledger, $firstParty, $secondParty, $row);

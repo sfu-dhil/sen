@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2020 Michael Joyce <mjoyce@sfu.ca>
+ * (c) 2021 Michael Joyce <mjoyce@sfu.ca>
  * This source file is subject to the GPL v2, bundled
  * with this source code in the file LICENSE.
  */
@@ -116,7 +116,6 @@ class ImportServiceTest extends ServiceBaseCase {
     public function testFindPerson($given, $family, $raceName, $status) : void {
         $found = $this->importer->findPerson($given, $family, $raceName, $status);
         $this->assertInstanceOf(Person::class, $found);
-        $this->assertNotNull($found->getId());
         $this->assertSame(\mb_convert_case($family, \MB_CASE_UPPER), $found->getLastName());
     }
 
