@@ -116,7 +116,6 @@ class ImportServiceTest extends ServiceBaseCase {
     public function testFindPerson($given, $family, $raceName, $status) : void {
         $found = $this->importer->findPerson($given, $family, $raceName, $status);
         $this->assertInstanceOf(Person::class, $found);
-        $this->assertNotNull($found->getId());
         $this->assertSame(\mb_convert_case($family, \MB_CASE_UPPER), $found->getLastName());
     }
 
