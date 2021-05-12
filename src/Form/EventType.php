@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\Event;
-use App\Entity\Person;
 use App\Entity\EventCategory;
 use App\Entity\Location;
+use App\Entity\Person;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -84,7 +84,7 @@ class EventType extends AbstractType {
                 'help_block' => '',
                 'add_path' => 'person_new_popup',
                 'add_label' => 'Add Person',
-            ]
+            ],
         ]);
     }
 

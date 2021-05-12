@@ -41,6 +41,7 @@ class EventRepository extends ServiceEntityRepository {
             ->where('event.date LIKE :q')
             ->setParameter('q', $q . '%')
             ->orderBy('event.id')
-            ->getQuery();
+            ->getQuery()
+        ;
     }
 }

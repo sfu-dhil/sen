@@ -12,7 +12,6 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Form\EventType;
-use App\Repository\CityRepository;
 use App\Repository\EventRepository;
 
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;

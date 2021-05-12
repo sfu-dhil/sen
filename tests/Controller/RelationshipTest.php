@@ -128,7 +128,6 @@ class RelationshipTest extends ControllerBaseCase {
         $form['relationship[person]']->disableValidation()->setValue(2);
         $form['relationship[relation]']->disableValidation()->setValue(2);
 
-
         $this->client->submit($form);
         $this->assertTrue($this->client->getResponse()->isRedirect('/relationship/1'));
         $responseCrawler = $this->client->followRedirect();

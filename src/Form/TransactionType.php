@@ -119,7 +119,6 @@ class TransactionType extends AbstractType {
                 'help_block' => '',
             ],
         ]);
-
     }
 
     /**
