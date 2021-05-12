@@ -142,6 +142,7 @@ class ImportService {
      * @param string $family
      * @param string $raceName
      * @param string $status
+     * @param mixed $sex
      *
      * @return Person
      */
@@ -153,12 +154,16 @@ class ImportService {
         ]);
         $race = $this->findRace($raceName);
         $s = null;
-        switch(mb_convert_case($sex, MB_CASE_LOWER)) {
+
+        switch (mb_convert_case($sex, MB_CASE_LOWER)) {
             case 'male':
                 $s = 'M';
+
                 break;
+
             case 'female':
                 $s = 'F';
+
                 break;
         }
         if ( ! $person) {
