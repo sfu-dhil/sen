@@ -6,22 +6,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="google" content="notranslate" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('/favicon.ico') }}">
         <link rel="stylesheet" href="{{ asset('yarn/bootstrap3/dist/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('yarn/bootstrap3/dist/css/bootstrap-theme.min.css') }}">
-
-        <link rel="stylesheet" href="{{ asset('css/base.css') }}">
-
-        <script src="{{ asset('yarn/jquery/dist/jquery.min.js') }}"></script>
-
-        <script src="{{ asset('yarn/select2/dist/js/select2.full.min.js') }}"></script>
         <link href="{{ asset('yarn/select2/dist/css/select2.min.css') }}" rel="stylesheet">
         <link href="{{ asset('yarn/select2-bootstrap-css/select2-bootstrap.min.css') }}" rel="stylesheet">
 
+        <script src="{{ asset('yarn/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('yarn/select2/dist/js/select2.full.min.js') }}"></script>
         <script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
         <script src="{{ asset('yarn/symfony-collection/jquery.collection.js') }}"></script>
 
-        <script src="{{ asset('js/form.js') }}"></script>
+        <link rel="stylesheet" href="{{ asset('bundles/ninesutil/css/nines.css') }}">
+
+        <script src="{{ asset('bundles/ninesutil/js/nines.js') }}"></script>
+
         {% block htmlhead %}{% endblock %}
         {% block styles %}{% endblock -%}
     </head>
@@ -38,7 +38,7 @@
                 <div id="navbar" class="collapse navbar-collapse">
                     {{ knp_menu_render('main') }}
                     {{ knp_menu_render('nines_blog_pages') }}
-                    {{ knp_menu_render('nines_blog_pages') }}
+                    {{ knp_menu_render('nines_blog_posts') }}
                     {{ knp_menu_render('nines_user_nav') }}
                 </div><!--/.nav-collapse -->
             </div>
@@ -68,11 +68,7 @@
 
         <footer class="footer">
             <div class="container">
-                <p>
-                    <b>Social and Economic Networks</b> <br /> <a href="{{ asset('docs/api/index.html') }}">API
-                        Documentation</a> | <a href="{{ asset('docs/user/index.html') }}">User Documentation</a> |
-                    <a href="{{ path('privacy') }}">Privacy</a> | <a href="https://github.com/sfu-dhil/sen">GitHub</a>
-                </p>
+                {{ knp_menu_render('footer') }}
             </div>
         </footer>
 
