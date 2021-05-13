@@ -60,7 +60,7 @@ class ImportRaceCommand extends Command {
         }
         while($row = fgetcsv($handle)) {
             $standard = $row[0];
-            $race = $this->repo->findONeBy(['name' => $standard]);
+            $race = $this->repo->findOneBy(['name' => $standard]);
             if( ! $race) {
                 $race = new Race();
                 $race->setName($standard);

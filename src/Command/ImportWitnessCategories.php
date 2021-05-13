@@ -54,7 +54,7 @@ class ImportWitnessCategories extends Command {
         }
         while($row = fgetcsv($handle)) {
             $standard = $row[0];
-            $category = $this->repo->findONeBy(['name' => $standard]);
+            $category = $this->repo->findOneBy(['name' => $standard]);
             if( ! $category) {
                 $category = new WitnessCategory();
                 $category->setName($standard);

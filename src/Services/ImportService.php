@@ -103,7 +103,7 @@ class ImportService {
             $ledger = new Ledger();
             $ledger->setNotary($notary);
             $ledger->setVolume($volume);
-            $ledger->setYear($year);
+            $ledger->setYear((int)$year);
             $this->em->persist($ledger);
         }
 
@@ -276,7 +276,7 @@ class ImportService {
         $transaction->setCategory($this->findTransactionCategory($row[N::transaction_category]));
         $date = new DateTimeImmutable($row[N::transaction_date]);
         $transaction->setDate($date);
-        $transaction->setPage($row[N::ledger_page]);
+        $transaction->setPage((int)$row[N::ledger_page]);
         $transaction->setNotes($row[N::transaction_notes]);
         $this->em->persist($transaction);
 

@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Entity\Race;
-use App\Entity\TransactionCategory;
+use App\Entity\EventCategory;
 use App\Repository\RaceRepository;
-use App\Repository\TransactionCategoryRepository;
+use App\Repository\EventCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,13 +22,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ImportTransactionCategories extends Command {
-    protected static $defaultName = 'sen:import:transaction-categories';
+class ImportEventCategories extends Command {
+    protected static $defaultName = 'sen:import:event-categories';
 
     protected static $defaultDescription = 'Add a short description for your command';
 
     /**
-     * @var TransactionCategoryRepository
+     * @var EventCategoryRepository
      */
     private $repo;
 
@@ -54,13 +54,12 @@ class ImportTransactionCategories extends Command {
             $standard = $row[0];
             $category = $this->repo->findOneBy(['name' => $standard]);
             if( ! $category) {
-                $category = new TransactionCategory();
+                $category = new EventCategory();
                 $category->setName($standard);
                 $category->setLabel(mb_convert_case($standard, MB_CASE_TITLE));
                 $this->em->persist($category);
+                $this->em->flush();
             }
-            $category->setDescription($row[1]);
-            $this->em->flush();
         }
     }
 
@@ -86,7 +85,7 @@ class ImportTransactionCategories extends Command {
     /**
      * @required
      */
-    public function setTransactionCategoryRepository(TransactionCategoryRepository $repo) {
+    public function setEventCategoryRepository(EventCategoryRepository $repo) {
         $this->repo = $repo;
     }
 }
