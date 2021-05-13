@@ -25,37 +25,37 @@ use Nines\UtilBundle\Entity\AbstractTerm;
 class Race extends AbstractTerm {
     /**
      * @var string
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=60, nullable=true)
      */
     private $spanishUngendered;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=60, nullable=true)
      */
     private $spanishMale;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=60, nullable=true)
      */
     private $spanishFemale;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=60, nullable=true)
      */
     private $frenchUngendered;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=60, nullable=true)
      */
     private $frenchMale;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=60, nullable=true)
      */
     private $frenchFemale;
 
@@ -74,7 +74,7 @@ class Race extends AbstractTerm {
         return $this->spanishUngendered;
     }
 
-    public function setSpanishUngendered(string $spanishUngendered) : self {
+    public function setSpanishUngendered(?string $spanishUngendered) : self {
         $this->spanishUngendered = $spanishUngendered;
 
         return $this;
@@ -84,7 +84,7 @@ class Race extends AbstractTerm {
         return $this->spanishMale;
     }
 
-    public function setSpanishMale(string $spanishMale) : self {
+    public function setSpanishMale(?string $spanishMale) : self {
         $this->spanishMale = $spanishMale;
 
         return $this;
@@ -94,7 +94,7 @@ class Race extends AbstractTerm {
         return $this->spanishFemale;
     }
 
-    public function setSpanishFemale(string $spanishFemale) : self {
+    public function setSpanishFemale(?string $spanishFemale) : self {
         $this->spanishFemale = $spanishFemale;
 
         return $this;
@@ -104,7 +104,7 @@ class Race extends AbstractTerm {
         return $this->frenchUngendered;
     }
 
-    public function setFrenchUngendered(string $frenchUngendered) : self {
+    public function setFrenchUngendered(?string $frenchUngendered) : self {
         $this->frenchUngendered = $frenchUngendered;
 
         return $this;
@@ -114,7 +114,7 @@ class Race extends AbstractTerm {
         return $this->frenchMale;
     }
 
-    public function setFrenchMale(string $frenchMale) : self {
+    public function setFrenchMale(?string $frenchMale) : self {
         $this->frenchMale = $frenchMale;
 
         return $this;
@@ -124,7 +124,7 @@ class Race extends AbstractTerm {
         return $this->frenchFemale;
     }
 
-    public function setFrenchFemale(string $frenchFemale) : self {
+    public function setFrenchFemale(?string $frenchFemale) : self {
         $this->frenchFemale = $frenchFemale;
 
         return $this;

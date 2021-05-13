@@ -23,9 +23,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class Builder implements ContainerAwareInterface {
     use ContainerAwareTrait;
 
-    // U+25BE, black down-pointing small triangle.
-    public const CARET = ' ▾';
-
     /**
      * @var FactoryInterface
      */
@@ -75,14 +72,10 @@ class Builder implements ContainerAwareInterface {
         $menu->setChildrenAttributes([
             'class' => 'nav navbar-nav',
         ]);
-        $menu->addChild('home', [
-            'label' => 'Home',
-            'route' => 'homepage',
-        ]);
 
         $browse = $menu->addChild('browse', [
             'uri' => '#',
-            'label' => 'Browse ' . self::CARET,
+            'label' => 'Browse ',
         ]);
         $browse->setAttribute('dropdown', true);
         $browse->setLinkAttribute('class', 'dropdown-toggle');
@@ -151,4 +144,30 @@ class Builder implements ContainerAwareInterface {
 
         return $menu;
     }
+
+    /**
+     * Build a menu for the footer.
+     *
+     * @return ItemInterface
+     */
+    public function footerMenu(array $options) {
+        $menu = $this->factory->createItem('root');
+        $menu->setChildrenAttributes([
+            'class' => 'nav',
+        ]);
+        $menu->addChild('Home', [
+            'route' => 'homepage',
+        ]);
+
+        $menu->addChild('Privacy', [
+            'route' => 'privacy',
+        ]);
+
+        $menu->addChild('GitHub', [
+            'uri' => 'https://github.com/sfu-dhil/sen'
+        ]);
+
+        return $menu;
+    }
+
 }

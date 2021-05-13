@@ -91,20 +91,13 @@ class ImportNotaryCommand extends Command {
         }
     }
 
-    /**
-     * Execute the command.
-     *
-     * @param InputInterface $input
-     *                              Command input, as defined in the configure() method.
-     * @param OutputInterface $output
-     *                                Output destination.
-     */
-    protected function execute(InputInterface $input, OutputInterface $output) : void {
+    protected function execute(InputInterface $input, OutputInterface $output) : int {
         $files = $input->getArgument('files');
         $skip = $input->getOption('skip');
 
         foreach ($files as $file) {
             $this->import($file, $skip);
         }
+        return 0;
     }
 }
