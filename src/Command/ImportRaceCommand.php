@@ -18,13 +18,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ImportRaceCommand extends Command {
-    protected static $defaultName = 'sen:import:race';
-
-    protected static $defaultDescription = 'Add a short description for your command';
-
     /**
      * @var RaceRepository
      */
@@ -35,6 +30,10 @@ class ImportRaceCommand extends Command {
      */
     private $em;
 
+    protected static $defaultName = 'sen:import:race';
+
+    protected static $defaultDescription = 'Add a short description for your command';
+
     protected function configure() : void {
         $this
             ->setDescription(self::$defaultDescription)
@@ -44,24 +43,25 @@ class ImportRaceCommand extends Command {
     }
 
     protected function append($s, $t) {
-        if( ! $t) {
+        if ( ! $t) {
             return $s;
         }
-        if($s) {
+        if ($s) {
             return $s . '/' . $t;
         }
+
         return $t;
     }
 
-    protected function import($file, $skip) {
+    protected function import($file, $skip) : void {
         $handle = fopen($file, 'r');
-        for($i = 0; $i < $skip; $i++) {
+        for ($i = 0; $i < $skip; $i++) {
             fgetcsv($handle);
         }
-        while($row = fgetcsv($handle)) {
+        while ($row = fgetcsv($handle)) {
             $standard = $row[0];
             $race = $this->repo->findOneBy(['name' => $standard]);
-            if( ! $race) {
+            if ( ! $race) {
                 $race = new Race();
                 $race->setName($standard);
                 $race->setLabel(mb_convert_case($standard, MB_CASE_TITLE));
@@ -89,18 +89,16 @@ class ImportRaceCommand extends Command {
     }
 
     /**
-     * @param EntityManagerInterface $em
      * @required
      */
-    public function setEntityManager(EntityManagerInterface $em) {
+    public function setEntityManager(EntityManagerInterface $em) : void {
         $this->em = $em;
     }
 
     /**
-     * @param RaceRepository $repo
      * @required
      */
-    public function setRaceRepository(RaceRepository $repo) {
+    public function setRaceRepository(RaceRepository $repo) : void {
         $this->repo = $repo;
     }
 }
