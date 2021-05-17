@@ -31,7 +31,7 @@ class TransactionRepository extends ServiceEntityRepository {
      */
     public function indexQuery() {
         return $this->createQueryBuilder('transaction')
-            ->orderBy('transaction.id')
+            ->orderBy('transaction.date')
             ->getQuery()
         ;
     }
