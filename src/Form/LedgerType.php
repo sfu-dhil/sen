@@ -10,14 +10,17 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\Ledger;
 use App\Entity\Notary;
+
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 /**
- * LedgerType form.
+ * Ledger form.
  */
 class LedgerType extends AbstractType {
     /**
@@ -25,25 +28,25 @@ class LedgerType extends AbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) : void {
         $builder->add('notary', Select2EntityType::class, [
-            'remote_route' => 'notary_typeahead',
+            'label' => 'Notary',
             'class' => Notary::class,
-            'multiple' => false,
-            'primary_key' => 'id',
-            'text_property' => 'name',
-            'page_limit' => 10,
+            'remote_route' => 'notary_typeahead',
             'allow_clear' => true,
-            'delay' => 250,
-            'language' => 'en',
+            'attr' => [
+                'help_block' => '',
+                'add_path' => 'notary_new_popup',
+                'add_label' => 'Add Notary',
+            ],
         ]);
-        $builder->add('year', null, [
-            'label' => 'Year',
+        $builder->add('volume', TextType::class, [
+            'label' => 'Volume',
             'required' => true,
             'attr' => [
                 'help_block' => '',
             ],
         ]);
-        $builder->add('volume', null, [
-            'label' => 'Volume',
+        $builder->add('year', null, [
+            'label' => 'Year',
             'required' => true,
             'attr' => [
                 'help_block' => '',
@@ -59,7 +62,7 @@ class LedgerType extends AbstractType {
      */
     public function configureOptions(OptionsResolver $resolver) : void {
         $resolver->setDefaults([
-            'data_class' => 'App\Entity\Ledger',
+            'data_class' => Ledger::class,
         ]);
     }
 }

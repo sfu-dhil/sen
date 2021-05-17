@@ -1,0 +1,19 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        {% embed '@NinesUtil/term/partial/show.html.twig' with {'term': relationship_category} %}
+        {% endembed %}
+    </tbody>
+</table>
+
+<h2>Relationships</h2>
+{% if relationship_category.relationships|length > 0 %}
+    <ul>
+        {% for relationship in relationship_category.relationships %}
+            <li>
+                <a href='{{ path("relationship_show", {"id":relationship.id }) }}'>
+                    {{ relationship }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

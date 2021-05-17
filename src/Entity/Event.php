@@ -41,6 +41,12 @@ class Event extends AbstractEntity {
     private $note;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $recordSource;
+
+    /**
      * @var EventCategory
      * @ORM\ManyToOne(targetEntity="EventCategory", inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
@@ -79,157 +85,111 @@ class Event extends AbstractEntity {
         return $this->category . ' ' . $this->date;
     }
 
-    public function setNote($note) : void {
-        $this->note = $note;
+    public function getWrittenDate() : ?string {
+        return $this->writtenDate;
     }
 
-    public function getNote() {
+    public function setWrittenDate(?string $writtenDate) : self {
+        $this->writtenDate = $writtenDate;
+
+        return $this;
+    }
+
+    public function getDate() : ?string {
+        return $this->date;
+    }
+
+    public function setDate(?string $date) : self {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function getNote() : ?string {
         return $this->note;
     }
 
-    /**
-     * Set category.
-     *
-     * @param ?EventCategory $category
-     *
-     * @return Event
-     */
-    public function setCategory(?EventCategory $category = null) {
+    public function setNote(?string $note) : self {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    public function getCategory() : ?EventCategory {
+        return $this->category;
+    }
+
+    public function setCategory(?EventCategory $category) : self {
         $this->category = $category;
 
         return $this;
     }
 
     /**
-     * Get category.
-     *
-     * @return null|EventCategory
+     * @return Collection|Person[]
      */
-    public function getCategory() {
-        return $this->category;
-    }
-
-    /**
-     * Add participant.
-     *
-     * @return Event
-     */
-    public function addParticipant(Person $participant) {
-        $this->participants[] = $participant;
-
-        return $this;
-    }
-
-    /**
-     * Remove participant.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeParticipant(Person $participant) {
-        return $this->participants->removeElement($participant);
-    }
-
-    /**
-     * Get participants.
-     *
-     * @return Collection
-     */
-    public function getParticipants() {
+    public function getParticipants() : Collection {
         return $this->participants;
     }
 
-    /**
-     * Add witness.
-     *
-     * @return Event
-     */
-    public function addWitness(Witness $witness) {
-        $this->witnesses[] = $witness;
+    public function addParticipant(Person $participant) : self {
+        if ( ! $this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(Person $participant) : self {
+        $this->participants->removeElement($participant);
 
         return $this;
     }
 
     /**
-     * Remove witness.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return Collection|Witness[]
      */
-    public function removeWitness(Witness $witness) {
-        return $this->witnesses->removeElement($witness);
-    }
-
-    /**
-     * Get witnesses.
-     *
-     * @return Collection
-     */
-    public function getWitnesses() {
+    public function getWitnesses() : Collection {
         return $this->witnesses;
     }
 
-    /**
-     * Set location.
-     *
-     * @param ?Location $location
-     *
-     * @return Event
-     */
-    public function setLocation(?Location $location = null) {
+    public function addWitness(Witness $witness) : self {
+        if ( ! $this->witnesses->contains($witness)) {
+            $this->witnesses[] = $witness;
+            $witness->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWitness(Witness $witness) : self {
+        if ($this->witnesses->removeElement($witness)) {
+            // set the owning side to null (unless already changed)
+            if ($witness->getEvent() === $this) {
+                $witness->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLocation() : ?Location {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location) : self {
         $this->location = $location;
 
         return $this;
     }
 
-    /**
-     * Get location.
-     *
-     * @return null|Location
-     */
-    public function getLocation() {
-        return $this->location;
+    public function getRecordSource() : ?string {
+        return $this->recordSource;
     }
 
-    /**
-     * Set writtenDate.
-     *
-     * @param null|string $writtenDate
-     *
-     * @return Event
-     */
-    public function setWrittenDate($writtenDate = null) {
-        $this->writtenDate = $writtenDate;
-
+    public function setRecordSource(?string $recordSource) : self {
+        $this->recordSource = $recordSource;
         return $this;
     }
 
-    /**
-     * Get writtenDate.
-     *
-     * @return null|string
-     */
-    public function getWrittenDate() {
-        return $this->writtenDate;
-    }
-
-    /**
-     * Set date.
-     *
-     * @param string $date
-     *
-     * @return Event
-     */
-    public function setDate($date = null) {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date.
-     *
-     * @return string
-     */
-    public function getDate() {
-        return $this->date;
-    }
 }

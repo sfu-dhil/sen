@@ -1,0 +1,19 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        {% embed '@NinesUtil/term/partial/show.html.twig' with {'term': transaction_category} %}
+        {% endembed %}
+    </tbody>
+</table>
+
+<h2>Transactions</h2>
+{% if transaction_category.transactions|length > 0 %}
+    <ul>
+        {% for transaction in transaction_category.transactions %}
+            <li>
+                <a href='{{ path("transaction_show", {"id":transaction.id }) }}'>
+                    {{ transaction }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

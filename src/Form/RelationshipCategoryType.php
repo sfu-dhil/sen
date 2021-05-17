@@ -10,12 +10,14 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\RelationshipCategory;
+
 use Nines\UtilBundle\Form\TermType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * RelationshipCategoryType form.
+ * RelationshipCategory form.
  */
 class RelationshipCategoryType extends TermType {
     /**
@@ -33,7 +35,7 @@ class RelationshipCategoryType extends TermType {
      */
     public function configureOptions(OptionsResolver $resolver) : void {
         $resolver->setDefaults([
-            'data_class' => 'App\Entity\RelationshipCategory',
+            'data_class' => RelationshipCategory::class,
         ]);
     }
 }

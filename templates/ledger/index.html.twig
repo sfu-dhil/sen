@@ -13,43 +13,15 @@
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_CONTENT_ADMIN') %}
                 <a href="{{ path('ledger_new') }}" class="btn btn-default">
-                    <span class="glyphicon glyphicon-plus"></span> New
-                </a>
+                    <span class="glyphicon glyphicon-plus"></span> New </a>
             {% endif %}
-            <a href="{{ path('ledger_search') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-search"></span> Search
-            </a>
         </div>
     </div>
 
-    <table class="table table-bordered table-condensed table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Volume</th>
-                <th>Year</th>
-                <th>Notary</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for ledger in ledgers %}
-                <tr>
-                    <td>
-                        <a href="{{ path('ledger_show', { 'id': ledger.id }) }}">
-                            {{ ledger.volume }}
-                        </a>
-                    </td>
-                    <td>{{ ledger.year }}</td>
-                    <td>
-                        <a href="{{ path('notary_show', {'id': ledger.notary.id }) }}">
-                            {{ ledger.notary }}
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% embed 'ledger/partial/table.html.twig' %}
+    {% endembed %}
 
     <div class="navigation">
         {{ knp_pagination_render(ledgers) }}

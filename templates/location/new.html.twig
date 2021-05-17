@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Location{% endblock %}
+    {% block title %}New Location {% endblock %}
 
+    {% block body %}
+        <h1>New Location</h1>
 
-{% block body %}
-    <h1>New Location</h1>
+        {% embed 'location/partial/form.html.twig' %}
+        {% endembed %}
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {% include 'location/form_controls.html.twig' with {'btnLabel': 'Create', 'cancelPath': path('location_index')} %}
-    {{ form_end(form) }}
+    {% endblock %}
 
-{% endblock %}
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

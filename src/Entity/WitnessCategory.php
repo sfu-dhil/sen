@@ -34,31 +34,29 @@ class WitnessCategory extends AbstractTerm {
     }
 
     /**
-     * Add witness.
-     *
-     * @return WitnessCategory
+     * @return Collection|Witness[]
      */
-    public function addWitness(Witness $witness) {
-        $this->witnesses[] = $witness;
+    public function getWitnesses() : Collection {
+        return $this->witnesses;
+    }
+
+    public function addWitness(Witness $witness) : self {
+        if ( ! $this->witnesses->contains($witness)) {
+            $this->witnesses[] = $witness;
+            $witness->setCategory($this);
+        }
 
         return $this;
     }
 
-    /**
-     * Remove witness.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeWitness(Witness $witness) {
-        return $this->witnesses->removeElement($witness);
-    }
+    public function removeWitness(Witness $witness) : self {
+        if ($this->witnesses->removeElement($witness)) {
+            // set the owning side to null (unless already changed)
+            if ($witness->getCategory() === $this) {
+                $witness->setCategory(null);
+            }
+        }
 
-    /**
-     * Get witnesses.
-     *
-     * @return Collection
-     */
-    public function getWitnesses() {
-        return $this->witnesses;
+        return $this;
     }
 }

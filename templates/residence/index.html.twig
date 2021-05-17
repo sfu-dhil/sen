@@ -13,47 +13,15 @@
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_CONTENT_ADMIN') %}
                 <a href="{{ path('residence_new') }}" class="btn btn-default">
-                    <span class="glyphicon glyphicon-plus"></span> New
-                </a>
+                    <span class="glyphicon glyphicon-plus"></span> New </a>
             {% endif %}
-            <a href="{{ path('residence_search') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-search"></span> Search
-            </a>
         </div>
     </div>
 
-    <table class="table table-bordered table-condensed table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Person</th>
-                <th>City</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for residence in residences %}
-                <tr>
-                    <td>
-                        <a href="{{ path('residence_show', { 'id': residence.id }) }}">
-                            {{ residence.date }}
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ path('person_show', { 'id': residence.person.id }) }}">
-                            {{ residence.person }}
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ path('city_show', { 'id': residence.city.id }) }}">
-                            {{ residence.city }}
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% embed 'residence/partial/table.html.twig' %}
+    {% endembed %}
 
     <div class="navigation">
         {{ knp_pagination_render(residences) }}

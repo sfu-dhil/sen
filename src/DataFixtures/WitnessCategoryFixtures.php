@@ -14,20 +14,19 @@ use App\Entity\WitnessCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- *
- * @author michael
- */
 class WitnessCategoryFixtures extends Fixture {
-    //put your code here
-    public function load(ObjectManager $manager) : void {
-        $category = new WitnessCategory();
-        $category->setName('wedding');
-        $category->setLabel('Wedding');
-        $manager->persist($category);
-        $this->setReference('witnesscategory.1', $category);
-
-        $manager->flush();
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new WitnessCategory();
+            $fixture->setName('Name ' . $i);
+            $fixture->setLabel('Label ' . $i);
+            $fixture->setDescription("<p>This is paragraph {$i}</p>");
+            $em->persist($fixture);
+            $this->setReference('witnesscategory.' . $i, $fixture);
+        }
+        $em->flush();
     }
 }

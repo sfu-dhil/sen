@@ -1,0 +1,37 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <td>
+                {{ notary.name }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Ledgers</th>
+            <td>
+                {% if notary.ledgers|length > 0 %}
+                    <ul>
+                        {% for ledger in notary.ledgers %}
+                            <li>
+                                <a href='{{ path("ledger_show", {"id":ledger.id }) }}'>
+                                    {{ ledger }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ notary.created|date }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ notary.updated|date }}</td>
+        </tr>
+    </tbody>
+</table>
+
+

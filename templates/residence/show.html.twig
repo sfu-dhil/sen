@@ -1,57 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Residence{% endblock %}
+{% block title %}Residence Details {% endblock %}
 
-{% block pageheader %}
-    <h1>Residence Details</h1>
-{% endblock %}
+ {% block pageheader %}
+     <h1>Residence Details</h1>
+ {% endblock %}
 
 {% block body %}
-    <div class="btn-toolbar">
-        <div class="btn-group pull-right">
-            <a href="{{ path('residence_index') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-arrow-left"></span> Back
-            </a>
-            {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('residence_edit', { 'id': residence.id }) }}" class="btn btn-default">
-                    <span class='glyphicon glyphicon-edit'></span> Edit
-                </a>
-                <a href="{{ path('residence_delete', { 'id': residence.id }) }}" class="btn btn-default" data-confirm="Are you sure you want to delete this Residence?">
-                    <span class='glyphicon glyphicon-remove'></span> Delete
-                </a>
-            {% endif %}
+
+    {% if is_granted('ROLE_CONTENT_ADMIN') %}
+        <div class='btn-toolbar pull-right'>
+            <div class='btn-group'>
+                <a href="{{ path('residence_edit', {'id': residence.id }) }}" class="btn btn-default">
+                    <span class="glyphicon glyphicon-edit"></span> Edit </a>
+            </div>
+            <div class='btn-group'>
+                <form class='delete-form' method="post" action="{{ path('residence_delete', {'id': residence.id }) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="_token" value="{{ csrf_token("delete" ~ residence.id) }}">
+                    <button class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+                </form>
+            </div>
         </div>
-    </div>
-    <table class="table table-bordered table-condensed table-hover table-striped">
-        <tbody>
-            <tr>
-                <th>Date</th>
-                <td>{{ residence.date }}</td>
-            </tr>
-            <tr>
-                <th>Person</th>
-                <td>
-                    <a href="{{ path('person_show', { 'id': residence.person.id}) }}">
-                        {{ residence.person }}
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td>
-                    <a href="{{ path('city_show', { 'id': residence.city.id}) }}">
-                        {{ residence.city }}
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <td>{% if residence.created %}{{ residence.created|date }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{% if residence.updated %}{{ residence.updated|date }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
+    {% endif %}
+
+    {% embed 'residence/partial/detail.html.twig' %}
+    {% endembed %}
+
 {% endblock %}

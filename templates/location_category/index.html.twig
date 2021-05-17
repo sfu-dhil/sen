@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}LocationCategory List{% endblock %}
+{% block title %}Location Category List{% endblock %}
 
 {% block pageheader %}
-    <h1>LocationCategory List</h1>
+    <h1>Location Category List</h1>
     <p class="count">
-        Displaying {{ locationCategories|length }} locationCategories of {{ locationCategories.getTotalItemCount }} total.
+        Displaying {{ location_categories|length }} location categories of {{ location_categories.getTotalItemCount }}
+        total.
     </p>
 {% endblock %}
 
@@ -13,25 +14,21 @@
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_CONTENT_ADMIN') %}
                 <a href="{{ path('location_category_new') }}" class="btn btn-default">
-                    <span class="glyphicon glyphicon-plus"></span> New
-                </a>
+                    <span class="glyphicon glyphicon-plus"></span> New </a>
             {% endif %}
+
             <a href="{{ path('location_category_search') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-search"></span> Search
-            </a>
+                <span class="glyphicon glyphicon-search"></span> Search </a>
         </div>
     </div>
 
-    {% embed '@NinesUtil/term/partial/index.html.twig' with {
-        'terms': locationCategories,
-        'path': 'location_category_show',
-    } %}
+    {% embed 'location_category/partial/table.html.twig' %}
     {% endembed %}
 
     <div class="navigation">
-        {{ knp_pagination_render(locationCategories) }}
+        {{ knp_pagination_render(location_categories) }}
     </div>
 
 {% endblock %}

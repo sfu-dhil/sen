@@ -14,20 +14,26 @@ use App\Entity\Race;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- *
- * @author michael
- */
 class RaceFixtures extends Fixture {
-    //put your code here
-    public function load(ObjectManager $manager) : void {
-        $race = new Race();
-        $race->setName('indian');
-        $race->setLabel('Indian');
-        $this->setReference('race.1', $race);
-        $manager->persist($race);
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new Race();
+            $fixture->setName('Name ' . $i);
+            $fixture->setLabel('Label ' . $i);
+            $fixture->setDescription("<p>This is paragraph {$i}</p>");
+            $fixture->setSpanishUngendered('SpanishUngendered ' . $i);
+            $fixture->setSpanishMale('SpanishMale ' . $i);
+            $fixture->setSpanishFemale('SpanishFemale ' . $i);
+            $fixture->setFrenchUngendered('FrenchUngendered ' . $i);
+            $fixture->setFrenchMale('FrenchMale ' . $i);
+            $fixture->setFrenchFemale('FrenchFemale ' . $i);
 
-        $manager->flush();
+            $em->persist($fixture);
+            $this->setReference('race.' . $i, $fixture);
+        }
+        $em->flush();
     }
 }

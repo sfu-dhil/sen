@@ -25,6 +25,7 @@ use App\Entity\Residence;
 use App\Entity\Transaction;
 use App\Entity\TransactionCategory;
 use App\Util\NotaryColumnDefinitions as N;
+use App\Util\SacramentColumnDefinitions as S;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -103,7 +104,7 @@ class ImportService {
             $ledger = new Ledger();
             $ledger->setNotary($notary);
             $ledger->setVolume($volume);
-            $ledger->setYear($year);
+            $ledger->setYear((int)$year);
             $this->em->persist($ledger);
         }
 
@@ -115,11 +116,11 @@ class ImportService {
      *
      * @param string $name
      *
-     * @return Race
+     * @return ?Race
      */
     public function findRace($name) {
         if ( ! $name) {
-            return;
+            return null;
         }
         $repo = $this->em->getRepository(Race::class);
         $race = $repo->findOneBy([
@@ -165,6 +166,11 @@ class ImportService {
                 $s = 'F';
 
                 break;
+            case 'unknown':
+                $s = null;
+                break;
+            default:
+                $this->logger->error("Unknown sex {$sex} for {$given} {$family}");
         }
         if ( ! $person) {
             $person = new Person();
@@ -276,7 +282,7 @@ class ImportService {
         $transaction->setCategory($this->findTransactionCategory($row[N::transaction_category]));
         $date = new DateTimeImmutable($row[N::transaction_date]);
         $transaction->setDate($date);
-        $transaction->setPage($row[N::ledger_page]);
+        $transaction->setPage((int)$row[N::ledger_page]);
         $transaction->setNotes($row[N::transaction_notes]);
         $this->em->persist($transaction);
 
@@ -352,12 +358,12 @@ class ImportService {
         return $location;
     }
 
-    public function addManumission(Person $person, $row) {
+    public function addManumission(Person $person, $row, $name = 'manumission') {
         if ( ! isset($row[7]) || ! $row[7]) {
-            return;
+            return null;
         }
         $category = $this->em->getRepository(EventCategory::class)->findOneBy([
-            'name' => 'manumission',
+            'name' => $name,
         ]);
         if ( ! $category) {
             throw new Exception('Manumission event category is missing.');
@@ -375,12 +381,12 @@ class ImportService {
         return $event;
     }
 
-    public function addBaptism(Person $person, $row) {
+    public function addBaptism(Person $person, $row, $name = 'baptism') {
         if ( ! isset($row[5]) || ! $row[5]) {
-            return;
+            return null;
         }
         $category = $this->em->getRepository(EventCategory::class)->findOneBy([
-            'name' => 'baptism',
+            'name' => $name,
         ]);
         if ( ! $category) {
             throw new Exception('Baptism event category is missing.');
@@ -388,10 +394,11 @@ class ImportService {
         $event = new Event();
         $event->setCategory($category);
         $event->addParticipant($person);
-        $event->setDate($this->parseDate($row[5]));
-        $event->setWrittenDate($row[5]);
-        if (isset($row[6]) && $row[6]) {
-            $event->setLocation($this->findLocation($row[6], 'church'));
+        $event->setDate($this->parseDate($row[S::event_baptism_date]));
+        $event->setWrittenDate($row[S::event_written_baptism_date]);
+
+        if (isset($row[S::event_baptism_place]) && $row[S::event_baptism_place]) {
+            $event->setLocation($this->findLocation($row[S::event_baptism_place], 'church'));
         }
         $this->em->persist($event);
 

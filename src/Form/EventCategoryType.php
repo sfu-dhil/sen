@@ -10,12 +10,14 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\EventCategory;
+
 use Nines\UtilBundle\Form\TermType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * EventCategoryType form.
+ * EventCategory form.
  */
 class EventCategoryType extends TermType {
     /**
@@ -33,7 +35,7 @@ class EventCategoryType extends TermType {
      */
     public function configureOptions(OptionsResolver $resolver) : void {
         $resolver->setDefaults([
-            'data_class' => 'App\Entity\EventCategory',
+            'data_class' => EventCategory::class,
         ]);
     }
 }

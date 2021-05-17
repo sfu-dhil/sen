@@ -1,13 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Relationship Edit{% endblock %}
+    {% block title %}Edit Relationship {% endblock %}
 
-{% block body %}
-    <h1>Relationship Edit</h1>
+    {% block body %}
+        <h1>Edit Relationship</h1>
 
-    {{ form_start(edit_form) }}
-    {{ form_widget(edit_form) }}
-    {% include 'relationship/form_controls.html.twig' with {'btnLabel': 'Update', 'cancelPath': path('relationship_show', { 'id': relationship.id }) } %}
-    {{ form_end(edit_form) }}
+        {% embed 'relationship/partial/form.html.twig' %}
+        {% endembed %}
 
-{% endblock %}
+    {% endblock %}
+
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

@@ -15,32 +15,32 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- *
- * @author michael
- */
 class EventFixtures extends Fixture implements DependentFixtureInterface {
-    public function load(ObjectManager $manager) : void {
-        $event1 = new Event();
-        $event1->setWrittenDate('21 Feb 1792');
-        $event1->setDate('1792-02-21');
-        $event1->setCategory($this->getReference('eventcategory.1'));
-        $event1->setLocation($this->getReference('location.1'));
-        $event1->setNote('Seen original.');
-        $event1->addParticipant($this->getReference('person.1'));
-        $this->setReference('event.1', $event1);
-        $manager->persist($event1);
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new Event();
+            $fixture->setWrittenDate('WrittenDate ' . $i);
+            $fixture->setDate('Date ' . $i);
+            $fixture->setNote('Note ' . $i);
 
-        $manager->flush();
+            $fixture->setCategory($this->getReference('eventcategory.' . $i));
+            $fixture->setLocation($this->getReference('location.' . $i));
+            $em->persist($fixture);
+            $this->setReference('event.' . $i, $fixture);
+        }
+        $em->flush();
     }
 
-    public function getDependencies() : array {
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies() {
         return [
-            CityFixtures::class,
             EventCategoryFixtures::class,
             LocationFixtures::class,
-            PersonFixtures::class,
         ];
     }
 }

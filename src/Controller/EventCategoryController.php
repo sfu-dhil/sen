@@ -13,10 +13,10 @@ namespace App\Controller;
 use App\Entity\EventCategory;
 use App\Form\EventCategoryType;
 use App\Repository\EventCategoryRepository;
-use Doctrine\ORM\EntityManagerInterface;
+
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,52 +25,60 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * EventCategory controller.
- *
  * @Route("/event_category")
  */
 class EventCategoryController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
-     * Lists all EventCategory entities.
-     *
-     * @return array
-     *
      * @Route("/", name="event_category_index", methods={"GET"})
      *
      * @Template
      */
-    public function indexAction(Request $request, EntityManagerInterface $em) {
-        $qb = $em->createQueryBuilder();
-        $qb->select('e')->from(EventCategory::class, 'e')->orderBy('e.id', 'ASC');
-        $query = $qb->getQuery();
-
-        $eventCategories = $this->paginator->paginate($query, $request->query->getint('page', 1), 25);
+    public function index(Request $request, EventCategoryRepository $eventCategoryRepository) : array {
+        $query = $eventCategoryRepository->indexQuery();
+        $pageSize = (int) $this->getParameter('page_size');
+        $page = $request->query->getint('page', 1);
 
         return [
-            'eventCategories' => $eventCategories,
+            'event_categories' => $this->paginator->paginate($query, $page, $pageSize),
         ];
     }
 
     /**
-     * Typeahead API endpoint for EventCategory entities.
+     * @Route("/search", name="event_category_search", methods={"GET"})
      *
-     * To make this work, add something like this to EventCategoryRepository:
+     * @Template
      *
+     * @return array
+     */
+    public function search(Request $request, EventCategoryRepository $eventCategoryRepository) {
+        $q = $request->query->get('q');
+        if ($q) {
+            $query = $eventCategoryRepository->searchQuery($q);
+            $eventCategories = $this->paginator->paginate($query, $request->query->getInt('page', 1), $this->getParameter('page_size'), ['wrap-queries' => true]);
+        } else {
+            $eventCategories = [];
+        }
+
+        return [
+            'event_categories' => $eventCategories,
+            'q' => $q,
+        ];
+    }
+
+    /**
      * @Route("/typeahead", name="event_category_typeahead", methods={"GET"})
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request, EventCategoryRepository $repo) {
+    public function typeahead(Request $request, EventCategoryRepository $eventCategoryRepository) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
         }
-
         $data = [];
-
-        foreach ($repo->typeaheadQuery($q) as $result) {
+        foreach ($eventCategoryRepository->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
                 'text' => (string) $result,
@@ -81,141 +89,93 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
     }
 
     /**
-     * Search for EventCategory entities.
-     *
-     * To make this work, add a method like this one to the
-     * App:EventCategory repository. Replace the fieldName with
-     * something appropriate, and adjust the generated search.html.twig
-     * template.
-     *
-     * <code><pre>
-     *    public function searchQuery($q) {
-     *       $qb = $this->createQueryBuilder('e');
-     *       $qb->addSelect("MATCH (e.title) AGAINST(:q BOOLEAN) as HIDDEN score");
-     *       $qb->orderBy('score', 'DESC');
-     *       $qb->setParameter('q', $q);
-     *       return $qb->getQuery();
-     *    }
-     * </pre></code>
-     *
-     * @Route("/search", name="event_category_search", methods={"GET"})
-     *
+     * @Route("/new", name="event_category_new", methods={"GET", "POST"})
      * @Template
-     */
-    public function searchAction(Request $request, EventCategoryRepository $repo) {
-        $q = $request->query->get('q');
-        if ($q) {
-            $query = $repo->searchQuery($q);
-
-            $eventCategories = $this->paginator->paginate($query, $request->query->getInt('page', 1), 25);
-        } else {
-            $eventCategories = [];
-        }
-
-        return [
-            'eventCategories' => $eventCategories,
-            'q' => $q,
-        ];
-    }
-
-    /**
-     * Creates a new EventCategory entity.
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      *
      * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="event_category_new", methods={"GET", "POST"})
-     *
-     * @Template
      */
-    public function newAction(Request $request, EntityManagerInterface $em) {
+    public function new(Request $request) {
         $eventCategory = new EventCategory();
         $form = $this->createForm(EventCategoryType::class, $eventCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($eventCategory);
-            $em->flush();
-
-            $this->addFlash('success', 'The new eventCategory was created.');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($eventCategory);
+            $entityManager->flush();
+            $this->addFlash('success', 'The new eventCategory has been saved.');
 
             return $this->redirectToRoute('event_category_show', ['id' => $eventCategory->getId()]);
         }
 
         return [
-            'eventCategory' => $eventCategory,
+            'event_category' => $eventCategory,
             'form' => $form->createView(),
         ];
     }
 
     /**
-     * Creates a new EventCategory entity in a popup.
+     * @Route("/new_popup", name="event_category_new_popup", methods={"GET", "POST"})
+     * @Template
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      *
      * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="event_category_new_popup", methods={"GET", "POST"})
-     *
-     * @Template
      */
-    public function newPopupAction(Request $request, EntityManagerInterface $em) {
-        return $this->newAction($request, $em);
+    public function new_popup(Request $request) {
+        return $this->new($request);
     }
 
     /**
-     * Finds and displays a EventCategory entity.
+     * @Route("/{id}", name="event_category_show", methods={"GET"})
+     * @Template
      *
      * @return array
-     *
-     * @Route("/{id}", name="event_category_show", methods={"GET"})
-     *
-     * @Template
      */
-    public function showAction(EventCategory $eventCategory) {
+    public function show(EventCategory $eventCategory) {
         return [
-            'eventCategory' => $eventCategory,
+            'event_category' => $eventCategory,
         ];
     }
 
     /**
-     * Displays a form to edit an existing EventCategory entity.
-     *
-     * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}/edit", name="event_category_edit", methods={"GET", "POST"})
      *
      * @Template
+     *
+     * @return array|RedirectResponse
      */
-    public function editAction(Request $request, EntityManagerInterface $em, EventCategory $eventCategory) {
-        $editForm = $this->createForm(EventCategoryType::class, $eventCategory);
-        $editForm->handleRequest($request);
+    public function edit(Request $request, EventCategory $eventCategory) {
+        $form = $this->createForm(EventCategoryType::class, $eventCategory);
+        $form->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em->flush();
-            $this->addFlash('success', 'The eventCategory has been updated.');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'The updated eventCategory has been saved.');
 
             return $this->redirectToRoute('event_category_show', ['id' => $eventCategory->getId()]);
         }
 
         return [
-            'eventCategory' => $eventCategory,
-            'edit_form' => $editForm->createView(),
+            'event_category' => $eventCategory,
+            'form' => $form->createView(),
         ];
     }
 
     /**
-     * Deletes a EventCategory entity.
+     * @IsGranted("ROLE_CONTENT_ADMIN")
+     * @Route("/{id}", name="event_category_delete", methods={"DELETE"})
      *
-     * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/delete", name="event_category_delete", methods={"GET"})
+     * @return RedirectResponse
      */
-    public function deleteAction(Request $request, EntityManagerInterface $em, EventCategory $eventCategory) {
-        $em->remove($eventCategory);
-        $em->flush();
-        $this->addFlash('success', 'The eventCategory was deleted.');
+    public function delete(Request $request, EventCategory $eventCategory) {
+        if ($this->isCsrfTokenValid('delete' . $eventCategory->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($eventCategory);
+            $entityManager->flush();
+            $this->addFlash('success', 'The eventCategory has been deleted.');
+        }
 
         return $this->redirectToRoute('event_category_index');
     }

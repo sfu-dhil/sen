@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Residence{% endblock %}
+    {% block title %}New Residence {% endblock %}
 
+    {% block body %}
+        <h1>New Residence</h1>
 
-{% block body %}
-    <h1>New Residence</h1>
+        {% embed 'residence/partial/form.html.twig' %}
+        {% endembed %}
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {% include 'residence/form_controls.html.twig' with {'btnLabel': 'Create', 'cancelPath': path('residence_index')} %}
-    {{ form_end(form) }}
+    {% endblock %}
 
-{% endblock %}
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

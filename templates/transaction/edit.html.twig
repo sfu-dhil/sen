@@ -1,13 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Transaction Edit{% endblock %}
+    {% block title %}Edit Transaction {% endblock %}
 
-{% block body %}
-    <h1>Transaction Edit</h1>
+    {% block body %}
+        <h1>Edit Transaction</h1>
 
-    {{ form_start(edit_form) }}
-    {{ form_widget(edit_form) }}
-    {% include 'transaction/form_controls.html.twig' with {'btnLabel': 'Update', 'cancelPath': path('transaction_show', { 'id': transaction.id }) } %}
-    {{ form_end(edit_form) }}
+        {% embed 'transaction/partial/form.html.twig' %}
+        {% endembed %}
 
-{% endblock %}
+    {% endblock %}
+
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Transaction{% endblock %}
+    {% block title %}New Transaction {% endblock %}
 
+    {% block body %}
+        <h1>New Transaction</h1>
 
-{% block body %}
-    <h1>New Transaction</h1>
+        {% embed 'transaction/partial/form.html.twig' %}
+        {% endembed %}
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {% include 'transaction/form_controls.html.twig' with {'btnLabel': 'Create', 'cancelPath': path('transaction_index')} %}
-    {{ form_end(form) }}
+    {% endblock %}
 
-{% endblock %}
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

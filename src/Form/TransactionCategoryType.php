@@ -10,12 +10,14 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\TransactionCategory;
+
 use Nines\UtilBundle\Form\TermType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * TransactionCategoryType form.
+ * TransactionCategory form.
  */
 class TransactionCategoryType extends TermType {
     /**
@@ -33,7 +35,7 @@ class TransactionCategoryType extends TermType {
      */
     public function configureOptions(OptionsResolver $resolver) : void {
         $resolver->setDefaults([
-            'data_class' => 'App\Entity\TransactionCategory',
+            'data_class' => TransactionCategory::class,
         ]);
     }
 }

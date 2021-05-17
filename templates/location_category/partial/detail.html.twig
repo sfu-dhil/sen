@@ -1,0 +1,19 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        {% embed '@NinesUtil/term/partial/show.html.twig' with {'term': location_category} %}
+        {% endembed %}
+    </tbody>
+</table>
+
+<h2>Locations</h2>
+{% if location_category.locations|length > 0 %}
+    <ul>
+        {% for location in location_category.locations %}
+            <li>
+                <a href='{{ path("location_show", {"id":location.id }) }}'>
+                    {{ location }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

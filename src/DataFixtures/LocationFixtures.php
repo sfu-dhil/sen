@@ -15,22 +15,26 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- */
 class LocationFixtures extends Fixture implements DependentFixtureInterface {
-    //put your code here
-    public function load(ObjectManager $manager) : void {
-        $location = new Location();
-        $location->setCategory($this->getReference('locationcategory.1'));
-        $location->setName('Saint Barnabas Church');
-        $manager->persist($location);
-        $this->setReference('location.1', $location);
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new Location();
+            $fixture->setName('Name ' . $i);
 
-        $manager->flush();
+            $fixture->setCategory($this->getReference('locationcategory.' . $i));
+            $em->persist($fixture);
+            $this->setReference('location.' . $i, $fixture);
+        }
+        $em->flush();
     }
 
-    public function getDependencies() : array {
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies() {
         return [
             LocationCategoryFixtures::class,
         ];

@@ -2,52 +2,50 @@
 
 {% block title %}Person Search{% endblock %}
 
-{% block pageheader %}
-    <h1>Person Search</h1>
-    {% if q %}
-        <p class="count">
-            Displaying {{ people|length }} people of {{ people.getTotalItemCount }} total.
-        </p>
-    {% endif %}
-{% endblock %}
+ {% block pageheader %}
+     <h1>Person Search</h1>
+     {% if people|length %}
+         <p class="count">
+             Displaying {{ people|length }} people of {{ people.getTotalItemCount }} total.
+         </p>
+     {% endif %}
+ {% endblock %}
 
 {% block body %}
 
-    {% include 'partial/search-form.html.twig' with {
-        'path': path('person_search')
-    } %}
+    <form method="get" action="{{ path('person_search') }}" class="form-horizontal">
+        <fieldset>
+            <legend>Search</legend>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label' for='q'>Search term</label>
+                <div class='col-sm-10'>
+                    <div class='input-group'>
+                        <input type='text' name='q' id='q' class='form-control' value='{{ q }}'>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" id='btn-search' type="submit">
+                                <span class='glyphicon glyphicon-search'></span>
+                                Search
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <p> Full text searching options, if available:</p>
+            <ul>
+                <li><code>shakespeare</code> - shakespeare should be present, but might not be</li>
+                <li><code>shakes*</code> - words starting with shakes should be present</li>
+                <li><code>+agnes</code> - agnes must be present</li>
+                <li><code>-fisher</code> - fisher must not be present</li>
+                <li>Combinations are OK: <code>+agnes -fisher</code> finds Anges who isn't a Fisher</li>
+                <li>Phrases are OK: <code>"nee agnes"</code> finds rows that contain the literal phrase.
+            </ul>
+        </fieldset>
+    </form>
 
-    {% if q %}
-        <table class="table table-bordered table-condensed table-hover table-striped">
-            <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Alias</th>
-                    <th>Sex</th>
-                    <th>Birth Date</th>
-                    <th>Birth Status</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for person in people %}
-                    <tr>
-                        <td>
-                            <a href="{{ path('person_show', { 'id': person.id }) }}">
-                                {{ person }}
-                            </a>
-                        </td>
-                        <td>{{ person.lastName }}</td>
-                        <td>{% if person.alias %}{{ person.alias|join(', ') }}{% endif %}</td>
-                        <td>{{ person.sex }}</td>
-                        <td>{{ person.birthDate }}</td>
-                        <td>{{ person.birthStatus }}</td>
-                        <td>{{ person.status }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    {% if people|length %}
+
+        {% embed 'person/partial/table.html.twig' %}
+        {% endembed %}
 
         <div class="navigation">
             {{ knp_pagination_render(people) }}
@@ -55,3 +53,4 @@
     {% endif %}
 
 {% endblock %}
+

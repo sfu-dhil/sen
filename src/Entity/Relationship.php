@@ -64,107 +64,53 @@ class Relationship extends AbstractEntity {
         return $this->person . ' ' . $this->category . ' ' . $this->relation;
     }
 
-    /**
-     * Set startDate.
-     *
-     * @param null|string $startDate
-     *
-     * @return Relationship
-     */
-    public function setStartDate($startDate = null) {
+    public function getStartDate() : ?string {
+        return $this->startDate;
+    }
+
+    public function setStartDate(?string $startDate) : self {
         $this->startDate = $startDate;
 
         return $this;
     }
 
-    /**
-     * Get startDate.
-     *
-     * @return null|string
-     */
-    public function getStartDate() {
-        return $this->startDate;
+    public function getEndDate() : ?string {
+        return $this->endDate;
     }
 
-    /**
-     * Set endDate.
-     *
-     * @param null|string $endDate
-     *
-     * @return Relationship
-     */
-    public function setEndDate($endDate = null) {
+    public function setEndDate(?string $endDate) : self {
         $this->endDate = $endDate;
 
         return $this;
     }
 
-    /**
-     * Get endDate.
-     *
-     * @return null|string
-     */
-    public function getEndDate() {
-        return $this->endDate;
+    public function getCategory() : ?RelationshipCategory {
+        return $this->category;
     }
 
-    /**
-     * Set category.
-     *
-     * @return Relationship
-     */
-    public function setCategory(RelationshipCategory $category) {
+    public function setCategory(?RelationshipCategory $category) : self {
         $this->category = $category;
 
         return $this;
     }
 
-    /**
-     * Get category.
-     *
-     * @return RelationshipCategory
-     */
-    public function getCategory() {
-        return $this->category;
+    public function getPerson() : ?Person {
+        return $this->person;
     }
 
-    /**
-     * Set person.
-     *
-     * @return Relationship
-     */
-    public function setPerson(Person $person) {
+    public function setPerson(?Person $person) : self {
         $this->person = $person;
 
         return $this;
     }
 
-    /**
-     * Get person.
-     *
-     * @return Person
-     */
-    public function getPerson() {
-        return $this->person;
+    public function getRelation() : ?Person {
+        return $this->relation;
     }
 
-    /**
-     * Set relation.
-     *
-     * @return Relationship
-     */
-    public function setRelation(Person $relation) {
+    public function setRelation(?Person $relation) : self {
         $this->relation = $relation;
 
         return $this;
-    }
-
-    /**
-     * Get relation.
-     *
-     * @return Person
-     */
-    public function getRelation() {
-        return $this->relation;
     }
 }

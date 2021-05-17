@@ -1,0 +1,51 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        <tr>
+            <th>Start Date</th>
+            <td>
+                {{ relationship.startDate }}
+            </td>
+        </tr>
+        <tr>
+            <th>End Date</th>
+            <td>
+                {{ relationship.endDate }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Category</th>
+            <td>
+                {% if relationship.category %}
+                    <a href='{{ path("relationship_category_show", {"id": relationship.category.id}) }}'>{{ relationship.category }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Person</th>
+            <td>
+                {% if relationship.person %}
+                    <a href='{{ path("person_show", {"id": relationship.person.id}) }}'>{{ relationship.person }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Relation</th>
+            <td>
+                {% if relationship.relation %}
+                    <a href='{{ path("person_show", {"id": relationship.relation.id}) }}'>{{ relationship.relation }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ relationship.created|date }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ relationship.updated|date }}</td>
+        </tr>
+    </tbody>
+</table>
+
+

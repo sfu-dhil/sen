@@ -5,7 +5,7 @@ twig:
     exception_controller: null
     date:
         timezone: America/Vancouver
-        format: Y-m-d
+        format: Y-m-d h:m:s
         interval_format: '%%d days'
     form_themes:
         - 'bootstrap_3_horizontal_layout.html.twig'

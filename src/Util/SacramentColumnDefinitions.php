@@ -55,38 +55,43 @@ class SacramentColumnDefinitions {
 
     public const godmother_last_name = 21;
 
-    //    public const event_baptism_date=22; duplicate column.
+    public const manumission_date=22;
+
     public const event_marriage_place = 23;
 
     public const event_written_marriage_date = 24;
 
     public const event_marriage_date = 25;
 
-    public const event_marriage_source = 26;
+    public const spouse_first_name = 26;
 
-    public const event_marriage_witness1_last_name = 27;
+    public const spouse_last_name = 27;
 
-    public const event_marriage_witness1_first_name = 28;
+    public const event_marriage_source = 28;
 
-    public const event_marriage_witness2_last_name = 29;
+    public const event_marriage_witness1_last_name = 29;
 
-    public const event_marriage_witness2_first_name = 30;
+    public const event_marriage_witness1_first_name = 30;
 
-    public const event_written_death_date = 31;
+    public const event_marriage_witness2_last_name = 31;
 
-    public const event_death_date = 32;
+    public const event_marriage_witness2_first_name = 32;
 
-    public const event_death_place = 33;
+    public const event_written_death_date = 33;
 
-    public const event_death_source = 34;
+    public const event_death_date = 34;
 
-    public const misc_notes = 35;
+    public const event_death_place = 35;
 
-    public const father_first_name = 36;
+    public const event_death_source = 36;
 
-    public const father_last_name = 37;
+    public const misc_notes = 37;
 
-    public const mother_first_name = 38;
+    public const father_first_name = 38;
 
-    public const mother_last_name = 39;
+    public const father_last_name = 39;
+
+    public const mother_first_name = 40;
+
+    public const mother_last_name = 41;
 }

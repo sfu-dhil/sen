@@ -1,13 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Event Edit{% endblock %}
+    {% block title %}Edit Event {% endblock %}
 
-{% block body %}
-    <h1>Event Edit</h1>
+    {% block body %}
+        <h1>Edit Event</h1>
 
-    {{ form_start(edit_form) }}
-    {{ form_widget(edit_form) }}
-    {% include 'event/form_controls.html.twig' with {'btnLabel': 'Update', 'cancelPath': path('event_show', { 'id': event.id }) } %}
-    {{ form_end(edit_form) }}
+        {% embed 'event/partial/form.html.twig' %}
+        {% endembed %}
 
-{% endblock %}
+    {% endblock %}
+
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

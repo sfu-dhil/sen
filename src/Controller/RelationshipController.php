@@ -13,10 +13,10 @@ namespace App\Controller;
 use App\Entity\Relationship;
 use App\Form\RelationshipType;
 use App\Repository\RelationshipRepository;
-use Doctrine\ORM\EntityManagerInterface;
+
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,92 +24,43 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Relationship controller.
- *
  * @Route("/relationship")
  */
 class RelationshipController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
-     * Lists all Relationship entities.
-     *
-     * @return array
-     *
      * @Route("/", name="relationship_index", methods={"GET"})
      *
      * @Template
      */
-    public function indexAction(Request $request, EntityManagerInterface $em) {
-        $qb = $em->createQueryBuilder();
-        $qb->select('e')->from(Relationship::class, 'e')->orderBy('e.id', 'ASC');
-        $query = $qb->getQuery();
-
-        $relationships = $this->paginator->paginate($query, $request->query->getint('page', 1), 25);
+    public function index(Request $request, RelationshipRepository $relationshipRepository) : array {
+        $query = $relationshipRepository->indexQuery();
+        $pageSize = (int) $this->getParameter('page_size');
+        $page = $request->query->getint('page', 1);
 
         return [
-            'relationships' => $relationships,
+            'relationships' => $this->paginator->paginate($query, $page, $pageSize),
         ];
     }
 
     /**
-     * Search for Relationship entities.
-     *
-     * To make this work, add a method like this one to the
-     * App:Relationship repository. Replace the fieldName with
-     * something appropriate, and adjust the generated search.html.twig
-     * template.
-     *
-     * <code><pre>
-     *    public function searchQuery($q) {
-     *       $qb = $this->createQueryBuilder('e');
-     *       $qb->addSelect("MATCH (e.title) AGAINST(:q BOOLEAN) as HIDDEN score");
-     *       $qb->orderBy('score', 'DESC');
-     *       $qb->setParameter('q', $q);
-     *       return $qb->getQuery();
-     *    }
-     * </pre></code>
-     *
-     * @Route("/search", name="relationship_search", methods={"GET"})
-     *
+     * @Route("/new", name="relationship_new", methods={"GET", "POST"})
      * @Template
-     */
-    public function searchAction(Request $request, RelationshipRepository $repo) {
-        $q = $request->query->get('q');
-        if ($q) {
-            $query = $repo->searchQuery($q);
-
-            $relationships = $this->paginator->paginate($query, $request->query->getInt('page', 1), 25);
-        } else {
-            $relationships = [];
-        }
-
-        return [
-            'relationships' => $relationships,
-            'q' => $q,
-        ];
-    }
-
-    /**
-     * Creates a new Relationship entity.
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      *
      * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="relationship_new", methods={"GET", "POST"})
-     *
-     * @Template
      */
-    public function newAction(Request $request, EntityManagerInterface $em) {
+    public function new(Request $request) {
         $relationship = new Relationship();
         $form = $this->createForm(RelationshipType::class, $relationship);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($relationship);
-            $em->flush();
-
-            $this->addFlash('success', 'The new relationship was created.');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($relationship);
+            $entityManager->flush();
+            $this->addFlash('success', 'The new relationship has been saved.');
 
             return $this->redirectToRoute('relationship_show', ['id' => $relationship->getId()]);
         }
@@ -121,73 +72,66 @@ class RelationshipController extends AbstractController implements PaginatorAwar
     }
 
     /**
-     * Creates a new Relationship entity in a popup.
+     * @Route("/new_popup", name="relationship_new_popup", methods={"GET", "POST"})
+     * @Template
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      *
      * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="relationship_new_popup", methods={"GET", "POST"})
-     *
-     * @Template
      */
-    public function newPopupAction(Request $request, EntityManagerInterface $em) {
-        return $this->newAction($request, $em);
+    public function new_popup(Request $request) {
+        return $this->new($request);
     }
 
     /**
-     * Finds and displays a Relationship entity.
+     * @Route("/{id}", name="relationship_show", methods={"GET"})
+     * @Template
      *
      * @return array
-     *
-     * @Route("/{id}", name="relationship_show", methods={"GET"})
-     *
-     * @Template
      */
-    public function showAction(Relationship $relationship) {
+    public function show(Relationship $relationship) {
         return [
             'relationship' => $relationship,
         ];
     }
 
     /**
-     * Displays a form to edit an existing Relationship entity.
-     *
-     * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}/edit", name="relationship_edit", methods={"GET", "POST"})
      *
      * @Template
+     *
+     * @return array|RedirectResponse
      */
-    public function editAction(Request $request, EntityManagerInterface $em, Relationship $relationship) {
-        $editForm = $this->createForm(RelationshipType::class, $relationship);
-        $editForm->handleRequest($request);
+    public function edit(Request $request, Relationship $relationship) {
+        $form = $this->createForm(RelationshipType::class, $relationship);
+        $form->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em->flush();
-            $this->addFlash('success', 'The relationship has been updated.');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'The updated relationship has been saved.');
 
             return $this->redirectToRoute('relationship_show', ['id' => $relationship->getId()]);
         }
 
         return [
             'relationship' => $relationship,
-            'edit_form' => $editForm->createView(),
+            'form' => $form->createView(),
         ];
     }
 
     /**
-     * Deletes a Relationship entity.
+     * @IsGranted("ROLE_CONTENT_ADMIN")
+     * @Route("/{id}", name="relationship_delete", methods={"DELETE"})
      *
-     * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/delete", name="relationship_delete", methods={"GET"})
+     * @return RedirectResponse
      */
-    public function deleteAction(Request $request, EntityManagerInterface $em, Relationship $relationship) {
-        $em->remove($relationship);
-        $em->flush();
-        $this->addFlash('success', 'The relationship was deleted.');
+    public function delete(Request $request, Relationship $relationship) {
+        if ($this->isCsrfTokenValid('delete' . $relationship->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($relationship);
+            $entityManager->flush();
+            $this->addFlash('success', 'The relationship has been deleted.');
+        }
 
         return $this->redirectToRoute('relationship_index');
     }

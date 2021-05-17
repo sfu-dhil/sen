@@ -14,20 +14,19 @@ use App\Entity\RelationshipCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- *
- * @author michael
- */
 class RelationshipCategoryFixtures extends Fixture {
-    //put your code here
-    public function load(ObjectManager $manager) : void {
-        $category = new RelationshipCategory();
-        $category->setName('rel');
-        $category->setLabel('Rel');
-        $manager->persist($category);
-        $this->setReference('relationshipcategory.1', $category);
-
-        $manager->flush();
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new RelationshipCategory();
+            $fixture->setName('Name ' . $i);
+            $fixture->setLabel('Label ' . $i);
+            $fixture->setDescription("<p>This is paragraph {$i}</p>");
+            $em->persist($fixture);
+            $this->setReference('relationshipcategory.' . $i, $fixture);
+        }
+        $em->flush();
     }
 }

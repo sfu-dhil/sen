@@ -53,76 +53,50 @@ class Location extends AbstractEntity {
         return $this->name;
     }
 
-    /**
-     * Set category.
-     *
-     * @param ?LocationCategory $category
-     *
-     * @return Location
-     */
-    public function setCategory(?LocationCategory $category = null) {
+    public function getName() : ?string {
+        return $this->name;
+    }
+
+    public function setName(string $name) : self {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCategory() : ?LocationCategory {
+        return $this->category;
+    }
+
+    public function setCategory(?LocationCategory $category) : self {
         $this->category = $category;
 
         return $this;
     }
 
     /**
-     * Get category.
-     *
-     * @return null|LocationCategory
+     * @return Collection|Event[]
      */
-    public function getCategory() {
-        return $this->category;
-    }
-
-    /**
-     * Add event.
-     *
-     * @return Location
-     */
-    public function addEvent(Event $event) {
-        $this->events[] = $event;
-
-        return $this;
-    }
-
-    /**
-     * Remove event.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeEvent(Event $event) {
-        return $this->events->removeElement($event);
-    }
-
-    /**
-     * Get events.
-     *
-     * @return Collection
-     */
-    public function getEvents() {
+    public function getEvents() : Collection {
         return $this->events;
     }
 
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return Location
-     */
-    public function setName($name) {
-        $this->name = $name;
+    public function addEvent(Event $event) : self {
+        if ( ! $this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setLocation($this);
+        }
 
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName() {
-        return $this->name;
+    public function removeEvent(Event $event) : self {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getLocation() === $this) {
+                $event->setLocation(null);
+            }
+        }
+
+        return $this;
     }
 }

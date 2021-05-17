@@ -12,39 +12,56 @@ namespace App\Form;
 
 use App\Entity\Event;
 use App\Entity\Person;
+use App\Entity\Witness;
 use App\Entity\WitnessCategory;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 /**
- * WitnessType form.
+ * Witness form.
  */
 class WitnessType extends AbstractType {
     /**
      * Add form fields to $builder.
      */
     public function buildForm(FormBuilderInterface $builder, array $options) : void {
-        $builder->add('category', EntityType::class, [
+        $builder->add('category', Select2EntityType::class, [
+            'label' => 'Category',
             'class' => WitnessCategory::class,
+            'remote_route' => 'witness_category_typeahead',
+            'allow_clear' => true,
+            'attr' => [
+                'help_block' => '',
+                'add_path' => 'witness_category_new_popup',
+                'add_label' => 'Add Category',
+            ],
         ]);
 
         $builder->add('person', Select2EntityType::class, [
-            'remote_route' => 'person_typeahead',
+            'label' => 'Person',
             'class' => Person::class,
-            'multiple' => false,
-            'primary_key' => 'id',
-            'text_property' => 'name',
-            'page_limit' => 10,
+            'remote_route' => 'person_typeahead',
             'allow_clear' => true,
-            'delay' => 250,
-            'language' => 'en',
+            'attr' => [
+                'help_block' => '',
+                'add_path' => 'person_new_popup',
+                'add_label' => 'Add Person',
+            ],
         ]);
 
-        $builder->add('event', EntityType::class, [
+        $builder->add('event', Select2EntityType::class, [
+            'label' => 'Event',
             'class' => Event::class,
+            'remote_route' => 'event_typeahead',
+            'allow_clear' => true,
+            'attr' => [
+                'help_block' => '',
+                'add_path' => 'event_new_popup',
+                'add_label' => 'Add Event',
+            ],
         ]);
     }
 
@@ -56,7 +73,7 @@ class WitnessType extends AbstractType {
      */
     public function configureOptions(OptionsResolver $resolver) : void {
         $resolver->setDefaults([
-            'data_class' => 'App\Entity\Witness',
+            'data_class' => Witness::class,
         ]);
     }
 }

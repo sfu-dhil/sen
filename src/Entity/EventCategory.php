@@ -34,31 +34,29 @@ class EventCategory extends AbstractTerm {
     }
 
     /**
-     * Add event.
-     *
-     * @return EventCategory
+     * @return Collection|Event[]
      */
-    public function addEvent(Event $event) {
-        $this->events[] = $event;
+    public function getEvents() : Collection {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event) : self {
+        if ( ! $this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setCategory($this);
+        }
 
         return $this;
     }
 
-    /**
-     * Remove event.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeEvent(Event $event) {
-        return $this->events->removeElement($event);
-    }
+    public function removeEvent(Event $event) : self {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getCategory() === $this) {
+                $event->setCategory(null);
+            }
+        }
 
-    /**
-     * Get events.
-     *
-     * @return Collection
-     */
-    public function getEvents() {
-        return $this->events;
+        return $this;
     }
 }

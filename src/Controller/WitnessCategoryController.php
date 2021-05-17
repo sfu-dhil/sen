@@ -13,10 +13,10 @@ namespace App\Controller;
 use App\Entity\WitnessCategory;
 use App\Form\WitnessCategoryType;
 use App\Repository\WitnessCategoryRepository;
-use Doctrine\ORM\EntityManagerInterface;
+
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,52 +25,60 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * WitnessCategory controller.
- *
  * @Route("/witness_category")
  */
 class WitnessCategoryController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
-     * Lists all WitnessCategory entities.
-     *
-     * @return array
-     *
      * @Route("/", name="witness_category_index", methods={"GET"})
      *
      * @Template
      */
-    public function indexAction(Request $request, EntityManagerInterface $em) {
-        $qb = $em->createQueryBuilder();
-        $qb->select('e')->from(WitnessCategory::class, 'e')->orderBy('e.id', 'ASC');
-        $query = $qb->getQuery();
-
-        $witnessCategories = $this->paginator->paginate($query, $request->query->getint('page', 1), 25);
+    public function index(Request $request, WitnessCategoryRepository $witnessCategoryRepository) : array {
+        $query = $witnessCategoryRepository->indexQuery();
+        $pageSize = (int) $this->getParameter('page_size');
+        $page = $request->query->getint('page', 1);
 
         return [
-            'witnessCategories' => $witnessCategories,
+            'witness_categories' => $this->paginator->paginate($query, $page, $pageSize),
         ];
     }
 
     /**
-     * Typeahead API endpoint for WitnessCategory entities.
+     * @Route("/search", name="witness_category_search", methods={"GET"})
      *
-     * To make this work, add something like this to WitnessCategoryRepository:
+     * @Template
      *
+     * @return array
+     */
+    public function search(Request $request, WitnessCategoryRepository $witnessCategoryRepository) {
+        $q = $request->query->get('q');
+        if ($q) {
+            $query = $witnessCategoryRepository->searchQuery($q);
+            $witnessCategories = $this->paginator->paginate($query, $request->query->getInt('page', 1), $this->getParameter('page_size'), ['wrap-queries' => true]);
+        } else {
+            $witnessCategories = [];
+        }
+
+        return [
+            'witness_categories' => $witnessCategories,
+            'q' => $q,
+        ];
+    }
+
+    /**
      * @Route("/typeahead", name="witness_category_typeahead", methods={"GET"})
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request, WitnessCategoryRepository $repo) {
+    public function typeahead(Request $request, WitnessCategoryRepository $witnessCategoryRepository) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
         }
-
         $data = [];
-
-        foreach ($repo->typeaheadQuery($q) as $result) {
+        foreach ($witnessCategoryRepository->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
                 'text' => (string) $result,
@@ -81,141 +89,93 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
     }
 
     /**
-     * Search for WitnessCategory entities.
-     *
-     * To make this work, add a method like this one to the
-     * App:WitnessCategory repository. Replace the fieldName with
-     * something appropriate, and adjust the generated search.html.twig
-     * template.
-     *
-     * <code><pre>
-     *    public function searchQuery($q) {
-     *       $qb = $this->createQueryBuilder('e');
-     *       $qb->addSelect("MATCH (e.title) AGAINST(:q BOOLEAN) as HIDDEN score");
-     *       $qb->orderBy('score', 'DESC');
-     *       $qb->setParameter('q', $q);
-     *       return $qb->getQuery();
-     *    }
-     * </pre></code>
-     *
-     * @Route("/search", name="witness_category_search", methods={"GET"})
-     *
+     * @Route("/new", name="witness_category_new", methods={"GET", "POST"})
      * @Template
-     */
-    public function searchAction(Request $request, WitnessCategoryRepository $repo) {
-        $q = $request->query->get('q');
-        if ($q) {
-            $query = $repo->searchQuery($q);
-
-            $witnessCategories = $this->paginator->paginate($query, $request->query->getInt('page', 1), 25);
-        } else {
-            $witnessCategories = [];
-        }
-
-        return [
-            'witnessCategories' => $witnessCategories,
-            'q' => $q,
-        ];
-    }
-
-    /**
-     * Creates a new WitnessCategory entity.
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      *
      * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="witness_category_new", methods={"GET", "POST"})
-     *
-     * @Template
      */
-    public function newAction(Request $request, EntityManagerInterface $em) {
+    public function new(Request $request) {
         $witnessCategory = new WitnessCategory();
         $form = $this->createForm(WitnessCategoryType::class, $witnessCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($witnessCategory);
-            $em->flush();
-
-            $this->addFlash('success', 'The new witnessCategory was created.');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($witnessCategory);
+            $entityManager->flush();
+            $this->addFlash('success', 'The new witnessCategory has been saved.');
 
             return $this->redirectToRoute('witness_category_show', ['id' => $witnessCategory->getId()]);
         }
 
         return [
-            'witnessCategory' => $witnessCategory,
+            'witness_category' => $witnessCategory,
             'form' => $form->createView(),
         ];
     }
 
     /**
-     * Creates a new WitnessCategory entity in a popup.
+     * @Route("/new_popup", name="witness_category_new_popup", methods={"GET", "POST"})
+     * @Template
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      *
      * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="witness_category_new_popup", methods={"GET", "POST"})
-     *
-     * @Template
      */
-    public function newPopupAction(Request $request, EntityManagerInterface $em) {
-        return $this->newAction($request, $em);
+    public function new_popup(Request $request) {
+        return $this->new($request);
     }
 
     /**
-     * Finds and displays a WitnessCategory entity.
+     * @Route("/{id}", name="witness_category_show", methods={"GET"})
+     * @Template
      *
      * @return array
-     *
-     * @Route("/{id}", name="witness_category_show", methods={"GET"})
-     *
-     * @Template
      */
-    public function showAction(WitnessCategory $witnessCategory) {
+    public function show(WitnessCategory $witnessCategory) {
         return [
-            'witnessCategory' => $witnessCategory,
+            'witness_category' => $witnessCategory,
         ];
     }
 
     /**
-     * Displays a form to edit an existing WitnessCategory entity.
-     *
-     * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}/edit", name="witness_category_edit", methods={"GET", "POST"})
      *
      * @Template
+     *
+     * @return array|RedirectResponse
      */
-    public function editAction(Request $request, EntityManagerInterface $em, WitnessCategory $witnessCategory) {
-        $editForm = $this->createForm(WitnessCategoryType::class, $witnessCategory);
-        $editForm->handleRequest($request);
+    public function edit(Request $request, WitnessCategory $witnessCategory) {
+        $form = $this->createForm(WitnessCategoryType::class, $witnessCategory);
+        $form->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em->flush();
-            $this->addFlash('success', 'The witnessCategory has been updated.');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'The updated witnessCategory has been saved.');
 
             return $this->redirectToRoute('witness_category_show', ['id' => $witnessCategory->getId()]);
         }
 
         return [
-            'witnessCategory' => $witnessCategory,
-            'edit_form' => $editForm->createView(),
+            'witness_category' => $witnessCategory,
+            'form' => $form->createView(),
         ];
     }
 
     /**
-     * Deletes a WitnessCategory entity.
+     * @IsGranted("ROLE_CONTENT_ADMIN")
+     * @Route("/{id}", name="witness_category_delete", methods={"DELETE"})
      *
-     * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/delete", name="witness_category_delete", methods={"GET"})
+     * @return RedirectResponse
      */
-    public function deleteAction(Request $request, EntityManagerInterface $em, WitnessCategory $witnessCategory) {
-        $em->remove($witnessCategory);
-        $em->flush();
-        $this->addFlash('success', 'The witnessCategory was deleted.');
+    public function delete(Request $request, WitnessCategory $witnessCategory) {
+        if ($this->isCsrfTokenValid('delete' . $witnessCategory->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($witnessCategory);
+            $entityManager->flush();
+            $this->addFlash('success', 'The witnessCategory has been deleted.');
+        }
 
         return $this->redirectToRoute('witness_category_index');
     }

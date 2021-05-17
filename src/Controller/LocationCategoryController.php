@@ -13,11 +13,10 @@ namespace App\Controller;
 use App\Entity\LocationCategory;
 use App\Form\LocationCategoryType;
 use App\Repository\LocationCategoryRepository;
-use App\Repository\LocationRepository;
-use Doctrine\ORM\EntityManagerInterface;
+
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,52 +25,60 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * LocationCategory controller.
- *
  * @Route("/location_category")
  */
 class LocationCategoryController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
-     * Lists all LocationCategory entities.
-     *
-     * @return array
-     *
      * @Route("/", name="location_category_index", methods={"GET"})
      *
      * @Template
      */
-    public function indexAction(Request $request, EntityManagerInterface $em) {
-        $qb = $em->createQueryBuilder();
-        $qb->select('e')->from(LocationCategory::class, 'e')->orderBy('e.id', 'ASC');
-        $query = $qb->getQuery();
-
-        $locationCategories = $this->paginator->paginate($query, $request->query->getint('page', 1), 25);
+    public function index(Request $request, LocationCategoryRepository $locationCategoryRepository) : array {
+        $query = $locationCategoryRepository->indexQuery();
+        $pageSize = (int) $this->getParameter('page_size');
+        $page = $request->query->getint('page', 1);
 
         return [
-            'locationCategories' => $locationCategories,
+            'location_categories' => $this->paginator->paginate($query, $page, $pageSize),
         ];
     }
 
     /**
-     * Typeahead API endpoint for LocationCategory entities.
+     * @Route("/search", name="location_category_search", methods={"GET"})
      *
-     * To make this work, add something like this to LocationCategoryRepository:
+     * @Template
      *
+     * @return array
+     */
+    public function search(Request $request, LocationCategoryRepository $locationCategoryRepository) {
+        $q = $request->query->get('q');
+        if ($q) {
+            $query = $locationCategoryRepository->searchQuery($q);
+            $locationCategories = $this->paginator->paginate($query, $request->query->getInt('page', 1), $this->getParameter('page_size'), ['wrap-queries' => true]);
+        } else {
+            $locationCategories = [];
+        }
+
+        return [
+            'location_categories' => $locationCategories,
+            'q' => $q,
+        ];
+    }
+
+    /**
      * @Route("/typeahead", name="location_category_typeahead", methods={"GET"})
      *
      * @return JsonResponse
      */
-    public function typeahead(Request $request, LocationRepository $repo) {
+    public function typeahead(Request $request, LocationCategoryRepository $locationCategoryRepository) {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
         }
-
         $data = [];
-
-        foreach ($repo->typeaheadQuery($q) as $result) {
+        foreach ($locationCategoryRepository->typeaheadQuery($q) as $result) {
             $data[] = [
                 'id' => $result->getId(),
                 'text' => (string) $result,
@@ -82,141 +89,93 @@ class LocationCategoryController extends AbstractController implements Paginator
     }
 
     /**
-     * Search for LocationCategory entities.
-     *
-     * To make this work, add a method like this one to the
-     * App:LocationCategory repository. Replace the fieldName with
-     * something appropriate, and adjust the generated search.html.twig
-     * template.
-     *
-     * <code><pre>
-     *    public function searchQuery($q) {
-     *       $qb = $this->createQueryBuilder('e');
-     *       $qb->addSelect("MATCH (e.title) AGAINST(:q BOOLEAN) as HIDDEN score");
-     *       $qb->orderBy('score', 'DESC');
-     *       $qb->setParameter('q', $q);
-     *       return $qb->getQuery();
-     *    }
-     * </pre></code>
-     *
-     * @Route("/search", name="location_category_search", methods={"GET"})
-     *
+     * @Route("/new", name="location_category_new", methods={"GET", "POST"})
      * @Template
-     */
-    public function searchAction(Request $request, LocationCategoryRepository $repo) {
-        $q = $request->query->get('q');
-        if ($q) {
-            $query = $repo->searchQuery($q);
-
-            $locationCategories = $this->paginator->paginate($query, $request->query->getInt('page', 1), 25);
-        } else {
-            $locationCategories = [];
-        }
-
-        return [
-            'locationCategories' => $locationCategories,
-            'q' => $q,
-        ];
-    }
-
-    /**
-     * Creates a new LocationCategory entity.
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      *
      * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="location_category_new", methods={"GET", "POST"})
-     *
-     * @Template
      */
-    public function newAction(Request $request, EntityManagerInterface $em) {
+    public function new(Request $request) {
         $locationCategory = new LocationCategory();
         $form = $this->createForm(LocationCategoryType::class, $locationCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($locationCategory);
-            $em->flush();
-
-            $this->addFlash('success', 'The new locationCategory was created.');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($locationCategory);
+            $entityManager->flush();
+            $this->addFlash('success', 'The new locationCategory has been saved.');
 
             return $this->redirectToRoute('location_category_show', ['id' => $locationCategory->getId()]);
         }
 
         return [
-            'locationCategory' => $locationCategory,
+            'location_category' => $locationCategory,
             'form' => $form->createView(),
         ];
     }
 
     /**
-     * Creates a new LocationCategory entity in a popup.
+     * @Route("/new_popup", name="location_category_new_popup", methods={"GET", "POST"})
+     * @Template
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      *
      * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="location_category_new_popup", methods={"GET", "POST"})
-     *
-     * @Template
      */
-    public function newPopupAction(Request $request, EntityManagerInterface $em) {
-        return $this->newAction($request, $em);
+    public function new_popup(Request $request) {
+        return $this->new($request);
     }
 
     /**
-     * Finds and displays a LocationCategory entity.
+     * @Route("/{id}", name="location_category_show", methods={"GET"})
+     * @Template
      *
      * @return array
-     *
-     * @Route("/{id}", name="location_category_show", methods={"GET"})
-     *
-     * @Template
      */
-    public function showAction(LocationCategory $locationCategory) {
+    public function show(LocationCategory $locationCategory) {
         return [
-            'locationCategory' => $locationCategory,
+            'location_category' => $locationCategory,
         ];
     }
 
     /**
-     * Displays a form to edit an existing LocationCategory entity.
-     *
-     * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}/edit", name="location_category_edit", methods={"GET", "POST"})
      *
      * @Template
+     *
+     * @return array|RedirectResponse
      */
-    public function editAction(Request $request, EntityManagerInterface $em, LocationCategory $locationCategory) {
-        $editForm = $this->createForm(LocationCategoryType::class, $locationCategory);
-        $editForm->handleRequest($request);
+    public function edit(Request $request, LocationCategory $locationCategory) {
+        $form = $this->createForm(LocationCategoryType::class, $locationCategory);
+        $form->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em->flush();
-            $this->addFlash('success', 'The locationCategory has been updated.');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'The updated locationCategory has been saved.');
 
             return $this->redirectToRoute('location_category_show', ['id' => $locationCategory->getId()]);
         }
 
         return [
-            'locationCategory' => $locationCategory,
-            'edit_form' => $editForm->createView(),
+            'location_category' => $locationCategory,
+            'form' => $form->createView(),
         ];
     }
 
     /**
-     * Deletes a LocationCategory entity.
+     * @IsGranted("ROLE_CONTENT_ADMIN")
+     * @Route("/{id}", name="location_category_delete", methods={"DELETE"})
      *
-     * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/delete", name="location_category_delete", methods={"GET"})
+     * @return RedirectResponse
      */
-    public function deleteAction(Request $request, EntityManagerInterface $em, LocationCategory $locationCategory) {
-        $em->remove($locationCategory);
-        $em->flush();
-        $this->addFlash('success', 'The locationCategory was deleted.');
+    public function delete(Request $request, LocationCategory $locationCategory) {
+        if ($this->isCsrfTokenValid('delete' . $locationCategory->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($locationCategory);
+            $entityManager->flush();
+            $this->addFlash('success', 'The locationCategory has been deleted.');
+        }
 
         return $this->redirectToRoute('location_category_index');
     }

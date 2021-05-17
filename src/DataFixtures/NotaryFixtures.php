@@ -14,19 +14,18 @@ use App\Entity\Notary;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- *
- * @author michael
- */
 class NotaryFixtures extends Fixture {
-    //put your code here
-    public function load(ObjectManager $manager) : void {
-        $notary = new Notary();
-        $notary->setName('Billy Terwilliger');
-        $manager->persist($notary);
-        $this->setReference('notary.1', $notary);
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new Notary();
+            $fixture->setName('Name ' . $i);
 
-        $manager->flush();
+            $em->persist($fixture);
+            $this->setReference('notary.' . $i, $fixture);
+        }
+        $em->flush();
     }
 }

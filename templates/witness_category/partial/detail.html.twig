@@ -1,0 +1,19 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        {% embed '@NinesUtil/term/partial/show.html.twig' with {'term': witness_category} %}
+        {% endembed %}
+    </tbody>
+</table>
+
+<h2>Witnesses</h2>
+{% if witness_category.witnesses|length > 0 %}
+    <ul>
+        {% for witness in witness_category.witnesses %}
+            <li>
+                <a href='{{ path("witness_show", {"id":witness.id }) }}'>
+                    {{ witness }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

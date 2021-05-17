@@ -15,28 +15,30 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- *
- * @author michael
- */
 class ResidenceFixtures extends Fixture implements DependentFixtureInterface {
-    //put your code here
-    public function load(ObjectManager $manager) : void {
-        $residence = new Residence();
-        $residence->setCity($this->getReference('city.1'));
-        $residence->setPerson($this->getReference('person.1'));
-        $residence->setDate('1780');
-        $manager->persist($residence);
-        $this->setReference('residence.1', $residence);
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new Residence();
+            $fixture->setDate('Date ' . $i);
 
-        $manager->flush();
+            $fixture->setPerson($this->getReference('person.' . $i));
+            $fixture->setCity($this->getReference('city.' . $i));
+            $em->persist($fixture);
+            $this->setReference('residence.' . $i, $fixture);
+        }
+        $em->flush();
     }
 
-    public function getDependencies() : array {
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies() {
         return [
-            CityFixtures::class,
             PersonFixtures::class,
+            CityFixtures::class,
         ];
     }
 }

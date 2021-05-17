@@ -44,69 +44,33 @@ class Residence extends AbstractEntity {
         return $this->date . ' ' . $this->city;
     }
 
-    /**
-     * Set date.
-     *
-     * @param string $date
-     *
-     * @return Residence
-     */
-    public function setDate($date) {
+    public function getDate() : ?string {
+        return $this->date;
+    }
+
+    public function setDate(?string $date) : self {
         $this->date = $date;
 
         return $this;
     }
 
-    /**
-     * Get date.
-     *
-     * @return string
-     */
-    public function getDate() {
-        return $this->date;
+    public function getPerson() : ?Person {
+        return $this->person;
     }
 
-    /**
-     * Set person.
-     *
-     * @param null|\App\Entity\Person $person
-     *
-     * @return Residence
-     */
-    public function setPerson(?Person $person = null) {
+    public function setPerson(?Person $person) : self {
         $this->person = $person;
 
         return $this;
     }
 
-    /**
-     * Get person.
-     *
-     * @return null|\App\Entity\Person
-     */
-    public function getPerson() {
-        return $this->person;
+    public function getCity() : ?City {
+        return $this->city;
     }
 
-    /**
-     * Set city.
-     *
-     * @param null|\App\Entity\City $city
-     *
-     * @return Residence
-     */
-    public function setCity(?City $city = null) {
+    public function setCity(?City $city) : self {
         $this->city = $city;
 
         return $this;
-    }
-
-    /**
-     * Get city.
-     *
-     * @return null|\App\Entity\City
-     */
-    public function getCity() {
-        return $this->city;
     }
 }

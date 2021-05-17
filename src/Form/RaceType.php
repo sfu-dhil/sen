@@ -10,12 +10,15 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\Race;
+
 use Nines\UtilBundle\Form\TermType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * RaceType form.
+ * Race form.
  */
 class RaceType extends TermType {
     /**
@@ -23,6 +26,48 @@ class RaceType extends TermType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) : void {
         parent::buildForm($builder, $options);
+        $builder->add('spanishUngendered', TextType::class, [
+            'label' => 'Spanish Ungendered',
+            'required' => true,
+            'attr' => [
+                'help_block' => '',
+            ],
+        ]);
+        $builder->add('spanishMale', TextType::class, [
+            'label' => 'Spanish Male',
+            'required' => true,
+            'attr' => [
+                'help_block' => '',
+            ],
+        ]);
+        $builder->add('spanishFemale', TextType::class, [
+            'label' => 'Spanish Female',
+            'required' => true,
+            'attr' => [
+                'help_block' => '',
+            ],
+        ]);
+        $builder->add('frenchUngendered', TextType::class, [
+            'label' => 'French Ungendered',
+            'required' => true,
+            'attr' => [
+                'help_block' => '',
+            ],
+        ]);
+        $builder->add('frenchMale', TextType::class, [
+            'label' => 'French Male',
+            'required' => true,
+            'attr' => [
+                'help_block' => '',
+            ],
+        ]);
+        $builder->add('frenchFemale', TextType::class, [
+            'label' => 'French Female',
+            'required' => true,
+            'attr' => [
+                'help_block' => '',
+            ],
+        ]);
     }
 
     /**
@@ -33,7 +78,7 @@ class RaceType extends TermType {
      */
     public function configureOptions(OptionsResolver $resolver) : void {
         $resolver->setDefaults([
-            'data_class' => 'App\Entity\Race',
+            'data_class' => Race::class,
         ]);
     }
 }

@@ -34,31 +34,29 @@ class RelationshipCategory extends AbstractTerm {
     }
 
     /**
-     * Add relationship.
-     *
-     * @return RelationshipCategory
+     * @return Collection|Relationship[]
      */
-    public function addRelationship(Relationship $relationship) {
-        $this->relationships[] = $relationship;
+    public function getRelationships() : Collection {
+        return $this->relationships;
+    }
+
+    public function addRelationship(Relationship $relationship) : self {
+        if ( ! $this->relationships->contains($relationship)) {
+            $this->relationships[] = $relationship;
+            $relationship->setCategory($this);
+        }
 
         return $this;
     }
 
-    /**
-     * Remove relationship.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeRelationship(Relationship $relationship) {
-        return $this->relationships->removeElement($relationship);
-    }
+    public function removeRelationship(Relationship $relationship) : self {
+        if ($this->relationships->removeElement($relationship)) {
+            // set the owning side to null (unless already changed)
+            if ($relationship->getCategory() === $this) {
+                $relationship->setCategory(null);
+            }
+        }
 
-    /**
-     * Get relationships.
-     *
-     * @return Collection
-     */
-    public function getRelationships() {
-        return $this->relationships;
+        return $this;
     }
 }

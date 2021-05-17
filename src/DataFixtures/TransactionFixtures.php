@@ -16,34 +16,39 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- *
- * @author michael
- */
 class TransactionFixtures extends Fixture implements DependentFixtureInterface {
-    //put your code here
-    public function load(ObjectManager $manager) : void {
-        $transaction = new Transaction();
-        $transaction->setCategory($this->getReference('transactioncategory.1'));
-        $transaction->setConjunction('to');
-        $transaction->setFirstParty($this->getReference('person.1'));
-        $transaction->setFirstPartyNote('and wife');
-        $transaction->setLedger($this->getReference('ledger.1'));
-        $transaction->setSecondParty($this->getReference('person.2'));
-        $transaction->setSecondPartyNote('and children');
-        $transaction->setDate(new DateTimeImmutable('1790-04-20'));
-        $transaction->setPage(27);
-        $manager->persist($transaction);
-        $this->setReference('transaction.1', $transaction);
-        $manager->flush();
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new Transaction();
+            $fixture->setDate(new DateTimeImmutable("2020-{$i}-{$i}"));
+            $fixture->setPage($i);
+            $fixture->setNotes('Notes ' . $i);
+            $fixture->setFirstPartyNote('FirstPartyNote ' . $i);
+            $fixture->setConjunction('Conjunction ' . $i);
+            $fixture->setSecondPartyNote('SecondPartyNote ' . $i);
+
+            $fixture->setFirstparty($this->getReference('person.' . $i));
+            $fixture->setSecondparty($this->getReference('person.' . (($i + 1) % 4 + 1)));
+            $fixture->setCategory($this->getReference('transactioncategory.' . $i));
+            $fixture->setLedger($this->getReference('ledger.' . $i));
+            $em->persist($fixture);
+            $this->setReference('transaction.' . $i, $fixture);
+        }
+        $em->flush();
     }
 
-    public function getDependencies() : array {
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies() {
         return [
+            PersonFixtures::class,
+            PersonFixtures::class,
             TransactionCategoryFixtures::class,
             LedgerFixtures::class,
-            PersonFixtures::class,
         ];
     }
 }

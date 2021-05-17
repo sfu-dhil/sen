@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Relationship{% endblock %}
+    {% block title %}New Relationship {% endblock %}
 
+    {% block body %}
+        <h1>New Relationship</h1>
 
-{% block body %}
-    <h1>New Relationship</h1>
+        {% embed 'relationship/partial/form.html.twig' %}
+        {% endembed %}
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {% include 'relationship/form_controls.html.twig' with {'btnLabel': 'Create', 'cancelPath': path('relationship_index')} %}
-    {{ form_end(form) }}
+    {% endblock %}
 
-{% endblock %}
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

@@ -1,13 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Residence Edit{% endblock %}
+    {% block title %}Edit Residence {% endblock %}
 
-{% block body %}
-    <h1>Residence Edit</h1>
+    {% block body %}
+        <h1>Edit Residence</h1>
 
-    {{ form_start(edit_form) }}
-    {{ form_widget(edit_form) }}
-    {% include 'residence/form_controls.html.twig' with {'btnLabel': 'Update', 'cancelPath': path('residence_show', { 'id': residence.id }) } %}
-    {{ form_end(edit_form) }}
+        {% embed 'residence/partial/form.html.twig' %}
+        {% endembed %}
 
-{% endblock %}
+    {% endblock %}
+
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

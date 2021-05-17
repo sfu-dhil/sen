@@ -1,19 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Race Edit{% endblock %}
+    {% block title %}Edit Race {% endblock %}
 
-{% block body %}
-    <h1>Race Edit</h1>
+    {% block body %}
+        <h1>Edit Race</h1>
 
-    {{ form_start(edit_form) }}
-    {{ form_widget(edit_form) }}
-    <div class="form-group">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-10">
-            <input type="submit" value="Update" class="btn btn-primary" />
-            <a href="{{ path('race_show', { 'id': race.id }) }}" class="btn btn-warning">Cancel</a>
-        </div>
-    </div>
-    {{ form_end(edit_form) }}
+        {% embed 'race/partial/form.html.twig' %}
+        {% endembed %}
 
-{% endblock %}
+    {% endblock %}
+
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

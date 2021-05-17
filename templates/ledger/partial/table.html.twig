@@ -1,0 +1,22 @@
+<table class="table table-bordered table-condensed table-hover table-striped">
+    <thead>
+        <tr>
+            <th>Volume</th>
+            <th>Notary</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ledger in ledgers %}
+            <tr>
+                <td>
+                    <a href="{{ path('ledger_show', { 'id': ledger.id }) }}">
+                        {{ ledger.year }} {{ ledger.volume }}
+                    </a>
+                </td>
+                <td>
+                    {{ ledger.notary }}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

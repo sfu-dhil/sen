@@ -14,24 +14,18 @@ use App\Entity\City;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- *
- * @author michael
- */
 class CityFixtures extends Fixture {
-    //put your code here
-    public function load(ObjectManager $manager) : void {
-        $neworleans = new City();
-        $neworleans->setName('Abbeville');
-        $manager->persist($neworleans);
-        $this->setReference('city.1', $neworleans);
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new City();
+            $fixture->setName('Name ' . $i);
 
-        $bernard = new City();
-        $bernard->setName('Saint Bernard Parish');
-        $manager->persist($bernard);
-        $this->setReference('city.2', $bernard);
-
-        $manager->flush();
+            $em->persist($fixture);
+            $this->setReference('city.' . $i, $fixture);
+        }
+        $em->flush();
     }
 }

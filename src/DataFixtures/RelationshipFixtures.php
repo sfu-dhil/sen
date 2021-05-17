@@ -15,26 +15,33 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- *
- * @author michael
- */
 class RelationshipFixtures extends Fixture implements DependentFixtureInterface {
-    //put your code here
-    public function load(ObjectManager $manager) : void {
-        $relationship = new Relationship();
-        $relationship->setCategory($this->getReference('relationshipcategory.1'));
-        $relationship->setPerson($this->getReference('person.1'));
-        $relationship->setRelation($this->getReference('person.2'));
-        $manager->persist($relationship);
-        $manager->flush();
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new Relationship();
+            $fixture->setStartDate('Date ' . $i);
+            $fixture->setEndDate('Date ' . $i);
+
+            $fixture->setCategory($this->getReference('relationshipcategory.' . $i));
+            $fixture->setPerson($this->getReference('person.' . $i));
+            $fixture->setRelation($this->getReference('person.' . (($i + 1) % 4 + 1)));
+            $em->persist($fixture);
+            $this->setReference('relationship.' . $i, $fixture);
+        }
+        $em->flush();
     }
 
-    public function getDependencies() : array {
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies() {
         return [
-            PersonFixtures::class,
             RelationshipCategoryFixtures::class,
+            PersonFixtures::class,
+            PersonFixtures::class,
         ];
     }
 }

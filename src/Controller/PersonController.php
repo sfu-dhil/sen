@@ -13,10 +13,10 @@ namespace App\Controller;
 use App\Entity\Person;
 use App\Form\PersonType;
 use App\Repository\PersonRepository;
-use Doctrine\ORM\EntityManagerInterface;
+
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,87 +25,38 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Person controller.
- *
  * @Route("/person")
  */
 class PersonController extends AbstractController implements PaginatorAwareInterface {
     use PaginatorTrait;
 
     /**
-     * Lists all Person entities.
-     *
-     * @return array
-     *
      * @Route("/", name="person_index", methods={"GET"})
      *
      * @Template
      */
-    public function indexAction(Request $request, EntityManagerInterface $em) {
-        $qb = $em->createQueryBuilder();
-        $qb->select('e')->from(Person::class, 'e')->orderBy('e.lastName', 'ASC');
-        $query = $qb->getQuery();
-
-        $people = $this->paginator->paginate($query, $request->query->getint('page', 1), 25);
+    public function index(Request $request, PersonRepository $personRepository) : array {
+        $query = $personRepository->indexQuery();
+        $pageSize = (int) $this->getParameter('page_size');
+        $page = $request->query->getint('page', 1);
 
         return [
-            'people' => $people,
+            'people' => $this->paginator->paginate($query, $page, $pageSize),
         ];
     }
 
     /**
-     * Typeahead API endpoint for Person entities.
-     *
-     * @Route("/typeahead", name="person_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
-     */
-    public function typeahead(Request $request, PersonRepository $repo) {
-        $q = $request->query->get('q');
-        if ( ! $q) {
-            return new JsonResponse([]);
-        }
-
-        $data = [];
-
-        foreach ($repo->typeaheadQuery($q) as $result) {
-            $data[] = [
-                'id' => $result->getId(),
-                'text' => (string) $result,
-            ];
-        }
-
-        return new JsonResponse($data);
-    }
-
-    /**
-     * Search for Person entities.
-     *
-     * To make this work, add a method like this one to the
-     * App:Person repository. Replace the fieldName with
-     * something appropriate, and adjust the generated search.html.twig
-     * template.
-     *
-     * <code><pre>
-     *    public function searchQuery($q) {
-     *       $qb = $this->createQueryBuilder('e');
-     *       $qb->addSelect("MATCH (e.title) AGAINST(:q BOOLEAN) as HIDDEN score");
-     *       $qb->orderBy('score', 'DESC');
-     *       $qb->setParameter('q', $q);
-     *       return $qb->getQuery();
-     *    }
-     * </pre></code>
-     *
      * @Route("/search", name="person_search", methods={"GET"})
      *
      * @Template
+     *
+     * @return array
      */
-    public function searchAction(Request $request, PersonRepository $repo) {
+    public function search(Request $request, PersonRepository $personRepository) {
         $q = $request->query->get('q');
         if ($q) {
-            $query = $repo->searchQuery($q);
-
-            $people = $this->paginator->paginate($query, $request->query->getInt('page', 1), 25);
+            $query = $personRepository->searchQuery($q);
+            $people = $this->paginator->paginate($query, $request->query->getInt('page', 1), $this->getParameter('page_size'), ['wrap-queries' => true]);
         } else {
             $people = [];
         }
@@ -117,25 +68,43 @@ class PersonController extends AbstractController implements PaginatorAwareInter
     }
 
     /**
-     * Creates a new Person entity.
+     * @Route("/typeahead", name="person_typeahead", methods={"GET"})
+     *
+     * @return JsonResponse
+     */
+    public function typeahead(Request $request, PersonRepository $personRepository) {
+        $q = $request->query->get('q');
+        if ( ! $q) {
+            return new JsonResponse([]);
+        }
+        $data = [];
+        foreach ($personRepository->typeaheadQuery($q) as $result) {
+            $data[] = [
+                'id' => $result->getId(),
+                'text' => (string) $result,
+            ];
+        }
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/new", name="person_new", methods={"GET", "POST"})
+     * @Template
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      *
      * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new", name="person_new", methods={"GET", "POST"})
-     *
-     * @Template
      */
-    public function newAction(Request $request, EntityManagerInterface $em) {
+    public function new(Request $request) {
         $person = new Person();
         $form = $this->createForm(PersonType::class, $person);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($person);
-            $em->flush();
-
-            $this->addFlash('success', 'The new person was created.');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($person);
+            $entityManager->flush();
+            $this->addFlash('success', 'The new person has been saved.');
 
             return $this->redirectToRoute('person_show', ['id' => $person->getId()]);
         }
@@ -147,73 +116,66 @@ class PersonController extends AbstractController implements PaginatorAwareInter
     }
 
     /**
-     * Creates a new Person entity in a popup.
+     * @Route("/new_popup", name="person_new_popup", methods={"GET", "POST"})
+     * @Template
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      *
      * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/new_popup", name="person_new_popup", methods={"GET", "POST"})
-     *
-     * @Template
      */
-    public function newPopupAction(Request $request, EntityManagerInterface $em) {
-        return $this->newAction($request, $em);
+    public function new_popup(Request $request) {
+        return $this->new($request);
     }
 
     /**
-     * Finds and displays a Person entity.
+     * @Route("/{id}", name="person_show", methods={"GET"})
+     * @Template
      *
      * @return array
-     *
-     * @Route("/{id}", name="person_show", methods={"GET"})
-     *
-     * @Template
      */
-    public function showAction(Person $person) {
+    public function show(Person $person) {
         return [
             'person' => $person,
         ];
     }
 
     /**
-     * Displays a form to edit an existing Person entity.
-     *
-     * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
+     * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}/edit", name="person_edit", methods={"GET", "POST"})
      *
      * @Template
+     *
+     * @return array|RedirectResponse
      */
-    public function editAction(Request $request, EntityManagerInterface $em, Person $person) {
-        $editForm = $this->createForm(PersonType::class, $person);
-        $editForm->handleRequest($request);
+    public function edit(Request $request, Person $person) {
+        $form = $this->createForm(PersonType::class, $person);
+        $form->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em->flush();
-            $this->addFlash('success', 'The person has been updated.');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'The updated person has been saved.');
 
             return $this->redirectToRoute('person_show', ['id' => $person->getId()]);
         }
 
         return [
             'person' => $person,
-            'edit_form' => $editForm->createView(),
+            'form' => $form->createView(),
         ];
     }
 
     /**
-     * Deletes a Person entity.
+     * @IsGranted("ROLE_CONTENT_ADMIN")
+     * @Route("/{id}", name="person_delete", methods={"DELETE"})
      *
-     * @return array|RedirectResponse
-     *
-     * @Security("is_granted('ROLE_CONTENT_ADMIN')")
-     * @Route("/{id}/delete", name="person_delete", methods={"GET"})
+     * @return RedirectResponse
      */
-    public function deleteAction(Request $request, EntityManagerInterface $em, Person $person) {
-        $em->remove($person);
-        $em->flush();
-        $this->addFlash('success', 'The person was deleted.');
+    public function delete(Request $request, Person $person) {
+        if ($this->isCsrfTokenValid('delete' . $person->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($person);
+            $entityManager->flush();
+            $this->addFlash('success', 'The person has been deleted.');
+        }
 
         return $this->redirectToRoute('person_index');
     }

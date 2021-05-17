@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Services\ImportService;
+use App\Util\SacramentColumnDefinitions as S;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -58,10 +59,10 @@ class ImportSacramentCommand extends Command {
         }
         while ($row = fgetcsv($handle)) {
             $row = array_map(fn ($data) => mb_convert_encoding($data, 'UTF-8', 'UTF-8'), $row);
-            $person = $this->importer->findPerson($row[0], $row[1]);
-            $person->setBirthDateDisplay($row[2]);
-            $person->setBirthDate($this->importer->parseDate($row[2]));
-            $person->setBirthPlace($this->importer->findCity($row[3]));
+            $person = $this->importer->findPerson(S::first_name, S::last_name, S::race_id, S::status, S::sex);
+            $person->setBirthDate($this->importer->parseDate($row[S::birth_date]));
+            $person->setBirthPlace($this->importer->findCity($row[S::birth_place]));
+
             $this->importer->addBaptism($person, $row);
             $this->importer->addManumission($person, $row);
 

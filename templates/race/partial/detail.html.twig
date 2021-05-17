@@ -1,0 +1,59 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        {% embed '@NinesUtil/term/partial/show.html.twig' with {'term': race} %}
+            {% block callback %}
+                <tr>
+                    <th>Spanish Ungendered</th>
+                    <td>
+                        {{ race.spanishUngendered }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Spanish Male</th>
+                    <td>
+                        {{ race.spanishMale }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Spanish Female</th>
+                    <td>
+                        {{ race.spanishFemale }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>French Ungendered</th>
+                    <td>
+                        {{ race.frenchUngendered }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>French Male</th>
+                    <td>
+                        {{ race.frenchMale }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>French Female</th>
+                    <td>
+                        {{ race.frenchFemale }}
+                    </td>
+                </tr>
+            {% endblock %}
+        {% endembed %}
+
+        <h2>People</h2>
+        {% if race.people|length > 0 %}
+            <ul>
+                {% for person in race.people %}
+                    <li>
+                        <a href='{{ path("person_show", {"id":person.id }) }}'>
+                            {{ person }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </tbody>
+</table>
+
+

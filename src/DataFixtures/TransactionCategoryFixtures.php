@@ -14,18 +14,19 @@ use App\Entity\TransactionCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- *
- * @author michael
- */
 class TransactionCategoryFixtures extends Fixture {
-    public function load(ObjectManager $manager) : void {
-        $category = new TransactionCategory();
-        $category->setName('sale-property');
-        $category->setLabel('Sale of property');
-        $manager->persist($category);
-        $this->setReference('transactioncategory.1', $category);
-        $manager->flush();
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new TransactionCategory();
+            $fixture->setName('Name ' . $i);
+            $fixture->setLabel('Label ' . $i);
+            $fixture->setDescription("<p>This is paragraph {$i}</p>");
+            $em->persist($fixture);
+            $this->setReference('transactioncategory.' . $i, $fixture);
+        }
+        $em->flush();
     }
 }

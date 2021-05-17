@@ -4,6 +4,20 @@ services:
 
     # If you need to access services in a test, create an alias
     # and then fetch that alias from the container. As a convention,
-    # aliases are prefixed with test. For example:
-    #
-    # test.App\Service\MyService: '@App\Service\MyService'
+    # aliases are prefixed with test.
+    test.App\Repository\CityRepository: '@App\Repository\CityRepository'
+    test.App\Repository\EventRepository: '@App\Repository\EventRepository'
+    test.App\Repository\EventCategoryRepository: '@App\Repository\EventCategoryRepository'
+    test.App\Repository\LedgerRepository: '@App\Repository\LedgerRepository'
+    test.App\Repository\LocationRepository: '@App\Repository\LocationRepository'
+    test.App\Repository\LocationCategoryRepository: '@App\Repository\LocationCategoryRepository'
+    test.App\Repository\NotaryRepository: '@App\Repository\NotaryRepository'
+    test.App\Repository\PersonRepository: '@App\Repository\PersonRepository'
+    test.App\Repository\RaceRepository: '@App\Repository\RaceRepository'
+    test.App\Repository\RelationshipRepository: '@App\Repository\RelationshipRepository'
+    test.App\Repository\RelationshipCategoryRepository: '@App\Repository\RelationshipCategoryRepository'
+    test.App\Repository\ResidenceRepository: '@App\Repository\ResidenceRepository'
+    test.App\Repository\TransactionRepository: '@App\Repository\TransactionRepository'
+    test.App\Repository\TransactionCategoryRepository: '@App\Repository\TransactionCategoryRepository'
+    test.App\Repository\WitnessRepository: '@App\Repository\WitnessRepository'
+    test.App\Repository\WitnessCategoryRepository: '@App\Repository\WitnessCategoryRepository'

@@ -43,6 +43,12 @@ class Person extends AbstractEntity {
     private $lastName;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=24, nullable=true)
+     */
+    private $title;
+
+    /**
      * @var array
      * @ORM\Column(type="array")
      */
@@ -159,6 +165,7 @@ class Person extends AbstractEntity {
         $this->residences = new ArrayCollection();
         $this->firstPartyTransactions = new ArrayCollection();
         $this->secondPartyTransactions = new ArrayCollection();
+        $this->relations = new ArrayCollection();
     }
 
     /**
@@ -168,536 +175,341 @@ class Person extends AbstractEntity {
         return ($this->lastName ?: '?') . ', ' . ($this->firstName ?: '?');
     }
 
-    /**
-     * Returns a string representation of this entity.
-     *
-     * @return string
-     */
-    public function getName() {
-        return $this->__toString();
+    public function getFirstName() : ?string {
+        return $this->firstName;
     }
 
-    /**
-     * Set race.
-     *
-     * @param ?Race $race
-     *
-     * @return Person
-     */
-    public function setRace(?Race $race = null) {
-        $this->race = $race;
-
-        return $this;
-    }
-
-    /**
-     * Get race.
-     *
-     * @return null|Race
-     */
-    public function getRace() {
-        return $this->race;
-    }
-
-    /**
-     * Add transaction.
-     *
-     * @return Person
-     */
-    public function addTransaction(Transaction $transaction) {
-        $this->transactions[] = $transaction;
-
-        return $this;
-    }
-
-    /**
-     * Remove transaction.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeTransaction(Transaction $transaction) {
-        return $this->transactions->removeElement($transaction);
-    }
-
-    /**
-     * Get transactions.
-     *
-     * @return Collection
-     */
-    public function getTransactions() {
-        return $this->transactions;
-    }
-
-    /**
-     * Add relationship.
-     *
-     * @return Person
-     */
-    public function addRelationship(Relationship $relationship) {
-        $this->relationships[] = $relationship;
-
-        return $this;
-    }
-
-    /**
-     * Remove relationship.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeRelationship(Relationship $relationship) {
-        return $this->relationships->removeElement($relationship);
-    }
-
-    /**
-     * Get relationships.
-     *
-     * @return Collection
-     */
-    public function getRelationships() {
-        return $this->relationships;
-    }
-
-    /**
-     * Add witness.
-     *
-     * @return Person
-     */
-    public function addWitness(Witness $witness) {
-        $this->witnesses[] = $witness;
-
-        return $this;
-    }
-
-    /**
-     * Remove witness.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeWitness(Witness $witness) {
-        return $this->witnesses->removeElement($witness);
-    }
-
-    /**
-     * Get witnesses.
-     *
-     * @return Collection
-     */
-    public function getWitnesses() {
-        return $this->witnesses;
-    }
-
-    /**
-     * Add event.
-     *
-     * @return Person
-     */
-    public function addEvent(Event $event) {
-        $this->events[] = $event;
-
-        return $this;
-    }
-
-    /**
-     * Remove event.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeEvent(Event $event) {
-        return $this->events->removeElement($event);
-    }
-
-    /**
-     * Get events.
-     *
-     * @return Collection
-     */
-    public function getEvents() {
-        return $this->events;
-    }
-
-    /**
-     * Set firstName.
-     *
-     * @param string $firstName
-     *
-     * @return Person
-     */
-    public function setFirstName($firstName) {
+    public function setFirstName(string $firstName) : self {
         $this->firstName = $firstName;
 
         return $this;
     }
 
-    /**
-     * Get firstName.
-     *
-     * @return string
-     */
-    public function getFirstName() {
-        return $this->firstName;
-    }
-
-    /**
-     * Set lastName.
-     *
-     * @param string $lastName
-     *
-     * @return Person
-     */
-    public function setLastName($lastName) {
-        $this->lastName = mb_convert_case($lastName, MB_CASE_UPPER);
-
-        return $this;
-    }
-
-    /**
-     * Get lastName.
-     *
-     * @return string
-     */
-    public function getLastName() {
+    public function getLastName() : ?string {
         return $this->lastName;
     }
 
-    public function addAlias($alias) {
-        if (is_array($alias)) {
-            $this->alias = array_merge($this->alias, $alias);
-        } else {
-            $this->alias[] = $alias;
-        }
+    public function setLastName(string $lastName) : self {
+        $this->lastName = mb_convert_case($lastName, MB_CASE_TITLE);
 
         return $this;
     }
 
-    /**
-     * Set alias.
-     *
-     * @param array $alias
-     *
-     * @return Person
-     */
-    public function setAlias($alias) {
+    public function getTitle() : ?string {
+        return $this->title;
+    }
+
+    public function setTitle(string $title) : self {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getAlias() : ?array {
+        return $this->alias;
+    }
+
+    public function setAlias(array $alias) : self {
         $this->alias = $alias;
 
         return $this;
     }
 
-    /**
-     * Get alias.
-     *
-     * @return array
-     */
-    public function getAlias() {
-        return $this->alias;
+    public function addAlias($alias) : self {
+        if (is_string($alias)) {
+            $this->alias[] = $alias;
+        }
+        if (is_array($alias)) {
+            $this->alias = array_merge($this->alias, $alias);
+        }
+
+        return $this;
     }
 
-    /**
-     * Set native.
-     *
-     * @param string $native
-     *
-     * @return Person
-     */
-    public function setNative($native) {
+    public function getNative() : ?string {
+        return $this->native;
+    }
+
+    public function setNative(?string $native) : self {
         $this->native = $native;
 
         return $this;
     }
 
-    /**
-     * Get native.
-     *
-     * @return string
-     */
-    public function getNative() {
-        return $this->native;
-    }
-
-    public function addOccupation($occupation) {
-        if (is_array($occupation)) {
-            $this->occupation = array_merge($this->occupation, $occupation);
-        } else {
-            $this->occupation[] = $occupation;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set occupation.
-     *
-     * @param array|string $occupation
-     *
-     * @return Person
-     */
-    public function setOccupation($occupation) {
-        if ( ! is_array($occupation)) {
-            $this->occupation = [$occupation];
-        } else {
-            $this->occupation = $occupation;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get occupation.
-     *
-     * @return array
-     */
-    public function getOccupation() {
+    public function getOccupation() : ?array {
         return $this->occupation;
     }
 
-    /**
-     * Set sex.
-     *
-     * @param null|string $sex
-     *
-     * @return Person
-     */
-    public function setSex($sex = null) {
+    public function setOccupation(?array $occupation) : self {
+        $this->occupation = $occupation;
+
+        return $this;
+    }
+
+    public function addOccupation($occupation) : self {
+        if (is_string($occupation)) {
+            $this->occupation[] = $occupation;
+        }
+        if (is_array($occupation)) {
+            $this->occupation = array_merge($this->occupation, $occupation);
+        }
+
+        return $this;
+    }
+
+    public function getSex() : ?string {
+        return $this->sex;
+    }
+
+    public function setSex(?string $sex) : self {
         $this->sex = $sex;
 
         return $this;
     }
 
-    /**
-     * Get sex.
-     *
-     * @return null|string
-     */
-    public function getSex() {
-        return $this->sex;
+    public function getBirthDate() : ?string {
+        return $this->birthDate;
     }
 
-    /**
-     * Set birthDate.
-     *
-     * @param string $birthDate
-     *
-     * @return Person
-     */
-    public function setBirthDate($birthDate) {
+    public function setBirthDate(?string $birthDate) : self {
         $this->birthDate = $birthDate;
 
         return $this;
     }
 
-    /**
-     * Get birthDate.
-     *
-     * @return string
-     */
-    public function getBirthDate() {
-        return $this->birthDate;
+    public function getWrittenBirthDate() : ?string {
+        return $this->writtenBirthDate;
     }
 
-    /**
-     * Set birthDate.
-     *
-     * @param string $birthDateDisplay
-     *
-     * @return Person
-     */
-    public function setBirthDateDisplay($birthDateDisplay) {
-        $this->writtenBirthDate = $birthDateDisplay;
+    public function setWrittenBirthDate(?string $writtenBirthDate) : self {
+        $this->writtenBirthDate = $writtenBirthDate;
 
         return $this;
     }
 
-    /**
-     * Get birthDate.
-     *
-     * @return string
-     */
-    public function getBirthDateDisplay() {
-        return $this->writtenBirthDate;
+    public function getBirthStatus() : ?string {
+        return $this->birthStatus;
     }
 
-    /**
-     * Set birthStatus.
-     *
-     * @param string $birthStatus
-     *
-     * @return Person
-     */
-    public function setBirthStatus($birthStatus) {
+    public function setBirthStatus(?string $birthStatus) : self {
         $this->birthStatus = $birthStatus;
 
         return $this;
     }
 
-    /**
-     * Get birthStatus.
-     *
-     * @return string
-     */
-    public function getBirthStatus() {
-        return $this->birthStatus;
+    public function getStatus() : ?string {
+        return $this->status;
     }
 
-    /**
-     * Set status.
-     *
-     * @param string $status
-     *
-     * @return Person
-     */
-    public function setStatus($status) {
+    public function setStatus(?string $status) : self {
         $this->status = $status;
 
         return $this;
     }
 
-    /**
-     * Get status.
-     *
-     * @return string
-     */
-    public function getStatus() {
-        return $this->status;
+    public function getBirthPlace() : ?City {
+        return $this->birthPlace;
     }
 
-    /**
-     * Set birthPlace.
-     *
-     * @param ?City $birthPlace
-     *
-     * @return Person
-     */
-    public function setBirthPlace(?City $birthPlace = null) {
+    public function setBirthPlace(?City $birthPlace) : self {
         $this->birthPlace = $birthPlace;
 
         return $this;
     }
 
     /**
-     * Get birthPlace.
-     *
-     * @return null|City
+     * @return Collection|Residence[]
      */
-    public function getBirthPlace() {
-        return $this->birthPlace;
-    }
-
-    /**
-     * Add residence.
-     *
-     * @return Person
-     */
-    public function addResidence(Residence $residence) {
-        $this->residences[] = $residence;
-
-        return $this;
-    }
-
-    /**
-     * Remove residence.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeResidence(Residence $residence) {
-        return $this->residences->removeElement($residence);
-    }
-
-    /**
-     * Get residences.
-     *
-     * @return Collection
-     */
-    public function getResidences() {
+    public function getResidences() : Collection {
         return $this->residences;
     }
 
-    /**
-     * Add firstPartyTransaction.
-     *
-     * @return Person
-     */
-    public function addFirstPartyTransaction(Transaction $firstPartyTransaction) {
-        $this->firstPartyTransactions[] = $firstPartyTransaction;
+    public function addResidence(Residence $residence) : self {
+        if ( ! $this->residences->contains($residence)) {
+            $this->residences[] = $residence;
+            $residence->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResidence(Residence $residence) : self {
+        if ($this->residences->removeElement($residence)) {
+            // set the owning side to null (unless already changed)
+            if ($residence->getPerson() === $this) {
+                $residence->setPerson(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRace() : ?Race {
+        return $this->race;
+    }
+
+    public function setRace(?Race $race) : self {
+        $this->race = $race;
 
         return $this;
     }
 
     /**
-     * Remove firstPartyTransaction.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return Collection|Relationship[]
      */
-    public function removeFirstPartyTransaction(Transaction $firstPartyTransaction) {
-        return $this->firstPartyTransactions->removeElement($firstPartyTransaction);
+    public function getRelationships() : Collection {
+        return $this->relationships;
+    }
+
+    public function addRelationship(Relationship $relationship) : self {
+        if ( ! $this->relationships->contains($relationship)) {
+            $this->relationships[] = $relationship;
+            $relationship->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelationship(Relationship $relationship) : self {
+        if ($this->relationships->removeElement($relationship)) {
+            // set the owning side to null (unless already changed)
+            if ($relationship->getPerson() === $this) {
+                $relationship->setPerson(null);
+            }
+        }
+
+        return $this;
     }
 
     /**
-     * Get firstPartyTransactions.
-     *
-     * @return Collection
+     * @return Collection|Relationship[]
      */
-    public function getFirstPartyTransactions() {
+    public function getRelations() : Collection {
+        return $this->relations;
+    }
+
+    public function addRelation(Relationship $relation) : self {
+        if ( ! $this->relations->contains($relation)) {
+            $this->relations[] = $relation;
+            $relation->setRelation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelation(Relationship $relation) : self {
+        if ($this->relations->removeElement($relation)) {
+            // set the owning side to null (unless already changed)
+            if ($relation->getRelation() === $this) {
+                $relation->setRelation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Witness[]
+     */
+    public function getWitnesses() : Collection {
+        return $this->witnesses;
+    }
+
+    public function addWitness(Witness $witness) : self {
+        if ( ! $this->witnesses->contains($witness)) {
+            $this->witnesses[] = $witness;
+            $witness->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWitness(Witness $witness) : self {
+        if ($this->witnesses->removeElement($witness)) {
+            // set the owning side to null (unless already changed)
+            if ($witness->getPerson() === $this) {
+                $witness->setPerson(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEvents() : Collection {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event) : self {
+        if ( ! $this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event) : self {
+        if ($this->events->removeElement($event)) {
+            $event->removeParticipant($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Transaction[]
+     */
+    public function getFirstPartyTransactions() : Collection {
         return $this->firstPartyTransactions;
     }
 
-    /**
-     * Add secondPartyTransaction.
-     *
-     * @return Person
-     */
-    public function addSecondPartyTransaction(Transaction $secondPartyTransaction) {
-        $this->secondPartyTransactions[] = $secondPartyTransaction;
+    public function addFirstPartyTransaction(Transaction $firstPartyTransaction) : self {
+        if ( ! $this->firstPartyTransactions->contains($firstPartyTransaction)) {
+            $this->firstPartyTransactions[] = $firstPartyTransaction;
+            $firstPartyTransaction->setFirstParty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFirstPartyTransaction(Transaction $firstPartyTransaction) : self {
+        if ($this->firstPartyTransactions->removeElement($firstPartyTransaction)) {
+            // set the owning side to null (unless already changed)
+            if ($firstPartyTransaction->getFirstParty() === $this) {
+                $firstPartyTransaction->setFirstParty(null);
+            }
+        }
 
         return $this;
     }
 
     /**
-     * Remove secondPartyTransaction.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return Collection|Transaction[]
      */
-    public function removeSecondPartyTransaction(Transaction $secondPartyTransaction) {
-        return $this->secondPartyTransactions->removeElement($secondPartyTransaction);
-    }
-
-    /**
-     * Get secondPartyTransactions.
-     *
-     * @return Collection
-     */
-    public function getSecondPartyTransactions() {
+    public function getSecondPartyTransactions() : Collection {
         return $this->secondPartyTransactions;
     }
 
-    /**
-     * Add relation.
-     *
-     * @param \App\Entity\Relationship $relation
-     *
-     * @return Person
-     */
-    public function addRelation(Relationship $relation) {
-        $this->relations[] = $relation;
+    public function addSecondPartyTransaction(Transaction $secondPartyTransaction) : self {
+        if ( ! $this->secondPartyTransactions->contains($secondPartyTransaction)) {
+            $this->secondPartyTransactions[] = $secondPartyTransaction;
+            $secondPartyTransaction->setSecondParty($this);
+        }
 
         return $this;
     }
 
-    /**
-     * Remove relation.
-     *
-     * @param \App\Entity\Relationship $relation
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeRelation(Relationship $relation) {
-        return $this->relations->removeElement($relation);
-    }
+    public function removeSecondPartyTransaction(Transaction $secondPartyTransaction) : self {
+        if ($this->secondPartyTransactions->removeElement($secondPartyTransaction)) {
+            // set the owning side to null (unless already changed)
+            if ($secondPartyTransaction->getSecondParty() === $this) {
+                $secondPartyTransaction->setSecondParty(null);
+            }
+        }
 
-    /**
-     * Get relations.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRelations() {
-        return $this->relations;
+        return $this;
     }
 }

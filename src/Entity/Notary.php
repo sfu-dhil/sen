@@ -46,54 +46,40 @@ class Notary extends AbstractEntity {
         return $this->name;
     }
 
-    /**
-     * Add ledger.
-     *
-     * @return Notary
-     */
-    public function addLedger(Ledger $ledger) {
-        $this->ledgers[] = $ledger;
-
-        return $this;
+    public function getName() : ?string {
+        return $this->name;
     }
 
-    /**
-     * Remove ledger.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeLedger(Ledger $ledger) {
-        return $this->ledgers->removeElement($ledger);
-    }
-
-    /**
-     * Get ledgers.
-     *
-     * @return Collection
-     */
-    public function getLedgers() {
-        return $this->ledgers;
-    }
-
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return Notary
-     */
-    public function setName($name) {
+    public function setName(string $name) : self {
         $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get name.
-     *
-     * @return string
+     * @return Collection|Ledger[]
      */
-    public function getName() {
-        return $this->name;
+    public function getLedgers() : Collection {
+        return $this->ledgers;
+    }
+
+    public function addLedger(Ledger $ledger) : self {
+        if ( ! $this->ledgers->contains($ledger)) {
+            $this->ledgers[] = $ledger;
+            $ledger->setNotary($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLedger(Ledger $ledger) : self {
+        if ($this->ledgers->removeElement($ledger)) {
+            // set the owning side to null (unless already changed)
+            if ($ledger->getNotary() === $this) {
+                $ledger->setNotary(null);
+            }
+        }
+
+        return $this;
     }
 }

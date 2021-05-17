@@ -13,21 +13,17 @@
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-            {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('race_new') }}" class="btn btn-default">
-                    <span class="glyphicon glyphicon-plus"></span> New
-                </a>
+            {% if is_granted('ROLE_CONTENT_ADMIN') %}
+                <a href="{{ path('race_new') }}" class="btn btn-default"> <span class="glyphicon glyphicon-plus"></span>
+                    New </a>
             {% endif %}
+
             <a href="{{ path('race_search') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-search"></span> Search
-            </a>
+                <span class="glyphicon glyphicon-search"></span> Search </a>
         </div>
     </div>
 
-    {% embed '@NinesUtil/term/partial/index.html.twig' with {
-        'terms': races,
-        'path': 'race_show',
-    } %}
+    {% embed 'race/partial/table.html.twig' %}
     {% endembed %}
 
     <div class="navigation">

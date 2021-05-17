@@ -13,47 +13,15 @@
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_CONTENT_ADMIN') %}
                 <a href="{{ path('relationship_new') }}" class="btn btn-default">
-                    <span class="glyphicon glyphicon-plus"></span> New
-                </a>
+                    <span class="glyphicon glyphicon-plus"></span> New </a>
             {% endif %}
-            <a href="{{ path('relationship_search') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-search"></span> Search
-            </a>
         </div>
     </div>
 
-    <table class="table table-bordered table-condensed table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Relationship</th>
-                <th>Category</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for relationship in relationships %}
-                <tr>
-                    <td>
-                        <a href="{{ path('relationship_show', { 'id': relationship.id }) }}">
-                            {{ relationship.person }} - {{ relationship.relation }}
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ path('relationship_category_show', {'id': relationship.category.id}) }}">
-                            {{ relationship.category }}
-                        </a>
-                    </td>
-                    <td>
-                        {{ relationship.startDate }}
-                    </td>
-                    <td>{{ relationship.endDate }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% embed 'relationship/partial/table.html.twig' %}
+    {% endembed %}
 
     <div class="navigation">
         {{ knp_pagination_render(relationships) }}

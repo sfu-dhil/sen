@@ -1,0 +1,19 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        {% embed '@NinesUtil/term/partial/show.html.twig' with {'term': event_category} %}
+        {% endembed %}
+    </tbody>
+</table>
+
+<h2>Events</h2>
+{% if event_category.events|length > 0 %}
+    <ul>
+        {% for event in event_category.events %}
+            <li>
+                <a href='{{ path("event_show", {"id":event.id }) }}'>
+                    {{ event }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

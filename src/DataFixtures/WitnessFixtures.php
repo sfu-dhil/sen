@@ -15,29 +15,31 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * Description of LoadEventCategory.
- *
- * @author michael
- */
 class WitnessFixtures extends Fixture implements DependentFixtureInterface {
-    //put your code here
-    public function load(ObjectManager $manager) : void {
-        $witness = new Witness();
-        $witness->setCategory($this->getReference('witnesscategory.1'));
-        $witness->setEvent($this->getReference('event.1'));
-        $witness->setPerson($this->getReference('person.1'));
-        $manager->persist($witness);
-        $this->setReference('witness.1', $witness);
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $em) : void {
+        for ($i = 1; $i <= 4; $i++) {
+            $fixture = new Witness();
 
-        $manager->flush();
+            $fixture->setCategory($this->getReference('witnesscategory.' . $i));
+            $fixture->setPerson($this->getReference('person.' . $i));
+            $fixture->setEvent($this->getReference('event.' . $i));
+            $em->persist($fixture);
+            $this->setReference('witness.' . $i, $fixture);
+        }
+        $em->flush();
     }
 
-    public function getDependencies() : array {
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies() {
         return [
-            EventFixtures::class,
             WitnessCategoryFixtures::class,
             PersonFixtures::class,
+            EventFixtures::class,
         ];
     }
 }

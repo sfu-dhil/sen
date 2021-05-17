@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Person{% endblock %}
+    {% block title %}New Person {% endblock %}
 
+    {% block body %}
+        <h1>New Person</h1>
 
-{% block body %}
-    <h1>New Person</h1>
+        {% embed 'person/partial/form.html.twig' %}
+        {% endembed %}
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {% include 'person/form_controls.html.twig' with {'btnLabel': 'Create', 'cancelPath': path('person_index')} %}
-    {{ form_end(form) }}
+    {% endblock %}
 
-{% endblock %}
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Witness{% endblock %}
+    {% block title %}New Witness {% endblock %}
 
+    {% block body %}
+        <h1>New Witness</h1>
 
-{% block body %}
-    <h1>New Witness</h1>
+        {% embed 'witness/partial/form.html.twig' %}
+        {% endembed %}
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {% include 'witness/form_controls.html.twig' with {'btnLabel': 'Create', 'cancelPath': path('witness_index')} %}
-    {{ form_end(form) }}
+    {% endblock %}
 
-{% endblock %}
+    {% block javascripts %}
+        {% include '@NinesEditor/editor/widget.html.twig' %}
+    {% endblock %}

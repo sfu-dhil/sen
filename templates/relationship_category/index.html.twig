@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}RelationshipCategory List{% endblock %}
+{% block title %}Relationship Category List{% endblock %}
 
 {% block pageheader %}
-    <h1>RelationshipCategory List</h1>
+    <h1>Relationship Category List</h1>
     <p class="count">
-        Displaying {{ relationshipCategories|length }} relationshipCategories of {{ relationshipCategories.getTotalItemCount }} total.
+        Displaying {{ relationship_categories|length }} relationship categories
+        of {{ relationship_categories.getTotalItemCount }} total.
     </p>
 {% endblock %}
 
@@ -13,25 +14,21 @@
 
     <div class='btn-toolbar pull-right'>
         <div class='btn-group'>
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_CONTENT_ADMIN') %}
                 <a href="{{ path('relationship_category_new') }}" class="btn btn-default">
-                    <span class="glyphicon glyphicon-plus"></span> New
-                </a>
+                    <span class="glyphicon glyphicon-plus"></span> New </a>
             {% endif %}
+
             <a href="{{ path('relationship_category_search') }}" class="btn btn-default">
-                <span class="glyphicon glyphicon-search"></span> Search
-            </a>
+                <span class="glyphicon glyphicon-search"></span> Search </a>
         </div>
     </div>
 
-    {% embed '@NinesUtil/term/partial/index.html.twig' with {
-        'terms': relationshipCategories,
-        'path': 'relationship_category_show',
-    } %}
+    {% embed 'relationship_category/partial/table.html.twig' %}
     {% endembed %}
 
     <div class="navigation">
-        {{ knp_pagination_render(relationshipCategories) }}
+        {{ knp_pagination_render(relationship_categories) }}
     </div>
 
 {% endblock %}

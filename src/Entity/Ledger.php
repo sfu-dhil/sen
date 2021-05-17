@@ -59,102 +59,60 @@ class Ledger extends AbstractEntity {
         return $this->notary . ' ' . $this->volume;
     }
 
-    public function getName() {
-        return $this->__toString();
+    public function getVolume() : ?string {
+        return $this->volume;
     }
 
-    /**
-     * Set notary.
-     *
-     * @param ?Notary $notary
-     *
-     * @return Ledger
-     */
-    public function setNotary(?Notary $notary = null) {
+    public function setVolume(string $volume) : self {
+        $this->volume = $volume;
+
+        return $this;
+    }
+
+    public function getYear() : ?int {
+        return $this->year;
+    }
+
+    public function setYear(int $year) : self {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    public function getNotary() : ?Notary {
+        return $this->notary;
+    }
+
+    public function setNotary(?Notary $notary) : self {
         $this->notary = $notary;
 
         return $this;
     }
 
     /**
-     * Get notary.
-     *
-     * @return null|Notary
+     * @return Collection|Transaction[]
      */
-    public function getNotary() {
-        return $this->notary;
-    }
-
-    /**
-     * Add transaction.
-     *
-     * @return Ledger
-     */
-    public function addTransaction(Transaction $transaction) {
-        $this->transactions[] = $transaction;
-
-        return $this;
-    }
-
-    /**
-     * Remove transaction.
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeTransaction(Transaction $transaction) {
-        return $this->transactions->removeElement($transaction);
-    }
-
-    /**
-     * Get transactions.
-     *
-     * @return Collection
-     */
-    public function getTransactions() {
+    public function getTransactions() : Collection {
         return $this->transactions;
     }
 
-    /**
-     * Set volume.
-     *
-     * @param string $volume
-     *
-     * @return Ledger
-     */
-    public function setVolume($volume) {
-        $this->volume = $volume;
+    public function addTransaction(Transaction $transaction) : self {
+        if ( ! $this->transactions->contains($transaction)) {
+            $this->transactions[] = $transaction;
+            $transaction->setLedger($this);
+        }
 
         return $this;
     }
 
-    /**
-     * Get volume.
-     *
-     * @return string
-     */
-    public function getVolume() {
-        return $this->volume;
-    }
-
-    /**
-     * Set year.
-     *
-     * @param int $year
-     *
-     * @return Ledger
-     */
-    public function setYear($year) {
-        $this->year = $year;
+    public function removeTransaction(Transaction $transaction) : self {
+        if ($this->transactions->removeElement($transaction)) {
+            // set the owning side to null (unless already changed)
+            if ($transaction->getLedger() === $this) {
+                $transaction->setLedger(null);
+            }
+        }
 
         return $this;
-    }
-
-    /**
-     * Get year.
-     *
-     * @return int
-     */
-    public function getYear() {
-        return $this->year;
     }
 }
