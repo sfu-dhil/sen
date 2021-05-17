@@ -41,6 +41,12 @@ class Event extends AbstractEntity {
     private $note;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $recordSource;
+
+    /**
      * @var EventCategory
      * @ORM\ManyToOne(targetEntity="EventCategory", inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
@@ -176,4 +182,14 @@ class Event extends AbstractEntity {
 
         return $this;
     }
+
+    public function getRecordSource() : ?string {
+        return $this->recordSource;
+    }
+
+    public function setRecordSource(?string $recordSource) : self {
+        $this->recordSource = $recordSource;
+        return $this;
+    }
+
 }

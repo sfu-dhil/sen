@@ -50,6 +50,13 @@ class EventType extends AbstractType {
                 'help_block' => '',
             ],
         ]);
+        $builder->add('recordSource', TextType::class, [
+            'label' => 'Record Source',
+            'required' => false,
+            'attr' => [
+                'help_block' => '',
+            ],
+        ]);
 
         $builder->add('category', Select2EntityType::class, [
             'label' => 'Category',
