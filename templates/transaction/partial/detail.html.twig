@@ -1,26 +1,6 @@
 <table class='table table-bordered table-condensed table-hover table-striped'>
     <tbody>
         <tr>
-            <th>Ledger</th>
-            <td>
-                {% if transaction.ledger %}
-                    <a href='{{ path("ledger_show", {"id": transaction.ledger.id}) }}'>{{ transaction.ledger }}</a>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>Page</th>
-            <td>
-                {{ transaction.page }}
-            </td>
-        </tr>
-        <tr>
-            <th>Date</th>
-            <td>
-                {% if transaction.date %}{{ transaction.date|date('Y-m-d') }}{% endif %}
-            </td>
-        </tr>
-        <tr>
             <th>First Party</th>
             <td>
                 {% if transaction.firstParty %}
@@ -32,20 +12,6 @@
             <th>First Party Note</th>
             <td>
                 {{ transaction.firstPartyNote }}
-            </td>
-        </tr>
-        <tr>
-            <th>Category</th>
-            <td>
-                {% if transaction.category %}
-                    <a href='{{ path("transaction_category_show", {"id": transaction.category.id}) }}'>{{ transaction.category }}</a>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>Notes</th>
-            <td>
-                {{ transaction.notes }}
             </td>
         </tr>
         <tr>
@@ -66,6 +32,40 @@
             <th>Second Party Note</th>
             <td>
                 {{ transaction.secondPartyNote }}
+            </td>
+        </tr>
+        <tr>
+            <th>Category</th>
+            <td>
+                {% if transaction.category %}
+                    <a href='{{ path("transaction_category_show", {"id": transaction.category.id}) }}'>{{ transaction.category }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Notes</th>
+            <td>
+                {{ transaction.notes }}
+            </td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>
+                {% if transaction.date %}{{ transaction.date|date('Y-m-d') }}{% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Ledger</th>
+            <td>
+                {% if transaction.ledger %}
+                    <a href='{{ path("ledger_show", {"id": transaction.ledger.id}) }}'>{{ transaction.ledger }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Page</th>
+            <td>
+                {{ transaction.page }}
             </td>
         </tr>
         <tr>
