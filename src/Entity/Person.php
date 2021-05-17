@@ -43,6 +43,12 @@ class Person extends AbstractEntity {
     private $lastName;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=24, nullable=true)
+     */
+    private $title;
+
+    /**
      * @var array
      * @ORM\Column(type="array")
      */
@@ -185,6 +191,16 @@ class Person extends AbstractEntity {
 
     public function setLastName(string $lastName) : self {
         $this->lastName = mb_convert_case($lastName, MB_CASE_TITLE);
+
+        return $this;
+    }
+
+    public function getTitle() : ?string {
+        return $this->title;
+    }
+
+    public function setTitle(string $title) : self {
+        $this->title = $title;
 
         return $this;
     }
