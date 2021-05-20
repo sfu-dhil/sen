@@ -55,7 +55,7 @@ class SacramentColumnDefinitions {
 
     public const godmother_last_name = 21;
 
-    public const manumission_date=22;
+    public const manumission_date = 22;
 
     public const event_marriage_place = 23;
 

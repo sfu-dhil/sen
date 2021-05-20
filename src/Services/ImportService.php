@@ -104,7 +104,7 @@ class ImportService {
             $ledger = new Ledger();
             $ledger->setNotary($notary);
             $ledger->setVolume($volume);
-            $ledger->setYear((int)$year);
+            $ledger->setYear((int) $year);
             $this->em->persist($ledger);
         }
 
@@ -120,7 +120,7 @@ class ImportService {
      */
     public function findRace($name) {
         if ( ! $name) {
-            return null;
+            return;
         }
         $repo = $this->em->getRepository(Race::class);
         $race = $repo->findOneBy([
@@ -166,9 +166,12 @@ class ImportService {
                 $s = 'F';
 
                 break;
+
             case 'unknown':
                 $s = null;
+
                 break;
+
             default:
                 $this->logger->error("Unknown sex {$sex} for {$given} {$family}");
         }
@@ -282,7 +285,7 @@ class ImportService {
         $transaction->setCategory($this->findTransactionCategory($row[N::transaction_category]));
         $date = new DateTimeImmutable($row[N::transaction_date]);
         $transaction->setDate($date);
-        $transaction->setPage((int)$row[N::ledger_page]);
+        $transaction->setPage((int) $row[N::ledger_page]);
         $transaction->setNotes($row[N::transaction_notes]);
         $this->em->persist($transaction);
 
@@ -360,7 +363,7 @@ class ImportService {
 
     public function addManumission(Person $person, $row, $name = 'manumission') {
         if ( ! isset($row[7]) || ! $row[7]) {
-            return null;
+            return;
         }
         $category = $this->em->getRepository(EventCategory::class)->findOneBy([
             'name' => $name,
@@ -383,7 +386,7 @@ class ImportService {
 
     public function addBaptism(Person $person, $row, $name = 'baptism') {
         if ( ! isset($row[5]) || ! $row[5]) {
-            return null;
+            return;
         }
         $category = $this->em->getRepository(EventCategory::class)->findOneBy([
             'name' => $name,

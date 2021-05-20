@@ -10,11 +10,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Entity\Race;
-use App\Entity\TransactionCategory;
 use App\Entity\WitnessCategory;
-use App\Repository\RaceRepository;
-use App\Repository\TransactionCategoryRepository;
 use App\Repository\WitnessCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -22,13 +18,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ImportWitnessCategories extends Command {
-    protected static $defaultName = 'sen:import:witness-categories';
-
-    protected static $defaultDescription = 'Add a short description for your command';
-
     /**
      * @var WitnessCategoryRepository
      */
@@ -39,6 +30,10 @@ class ImportWitnessCategories extends Command {
      */
     private $em;
 
+    protected static $defaultName = 'sen:import:witness-categories';
+
+    protected static $defaultDescription = 'Add a short description for your command';
+
     protected function configure() : void {
         $this
             ->setDescription(self::$defaultDescription)
@@ -47,15 +42,15 @@ class ImportWitnessCategories extends Command {
         ;
     }
 
-    protected function import($file, $skip) {
+    protected function import($file, $skip) : void {
         $handle = fopen($file, 'r');
-        for($i = 0; $i < $skip; $i++) {
+        for ($i = 0; $i < $skip; $i++) {
             fgetcsv($handle);
         }
-        while($row = fgetcsv($handle)) {
+        while ($row = fgetcsv($handle)) {
             $standard = $row[0];
             $category = $this->repo->findOneBy(['name' => $standard]);
-            if( ! $category) {
+            if ( ! $category) {
                 $category = new WitnessCategory();
                 $category->setName($standard);
                 $category->setLabel(mb_convert_case($standard, MB_CASE_TITLE));
@@ -77,17 +72,16 @@ class ImportWitnessCategories extends Command {
     }
 
     /**
-     * @param EntityManagerInterface $em
      * @required
      */
-    public function setEntityManager(EntityManagerInterface $em) {
+    public function setEntityManager(EntityManagerInterface $em) : void {
         $this->em = $em;
     }
 
     /**
      * @required
      */
-    public function setTransactionCategoryRepository(WitnessCategoryRepository $repo) {
+    public function setTransactionCategoryRepository(WitnessCategoryRepository $repo) : void {
         $this->repo = $repo;
     }
 }
