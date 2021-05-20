@@ -98,6 +98,7 @@ class ImportNotaryCommand extends Command {
         foreach ($files as $file) {
             $this->import($file, $skip);
         }
+
         return 0;
     }
 }

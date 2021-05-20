@@ -164,10 +164,9 @@ class Builder implements ContainerAwareInterface {
         ]);
 
         $menu->addChild('GitHub', [
-            'uri' => 'https://github.com/sfu-dhil/sen'
+            'uri' => 'https://github.com/sfu-dhil/sen',
         ]);
 
         return $menu;
     }
-
 }

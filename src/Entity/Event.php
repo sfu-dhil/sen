@@ -189,7 +189,7 @@ class Event extends AbstractEntity {
 
     public function setRecordSource(?string $recordSource) : self {
         $this->recordSource = $recordSource;
+
         return $this;
     }
-
 }
