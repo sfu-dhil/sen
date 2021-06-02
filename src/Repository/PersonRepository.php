@@ -60,7 +60,7 @@ class PersonRepository extends ServiceEntityRepository {
      */
     public function searchQuery($q) {
         $qb = $this->createQueryBuilder('person');
-        $qb->addSelect('MATCH (person.first_name, person.last_name) AGAINST(:q BOOLEAN) as HIDDEN score');
+        $qb->addSelect('MATCH (person.firstName, person.lastName) AGAINST(:q BOOLEAN) as HIDDEN score');
         $qb->andHaving('score > 0');
         $qb->orderBy('score', 'DESC');
         $qb->setParameter('q', $q);
