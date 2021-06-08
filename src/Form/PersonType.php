@@ -92,20 +92,6 @@ class PersonType extends AbstractType {
                 'Unknown' => null,
             ],
         ]);
-        $builder->add('birthDate', TextType::class, [
-            'label' => 'Birth Date',
-            'required' => false,
-            'attr' => [
-                'help_block' => 'The closest date known for the date. YYYY-MM-DD. Use -00 for unknown month or day.',
-            ],
-        ]);
-        $builder->add('writtenBirthDate', TextType::class, [
-            'label' => 'Written Birth Date',
-            'required' => false,
-            'attr' => [
-                'help_block' => 'Descriptive date. bef 1790, abt 2 Mar 1780.',
-            ],
-        ]);
         $builder->add('birthStatus', TextType::class, [
             'label' => 'Birth Status',
             'required' => false,
@@ -120,19 +106,6 @@ class PersonType extends AbstractType {
                 'help_block' => '',
             ],
         ]);
-
-        $builder->add('birthPlace', Select2EntityType::class, [
-            'label' => 'Birth Place',
-            'class' => City::class,
-            'remote_route' => 'city_typeahead',
-            'allow_clear' => true,
-            'attr' => [
-                'help_block' => '',
-                'add_path' => 'city_new_popup',
-                'add_label' => 'Add City',
-            ],
-        ]);
-
         $builder->add('race', Select2EntityType::class, [
             'label' => 'Race',
             'class' => Race::class,

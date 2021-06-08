@@ -37,18 +37,6 @@
             </td>
         </tr>
         <tr>
-            <th>Birth Date</th>
-            <td>
-                {{ person.birthDate }}
-            </td>
-        </tr>
-        <tr>
-            <th>Written Birth Date</th>
-            <td>
-                {{ person.writtenBirthDate }}
-            </td>
-        </tr>
-        <tr>
             <th>Birth Status</th>
             <td>
                 {{ person.birthStatus }}
@@ -58,15 +46,6 @@
             <th>Status</th>
             <td>
                 {{ person.status }}
-            </td>
-        </tr>
-
-        <tr>
-            <th>City</th>
-            <td>
-                {% if person.birthPlace %}
-                    <a href='{{ path("city_show", {"id": person.birthPlace.id}) }}'>{{ person.birthPlace }}</a>
-                {% endif %}
             </td>
         </tr>
         <tr>

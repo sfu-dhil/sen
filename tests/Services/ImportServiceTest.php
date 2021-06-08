@@ -111,9 +111,8 @@ class ImportServiceTest extends ServiceBaseCase {
      * @param mixed $given
      * @param mixed $family
      * @param mixed $raceName
-     * @param mixed $status
      */
-    public function testFindPerson($given, $family, $raceName, $status) : void {
+    public function testFindPerson($given, $family, $raceName) : void {
         $found = $this->importer->findPerson($given, $family, $raceName);
         $this->assertInstanceOf(Person::class, $found);
         $this->assertNotNull($found->getId());
@@ -122,10 +121,10 @@ class ImportServiceTest extends ServiceBaseCase {
 
     public function findPersonData() {
         return [
-            ['FirstName 1', 'LastName 1', 'Name 1', 'free'],
-            ['FirstName 1', 'LastName 1', null, 'free'],
-            ['FirstName 1', 'LastName 1', 'Name 1', 'nonfree'],
-            ['FirstName 1', 'LastName 1', null, null],
+            ['FirstName 1', 'LastName 1', 'Name 1'],
+            ['FirstName 1', 'LastName 1', null],
+            ['FirstName 1', 'LastName 1', 'Name 1'],
+            ['FirstName 1', 'LastName 1', null],
         ];
     }
 
@@ -135,9 +134,8 @@ class ImportServiceTest extends ServiceBaseCase {
      * @param mixed $given
      * @param mixed $family
      * @param mixed $raceName
-     * @param mixed $status
      */
-    public function testFindNewPerson($given, $family, $raceName, $status) : void {
+    public function testFindNewPerson($given, $family, $raceName) : void {
         $found = $this->importer->findPerson($given, $family, $raceName);
         $this->assertInstanceOf(Person::class, $found);
 
@@ -146,16 +144,16 @@ class ImportServiceTest extends ServiceBaseCase {
 
     public function findNewPersonData() {
         return [
-            ['Coup', 'McCity', 'indian', 'free'],
-            ['Coup', 'McCity', 'non-indian', 'free'],
-            ['Coup', 'McCity', null, 'free'],
-            ['Coup', 'McCity', 'indian', 'nonfree'],
-            ['Coup', 'McCity', null, null],
-            ['Coup', 'McCity', 'non-indian', 'non-free'],
+            ['Coup', 'McCity', 'indian'],
+            ['Coup', 'McCity', 'non-indian'],
+            ['Coup', 'McCity', null],
+            ['Coup', 'McCity', 'indian'],
+            ['Coup', 'McCity', null],
+            ['Coup', 'McCity', 'non-indian'],
             // Unicode
-            ['Coup', 'Cóup', null, null],
-            ['Coup', 'чащах', null, null],
-            ['Coup', 'şoföre', null, null],
+            ['Coup', 'Cóup', null],
+            ['Coup', 'чащах', null],
+            ['Coup', 'şoföre', null],
         ];
     }
 

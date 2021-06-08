@@ -1,0 +1,4 @@
+security:
+    encoders:
+        Nines\UserBundle\Entity\User:
+            algorithm: plain

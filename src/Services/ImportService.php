@@ -179,15 +179,11 @@ class ImportService {
             $person->setFirstName($given);
             $person->setLastName($family);
             $person->setRace($race);
-            $person->setStatus($status);
             $person->setSex($s);
             $this->em->persist($person);
         }
         if ($person->getRace() && $person->getRace()->getName() !== $raceName) {
             $this->logger->warn("Possible duplicate person: {$person} with races {$person->getRace()->getName()} and {$raceName}");
-        }
-        if ($person->getStatus() !== $status) {
-            $this->logger->warn("Possible duplicate person: {$person} with statuses {$person->getStatus()} and {$status}");
         }
 
         return $person;

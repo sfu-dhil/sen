@@ -28,12 +28,9 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface {
             $fixture->setNative('Native ' . $i);
             $fixture->setOccupation(['Occupation ' . $i]);
             $fixture->setSex($i % 2 ? 'M' : 'F');
-            $fixture->setBirthDate('Born ' . $i);
-            $fixture->setWrittenBirthDate('WrittenBirthDate ' . $i);
             $fixture->setBirthStatus('BirthStatus ' . $i);
             $fixture->setStatus('Status ' . $i);
 
-            $fixture->setBirthplace($this->getReference('city.' . $i));
             $fixture->setRace($this->getReference('race.' . $i));
             $em->persist($fixture);
             $this->setReference('person.' . $i, $fixture);
