@@ -28,8 +28,7 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface {
             $fixture->setNative('Native ' . $i);
             $fixture->setOccupations(['Occupation ' . $i]);
             $fixture->setSex($i % 2 ? 'M' : 'F');
-            $fixture->setBirthStatus('BirthStatus ' . $i);
-            $fixture->setStatus('Status ' . $i);
+            $fixture->setBirthStatus($this->getReference('birthstatus.' . $i));
 
             $fixture->setRace($this->getReference('race.' . $i));
             $em->persist($fixture);
@@ -43,6 +42,7 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface {
      */
     public function getDependencies() {
         return [
+            BirthStatusFixtures::class,
             CityFixtures::class,
             RaceFixtures::class,
         ];
