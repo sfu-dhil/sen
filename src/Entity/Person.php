@@ -31,24 +31,24 @@ class Person extends AbstractEntity {
     public const FEMALE = 'F';
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
-    private string $firstName;
+    private ?string $firstName;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
-    private string $lastName;
-
-    /**
-     * @ORM\Column(type="string", length=24, nullable=true)
-     */
-    private string $title;
+    private ?string $lastName;
 
     /**
      * @ORM\Column(type="array")
      */
-    private array $alias;
+    private array $titles;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private array $aliases;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -56,9 +56,11 @@ class Person extends AbstractEntity {
     private ?string $native;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * {date => $date, job => $job}.
+     *
+     * @ORM\Column(type="json")
      */
-    private array $occupation;
+    private array $occupations;
 
     /**
      * One of M or F.
@@ -68,14 +70,14 @@ class Person extends AbstractEntity {
     private ?string $sex;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="array")
      */
-    private ?string $birthStatus;
+    private array $statuses;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="array")
      */
-    private ?string $status;
+    private array $writtenRaces;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -83,15 +85,20 @@ class Person extends AbstractEntity {
     private ?string $notes;
 
     /**
-     * @var Collection|Residence[]
-     * @ORM\OneToMany(targetEntity="Residence", mappedBy="person")
+     * @ORM\ManyToOne(targetEntity="BirthStatus", inversedBy="people")
      */
-    private $residences;
+    private ?BirthStatus $birthStatus;
 
     /**
      * @ORM\ManyToOne(targetEntity="Race", inversedBy="people")
      */
     private ?Race $race;
+
+    /**
+     * @var Collection|Residence[]
+     * @ORM\OneToMany(targetEntity="Residence", mappedBy="person")
+     */
+    private $residences;
 
     /**
      * @var Collection|Relationship[]
@@ -131,15 +138,21 @@ class Person extends AbstractEntity {
 
     public function __construct() {
         parent::__construct();
-        $this->alias = [];
-        $this->occupation = [];
+        $this->titles = [];
+        $this->aliases = [];
+        $this->occupations = [];
+        $this->statuses = [];
+        $this->writtenRaces = [];
+
+        $this->residences = new ArrayCollection();
         $this->relationships = new ArrayCollection();
+        $this->relations = new ArrayCollection();
+
         $this->witnesses = new ArrayCollection();
         $this->events = new ArrayCollection();
-        $this->residences = new ArrayCollection();
+
         $this->firstPartyTransactions = new ArrayCollection();
         $this->secondPartyTransactions = new ArrayCollection();
-        $this->relations = new ArrayCollection();
     }
 
     /**
@@ -153,7 +166,7 @@ class Person extends AbstractEntity {
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName) : self {
+    public function setFirstName(?string $firstName) : self {
         $this->firstName = $firstName;
 
         return $this;
@@ -163,39 +176,28 @@ class Person extends AbstractEntity {
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName) : self {
-        $this->lastName = (string) mb_convert_case($lastName, \MB_CASE_TITLE);
+    public function setLastName(?string $lastName) : self {
+        $this->lastName = $lastName;
 
         return $this;
     }
 
-    public function getTitle() : ?string {
-        return $this->title;
+    public function getTitles() : ?array {
+        return $this->titles;
     }
 
-    public function setTitle(string $title) : self {
-        $this->title = $title;
+    public function setTitles(array $titles) : self {
+        $this->titles = $titles;
 
         return $this;
     }
 
-    public function getAlias() : ?array {
-        return $this->alias;
+    public function getAliases() : ?array {
+        return $this->aliases;
     }
 
-    public function setAlias(array $alias) : self {
-        $this->alias = $alias;
-
-        return $this;
-    }
-
-    public function addAlias($alias) : self {
-        if (is_string($alias)) {
-            $this->alias[] = $alias;
-        }
-        if (is_array($alias)) {
-            $this->alias = array_merge($this->alias, $alias);
-        }
+    public function setAliases(array $aliases) : self {
+        $this->aliases = $aliases;
 
         return $this;
     }
@@ -210,23 +212,12 @@ class Person extends AbstractEntity {
         return $this;
     }
 
-    public function getOccupation() : ?array {
-        return $this->occupation;
+    public function getOccupations() : ?array {
+        return $this->occupations;
     }
 
-    public function setOccupation(array $occupation) : self {
-        $this->occupation = $occupation;
-
-        return $this;
-    }
-
-    public function addOccupation($occupation) : self {
-        if (is_string($occupation)) {
-            $this->occupation[] = $occupation;
-        }
-        if (is_array($occupation)) {
-            $this->occupation = array_merge($this->occupation, $occupation);
-        }
+    public function setOccupations(array $occupations) : self {
+        $this->occupations = $occupations;
 
         return $this;
     }
@@ -241,22 +232,42 @@ class Person extends AbstractEntity {
         return $this;
     }
 
-    public function getBirthStatus() : ?string {
-        return $this->birthStatus;
+    public function getStatuses() : ?array {
+        return $this->statuses;
     }
 
-    public function setBirthStatus(?string $birthStatus) : self {
-        $this->birthStatus = $birthStatus;
+    public function setStatuses(array $statuses) : self {
+        $this->statuses = $statuses;
 
         return $this;
     }
 
-    public function getStatus() : ?string {
-        return $this->status;
+    public function getWrittenRaces() : ?array {
+        return $this->writtenRaces;
     }
 
-    public function setStatus(?string $status) : self {
-        $this->status = $status;
+    public function setWrittenRaces(array $writtenRaces) : self {
+        $this->writtenRaces = $writtenRaces;
+
+        return $this;
+    }
+
+    public function getNotes() : ?string {
+        return $this->notes;
+    }
+
+    public function setNotes(?string $notes) : self {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    public function getRace() : ?Race {
+        return $this->race;
+    }
+
+    public function setRace(?Race $race) : self {
+        $this->race = $race;
 
         return $this;
     }
@@ -284,16 +295,6 @@ class Person extends AbstractEntity {
                 $residence->setPerson(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getRace() : ?Race {
-        return $this->race;
-    }
-
-    public function setRace(?Race $race) : self {
-        $this->race = $race;
 
         return $this;
     }
@@ -457,12 +458,12 @@ class Person extends AbstractEntity {
         return $this;
     }
 
-    public function getNotes() : ?string {
-        return $this->notes;
+    public function getBirthStatus() : ?BirthStatus {
+        return $this->birthStatus;
     }
 
-    public function setNotes(?string $notes) : self {
-        $this->notes = $notes;
+    public function setBirthStatus(?BirthStatus $birthStatus) : self {
+        $this->birthStatus = $birthStatus;
 
         return $this;
     }

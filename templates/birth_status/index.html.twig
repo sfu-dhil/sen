@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Birth Status List{% endblock %}
+
+{% block pageheader %}
+    <h1>Birth Status List</h1>
+    <p class="count">
+        Displaying {{ birth_statuses|length }} birth_statuses of {{ birth_statuses.getTotalItemCount }} total.
+    </p>
+{% endblock %}
+
+{% block body %}
+
+    <div class='btn-toolbar pull-right'>
+        <div class='btn-group'>
+            {% if is_granted('ROLE_CONTENT_ADMIN') %}
+                <a href="{{ path('birth_status_new') }}" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span> New </a>
+            {% endif %}
+
+            <a href="{{ path('birth_status_search') }}" class="btn btn-default">
+                <span class="glyphicon glyphicon-search"></span> Search </a>
+        </div>
+    </div>
+
+    {% embed 'birth_status/partial/table.html.twig' %}
+    {% endembed %}
+
+    <div class="navigation">
+        {{ knp_pagination_render(birth_statuses) }}
+    </div>
+
+{% endblock %}

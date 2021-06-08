@@ -1,0 +1,19 @@
+<table class='table table-bordered table-condensed table-hover table-striped'>
+    <tbody>
+        {% embed '@NinesUtil/term/partial/table.html.twig' with {'term': birth_status} %}
+        {% endembed %}
+    </tbody>
+</table>
+
+<h2>People</h2>
+{% if birth_status.people|length > 0 %}
+    <ul>
+        {% for person in birth_status.people %}
+            <li>
+                <a href='{{ path("person_show", {"id":person.id }) }}'>
+                    {{ person }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

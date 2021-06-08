@@ -15,7 +15,7 @@
         <tr>
             <th>Aliases</th>
             <td>
-                {% if person.alias %}{{ person.alias|join(', ') }}{% endif %}
+                {{ person.aliases|join('; ') }}
             </td>
         </tr>
         <tr>
@@ -27,7 +27,9 @@
         <tr>
             <th>Occupation</th>
             <td>
-                {% if person.occupation %}{{ person.occupation|join(', ') }}{% endif %}
+                {% for job in person.occupations %}
+                    {{ job[date] }} - {{ job['occupation'] }}
+                {% endfor %}
             </td>
         </tr>
         <tr>
@@ -45,7 +47,7 @@
         <tr>
             <th>Status</th>
             <td>
-                {{ person.status }}
+                {{ person.statuses|join('; ') }}
             </td>
         </tr>
         <tr>

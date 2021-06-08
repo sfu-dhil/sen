@@ -22,7 +22,7 @@
                     {{ person.sex }}
                 </td>
                 <td>
-                    {{ person.status }}
+                    {{ person.statuses|join('; ') }}
                 </td>
             </tr>
         {% endfor %}

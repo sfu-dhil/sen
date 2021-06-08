@@ -61,7 +61,7 @@ class ImportNotaryCommand extends Command {
         while ($row = fgetcsv($handle)) {
             $date = new DateTimeImmutable($row[N::transaction_date]);
             $notary = $this->importer->findNotary($row[N::notary_name]);
-            $ledger = $this->importer->findLedger($notary, $row[N::ledger_volume], $date->format('Y'));
+            $ledger = $this->importer->findLedger($notary, $row[N::ledger_volume], (int) $date->format('Y'));
 
             $firstParty = $this->importer->findPerson(
                 $row[N::first_party_first_name],

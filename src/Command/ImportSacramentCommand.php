@@ -54,17 +54,17 @@ class ImportSacramentCommand extends Command {
             $row = array_map(static fn($data) => mb_convert_encoding($data, 'UTF-8', 'UTF-8'), $row);
             $person = $this->importer->findPerson($row[S::first_name], $row[S::last_name], $row[S::race_id], $row[S::sex]);
 
-            $this->importer->addBirthDate($person, $row);
-            $this->importer->addDeathDate($person, $row);
+            $this->importer->setNative($person, $row);
+            $this->importer->addAliases($person, $row);
+            $this->importer->addOccupations($person, $row);
+
+            $this->importer->addBirth($person, $row);
+            $this->importer->addDeath($person, $row);
             $this->importer->addBaptism($person, $row);
             $this->importer->addManumission($person, $row);
             $this->importer->addMarriage($person, $row);
 
             $this->importer->addResidences($person, $row);
-
-            $this->importer->setNative($person, $row);
-            $this->importer->addAliases($person, $row);
-            $this->importer->addOccupations($person, $row);
 
             $this->em->flush();
         }
