@@ -164,7 +164,7 @@ class Person extends AbstractEntity {
     }
 
     public function setLastName(string $lastName) : self {
-        $this->lastName = (string) mb_convert_case($lastName, MB_CASE_TITLE);
+        $this->lastName = (string) mb_convert_case($lastName, \MB_CASE_TITLE);
 
         return $this;
     }
@@ -457,13 +457,11 @@ class Person extends AbstractEntity {
         return $this;
     }
 
-    public function getNotes(): ?string
-    {
+    public function getNotes() : ?string {
         return $this->notes;
     }
 
-    public function setNotes(?string $notes): self
-    {
+    public function setNotes(?string $notes) : self {
         $this->notes = $notes;
 
         return $this;

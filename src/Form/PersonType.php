@@ -121,7 +121,7 @@ class PersonType extends AbstractType {
             'required' => false,
             'attr' => [
                 'help_block' => 'Private research notes',
-                'class' => 'tinymce'
+                'class' => 'tinymce',
             ],
         ]);
     }

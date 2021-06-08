@@ -66,7 +66,6 @@ class ImportSacramentCommand extends Command {
             $this->importer->addAliases($person, $row);
             $this->importer->addOccupations($person, $row);
 
-
             $this->em->flush();
         }
     }
