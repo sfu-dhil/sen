@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\WitnessCategory;
 use App\Form\WitnessCategoryType;
 use App\Repository\WitnessCategoryRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -49,10 +48,8 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
      * @Route("/search", name="witness_category_search", methods={"GET"})
      *
      * @Template
-     *
-     * @return array
      */
-    public function search(Request $request, WitnessCategoryRepository $witnessCategoryRepository) {
+    public function search(Request $request, WitnessCategoryRepository $witnessCategoryRepository) : array {
         $q = $request->query->get('q');
         if ($q) {
             $query = $witnessCategoryRepository->searchQuery($q);
@@ -69,10 +66,8 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
 
     /**
      * @Route("/typeahead", name="witness_category_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, WitnessCategoryRepository $witnessCategoryRepository) {
+    public function typeahead(Request $request, WitnessCategoryRepository $witnessCategoryRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -129,10 +124,8 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
     /**
      * @Route("/{id}", name="witness_category_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(WitnessCategory $witnessCategory) {
+    public function show(WitnessCategory $witnessCategory) : array {
         return [
             'witness_category' => $witnessCategory,
         ];
@@ -166,10 +159,8 @@ class WitnessCategoryController extends AbstractController implements PaginatorA
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="witness_category_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, WitnessCategory $witnessCategory) {
+    public function delete(Request $request, WitnessCategory $witnessCategory) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $witnessCategory->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($witnessCategory);

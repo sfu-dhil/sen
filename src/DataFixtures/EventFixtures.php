@@ -35,7 +35,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getDependencies() {
         return [

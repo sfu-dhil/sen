@@ -13,6 +13,10 @@ namespace App\Tests\Entity;
 use App\Entity\Person;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class PersonTest extends ControllerBaseCase {
     /**
      * @dataProvider setLastNameData
@@ -23,7 +27,7 @@ class PersonTest extends ControllerBaseCase {
     public function testSetLastName($expected, $name) : void {
         $person = new Person();
         $person->setLastName($name);
-        $this->assertSame($expected, $person->getLastName());
+        static::assertSame($expected, $person->getLastName());
     }
 
     public function setLastNameData() {

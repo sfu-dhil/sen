@@ -26,6 +26,7 @@ use App\Entity\Transaction;
 use App\Entity\TransactionCategory;
 use App\Util\NotaryColumnDefinitions as N;
 use App\Util\SacramentColumnDefinitions as S;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -33,8 +34,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Description of AbstractImportService.
- *
- * @author michael
  */
 class ImportService {
     public const MONTHS = [
@@ -46,15 +45,9 @@ class ImportService {
         'ca', 'bef', 'abt', 'aft',
     ];
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * Construct the import service.
@@ -66,12 +59,8 @@ class ImportService {
 
     /**
      * Find a notary by name. Creates a new notary record if necessary.
-     *
-     * @param string $name
-     *
-     * @return Notary
      */
-    public function findNotary($name) {
+    public function findNotary(string $name) : Notary {
         $repo = $this->em->getRepository(Notary::class);
         $notary = $repo->findOneBy([
             'name' => $name,
@@ -88,13 +77,8 @@ class ImportService {
     /**
      * Find or create a ledger for a notary with the given volume identifier and
      * year.
-     *
-     * @param string $volume
-     * @param int $year
-     *
-     * @return Ledger
      */
-    public function findLedger(Notary $notary, $volume, $year) {
+    public function findLedger(Notary $notary, string $volume, int $year) : Ledger {
         $repo = $this->em->getRepository(Ledger::class);
         $ledger = $repo->findOneBy([
             'volume' => $volume,
@@ -114,13 +98,11 @@ class ImportService {
     /**
      * Find or create a race record by name.
      *
-     * @param string $name
-     *
      * @return ?Race
      */
-    public function findRace($name) {
+    public function findRace(?string $name) {
         if ( ! $name) {
-            return;
+            return null;
         }
         $repo = $this->em->getRepository(Race::class);
         $race = $repo->findOneBy([
@@ -139,38 +121,30 @@ class ImportService {
     /**
      * Find or create a record for a person.
      *
-     * @param string $given
-     * @param string $family
-     * @param string $raceName
      * @param mixed $sex
-     *
-     * @return Person
      */
-    public function findPerson($given, $family, $raceName = '', $sex = '') {
+    public function findPerson(?string $given, ?string $family, ?string $raceName = '', $sex = '') : Person {
         $repo = $this->em->getRepository(Person::class);
         $person = $repo->findOneBy([
             'firstName' => $given,
-            'lastName' => mb_convert_case($family, MB_CASE_TITLE),
+            'lastName' => mb_convert_case($family, \MB_CASE_TITLE),
         ]);
         $race = $this->findRace($raceName);
         $s = null;
 
-        switch (mb_convert_case($sex, MB_CASE_LOWER)) {
+        switch (mb_convert_case($sex, \MB_CASE_LOWER)) {
             case 'male':
                 $s = 'M';
 
                 break;
-
             case 'female':
                 $s = 'F';
 
                 break;
-
             case 'unknown':
                 $s = null;
 
                 break;
-
             default:
                 $this->logger->error("Unknown sex {$sex} for {$given} {$family}");
         }
@@ -205,18 +179,14 @@ class ImportService {
 
     /**
      * Find or create a transaction category by label.
-     *
-     * @param string $label
-     *
-     * @return TransactionCategory
      */
-    public function findTransactionCategory($label) {
+    public function findTransactionCategory(string $label) : TransactionCategory {
         $repo = $this->em->getRepository(TransactionCategory::class);
         $category = $repo->findOneBy([
             'label' => $label,
         ]);
         if ( ! $category) {
-            $short = preg_replace('/[^a-z0-9]/u', '-', mb_convert_case($label, MB_CASE_LOWER));
+            $short = preg_replace('/[^a-z0-9]/u', '-', mb_convert_case($label, \MB_CASE_LOWER));
             $category = new TransactionCategory();
             $category->setName($short);
             $category->setLabel($label);
@@ -228,12 +198,8 @@ class ImportService {
 
     /**
      * Find or create a relationship category by name.
-     *
-     * @param string $name
-     *
-     * @return RelationshipCategory
      */
-    public function findRelationshipCategory($name) {
+    public function findRelationshipCategory(string $name) : RelationshipCategory {
         $repo = $this->em->getRepository(RelationshipCategory::class);
         $category = $repo->findOneBy([
             'name' => $name,
@@ -250,10 +216,8 @@ class ImportService {
 
     /**
      * Create a transaction.
-     *
-     * @param array $row
      */
-    public function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, $row) {
+    public function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, array $row) {
         $transaction = new Transaction();
         $transaction->setLedger($ledger);
         $transaction->setFirstParty($firstParty);
@@ -278,7 +242,7 @@ class ImportService {
         }
         $transaction->setSecondPartyNote($row[N::second_party_notes]);
         $transaction->setCategory($this->findTransactionCategory($row[N::transaction_category]));
-        $date = new DateTimeImmutable($row[N::transaction_date]);
+        $date = new DateTime($row[N::transaction_date]);
         $transaction->setDate($date);
         $transaction->setPage((int) $row[N::ledger_page]);
         $transaction->setNotes($row[N::transaction_notes]);
@@ -300,7 +264,7 @@ class ImportService {
         if ( ! $string) {
             return;
         }
-        $string = mb_convert_case($string, MB_CASE_LOWER);
+        $string = mb_convert_case($string, \MB_CASE_LOWER);
         $matches = [];
         if (preg_match("/(\\d{1,2})\\s*({$months})\\s*(\\d\\d\\d\\d)/u", $string, $matches)) {
             $year = $matches[3];
@@ -330,7 +294,7 @@ class ImportService {
         if ( ! $category) {
             $category = new LocationCategory();
             $category->setName($name);
-            $category->setLabel(mb_convert_case($name, MB_CASE_TITLE));
+            $category->setLabel(mb_convert_case($name, \MB_CASE_TITLE));
             $this->em->persist($category);
         }
 

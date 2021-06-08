@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\RelationshipCategory;
-
 use Nines\UtilBundle\Form\TermType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

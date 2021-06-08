@@ -23,15 +23,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  * AppImportSacramentCommand command.
  */
 class ImportSacramentCommand extends Command {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
-    /**
-     * @var ImportService
-     */
-    private $importer;
+    private ImportService $importer;
 
     public function __construct(EntityManagerInterface $em, ImportService $importer, $name = null) {
         parent::__construct($name);
@@ -47,8 +41,7 @@ class ImportSacramentCommand extends Command {
             ->setName('app:import:sacrament')
             ->setDescription('Import sacramental data from one or more CSV files')
             ->addArgument('files', InputArgument::IS_ARRAY, 'List of CSV files to import')
-            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Number of header rows to skip', 1)
-        ;
+            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Number of header rows to skip', 1);
     }
 
     protected function import($file, $skip) : void {
@@ -58,7 +51,7 @@ class ImportSacramentCommand extends Command {
             fgetcsv($handle);
         }
         while ($row = fgetcsv($handle)) {
-            $row = array_map(fn ($data) => mb_convert_encoding($data, 'UTF-8', 'UTF-8'), $row);
+            $row = array_map(static fn($data) => mb_convert_encoding($data, 'UTF-8', 'UTF-8'), $row);
             $person = $this->importer->findPerson($row[S::first_name], $row[S::last_name], $row[S::race_id], $row[S::sex]);
             $person->setBirthDate($this->importer->parseDate($row[S::birth_date]));
             $person->setBirthPlace($this->importer->findCity($row[S::birth_place]));
@@ -78,10 +71,10 @@ class ImportSacramentCommand extends Command {
     /**
      * Execute the command.
      *
-     * @param InputInterface $input
-     *                              Command input, as defined in the configure() method.
-     * @param OutputInterface $output
-     *                                Output destination.
+     * @param inputInterface $input
+     *                              Command input, as defined in the configure() method
+     * @param outputInterface $output
+     *                                Output destination
      */
     protected function execute(InputInterface $input, OutputInterface $output) : void {
         $files = $input->getArgument('files');

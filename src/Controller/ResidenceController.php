@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\Residence;
 use App\Form\ResidenceType;
 use App\Repository\ResidenceRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -85,10 +84,8 @@ class ResidenceController extends AbstractController implements PaginatorAwareIn
     /**
      * @Route("/{id}", name="residence_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(Residence $residence) {
+    public function show(Residence $residence) : array {
         return [
             'residence' => $residence,
         ];
@@ -122,10 +119,8 @@ class ResidenceController extends AbstractController implements PaginatorAwareIn
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="residence_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, Residence $residence) {
+    public function delete(Request $request, Residence $residence) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $residence->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($residence);

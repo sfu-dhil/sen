@@ -12,7 +12,6 @@ namespace App\Form;
 
 use App\Entity\Ledger;
 use App\Entity\Notary;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;

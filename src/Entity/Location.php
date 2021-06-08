@@ -23,17 +23,15 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  */
 class Location extends AbstractEntity {
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=false)
      */
-    private $name;
+    private string $name;
 
     /**
-     * @var LocationCategory
      * @ORM\ManyToOne(targetEntity="LocationCategory", inversedBy="locations")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $category;
+    private LocationCategory $category;
 
     /**
      * @var Collection|Event[]

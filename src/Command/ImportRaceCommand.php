@@ -20,15 +20,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportRaceCommand extends Command {
-    /**
-     * @var RaceRepository
-     */
-    private $repo;
+    private RaceRepository $repo;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
     protected static $defaultName = 'sen:import:race';
 
@@ -38,8 +32,7 @@ class ImportRaceCommand extends Command {
         $this
             ->setDescription(self::$defaultDescription)
             ->addArgument('files', InputArgument::IS_ARRAY, 'List of files to import')
-            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Rows of data to skip', 1)
-        ;
+            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Rows of data to skip', 1);
     }
 
     protected function append($s, $t) {
@@ -64,7 +57,7 @@ class ImportRaceCommand extends Command {
             if ( ! $race) {
                 $race = new Race();
                 $race->setName($standard);
-                $race->setLabel(mb_convert_case($standard, MB_CASE_TITLE));
+                $race->setLabel(mb_convert_case($standard, \MB_CASE_TITLE));
                 $this->em->persist($race);
             }
             $race->setSpanishUngendered($this->append($race->getSpanishUngendered(), $row[1]));

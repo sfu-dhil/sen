@@ -17,23 +17,19 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method null|Event find($id, $lockMode = null, $lockVersion = null)
- * @method null|Event findOneBy(array $criteria, array $orderBy = null)
  * @method Event[] findAll()
  * @method Event[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method null|Event findOneBy(array $criteria, array $orderBy = null)
  */
 class EventRepository extends ServiceEntityRepository {
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Event::class);
     }
 
-    /**
-     * @return Query
-     */
-    public function indexQuery() {
+    public function indexQuery() : Query {
         return $this->createQueryBuilder('event')
             ->orderBy('event.id')
-            ->getQuery()
-        ;
+            ->getQuery();
     }
 
     public function typeaheadQuery($q) {
@@ -41,7 +37,6 @@ class EventRepository extends ServiceEntityRepository {
             ->where('event.date LIKE :q')
             ->setParameter('q', $q . '%')
             ->orderBy('event.id')
-            ->getQuery()
-        ;
+            ->getQuery();
     }
 }

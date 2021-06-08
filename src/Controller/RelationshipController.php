@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\Relationship;
 use App\Form\RelationshipType;
 use App\Repository\RelationshipRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -85,10 +84,8 @@ class RelationshipController extends AbstractController implements PaginatorAwar
     /**
      * @Route("/{id}", name="relationship_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(Relationship $relationship) {
+    public function show(Relationship $relationship) : array {
         return [
             'relationship' => $relationship,
         ];
@@ -122,10 +119,8 @@ class RelationshipController extends AbstractController implements PaginatorAwar
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="relationship_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, Relationship $relationship) {
+    public function delete(Request $request, Relationship $relationship) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $relationship->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($relationship);

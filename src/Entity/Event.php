@@ -23,35 +23,30 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  */
 class Event extends AbstractEntity {
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=true)
      */
-    private $writtenDate;
+    private string $writtenDate;
 
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=true)
      */
-    private $date;
+    private ?string $date;
 
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=true)
      */
-    private $note;
+    private ?string $note;
 
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=true)
      */
-    private $recordSource;
+    private ?string $recordSource;
 
     /**
-     * @var EventCategory
      * @ORM\ManyToOne(targetEntity="EventCategory", inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $category;
+    private EventCategory $category;
 
     /**
      * @var Collection|Person[]
@@ -66,11 +61,10 @@ class Event extends AbstractEntity {
     private $witnesses;
 
     /**
-     * @var Location
      * @ORM\ManyToOne(targetEntity="Location", inversedBy="events")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $location;
+    private ?Location $location;
 
     public function __construct() {
         parent::__construct();

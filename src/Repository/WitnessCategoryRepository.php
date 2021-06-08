@@ -16,9 +16,9 @@ use Nines\UtilBundle\Repository\TermRepository;
 
 /**
  * @method null|WitnessCategory find($id, $lockMode = null, $lockVersion = null)
- * @method null|WitnessCategory findOneBy(array $criteria, array $orderBy = null)
  * @method WitnessCategory[] findAll()
  * @method WitnessCategory[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method null|WitnessCategory findOneBy(array $criteria, array $orderBy = null)
  */
 class WitnessCategoryRepository extends TermRepository {
     public function __construct(ManagerRegistry $registry) {

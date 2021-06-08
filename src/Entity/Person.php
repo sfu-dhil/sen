@@ -31,60 +31,51 @@ class Person extends AbstractEntity {
     public const FEMALE = 'F';
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
-    private $firstName;
+    private string $firstName;
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
-    private $lastName;
+    private string $lastName;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=24, nullable=true)
      */
-    private $title;
+    private string $title;
 
     /**
-     * @var array
      * @ORM\Column(type="array")
      */
-    private $alias;
+    private array $alias;
 
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=true)
      */
-    private $native;
+    private string $native;
 
     /**
-     * @var array
      * @ORM\Column(type="array", nullable=true)
      */
-    private $occupation;
+    private array $occupation;
 
     /**
      * One of M or F.
      *
-     * @var string
      * @ORM\Column(type="string", length=1, nullable=true)
      */
-    private $sex;
+    private ?string $sex;
 
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=true)
      */
-    private $birthStatus;
+    private ?string $birthStatus;
 
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=true)
      */
-    private $status;
+    private ?string $status;
 
     /**
      * @var Collection|Residence[]
@@ -93,10 +84,9 @@ class Person extends AbstractEntity {
     private $residences;
 
     /**
-     * @var Race
      * @ORM\ManyToOne(targetEntity="Race", inversedBy="people")
      */
-    private $race;
+    private ?Race $race;
 
     /**
      * @var Collection|Relationship[]
@@ -170,7 +160,7 @@ class Person extends AbstractEntity {
     }
 
     public function setLastName(string $lastName) : self {
-        $this->lastName = mb_convert_case($lastName, MB_CASE_TITLE);
+        $this->lastName = mb_convert_case($lastName, \MB_CASE_TITLE);
 
         return $this;
     }

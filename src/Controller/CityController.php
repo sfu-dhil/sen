@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\City;
 use App\Form\CityType;
 use App\Repository\CityRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -49,10 +48,8 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
      * @Route("/search", name="city_search", methods={"GET"})
      *
      * @Template
-     *
-     * @return array
      */
-    public function search(Request $request, CityRepository $cityRepository) {
+    public function search(Request $request, CityRepository $cityRepository) : array {
         $q = $request->query->get('q');
         if ($q) {
             $query = $cityRepository->searchQuery($q);
@@ -69,10 +66,8 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
 
     /**
      * @Route("/typeahead", name="city_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, CityRepository $cityRepository) {
+    public function typeahead(Request $request, CityRepository $cityRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -129,10 +124,8 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
     /**
      * @Route("/{id}", name="city_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(City $city) {
+    public function show(City $city) : array {
         return [
             'city' => $city,
         ];
@@ -166,10 +159,8 @@ class CityController extends AbstractController implements PaginatorAwareInterfa
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="city_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, City $city) {
+    public function delete(Request $request, City $city) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $city->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($city);

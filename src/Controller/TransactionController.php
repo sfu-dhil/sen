@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\Transaction;
 use App\Form\TransactionType;
 use App\Repository\TransactionRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -85,10 +84,8 @@ class TransactionController extends AbstractController implements PaginatorAware
     /**
      * @Route("/{id}", name="transaction_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(Transaction $transaction) {
+    public function show(Transaction $transaction) : array {
         return [
             'transaction' => $transaction,
         ];
@@ -122,10 +119,8 @@ class TransactionController extends AbstractController implements PaginatorAware
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="transaction_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, Transaction $transaction) {
+    public function delete(Request $request, Transaction $transaction) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $transaction->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($transaction);

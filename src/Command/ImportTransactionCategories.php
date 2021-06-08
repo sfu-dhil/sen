@@ -20,15 +20,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportTransactionCategories extends Command {
-    /**
-     * @var TransactionCategoryRepository
-     */
-    private $repo;
+    private TransactionCategoryRepository $repo;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
     protected static $defaultName = 'sen:import:transaction-categories';
 
@@ -38,8 +32,7 @@ class ImportTransactionCategories extends Command {
         $this
             ->setDescription(self::$defaultDescription)
             ->addArgument('files', InputArgument::IS_ARRAY, 'List of files to import')
-            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Rows of data to skip', 1)
-        ;
+            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Rows of data to skip', 1);
     }
 
     protected function import($file, $skip) : void {
@@ -53,7 +46,7 @@ class ImportTransactionCategories extends Command {
             if ( ! $category) {
                 $category = new TransactionCategory();
                 $category->setName($standard);
-                $category->setLabel(mb_convert_case($standard, MB_CASE_TITLE));
+                $category->setLabel(mb_convert_case($standard, \MB_CASE_TITLE));
                 $this->em->persist($category);
             }
             $category->setDescription($row[1]);

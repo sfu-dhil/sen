@@ -21,37 +21,32 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  */
 class Relationship extends AbstractEntity {
     /**
-     * @var string
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private $startDate;
+    private string $startDate;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private $endDate;
+    private string $endDate;
 
     /**
-     * @var RelationshipCategory
      * @ORM\ManyToOne(targetEntity="RelationshipCategory", inversedBy="relationships")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $category;
+    private RelationshipCategory $category;
 
     /**
-     * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="relationships")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $person;
+    private Person $person;
 
     /**
-     * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="relations")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $relation;
+    private Person $relation;
 
     public function __construct() {
         parent::__construct();

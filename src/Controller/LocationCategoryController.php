@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\LocationCategory;
 use App\Form\LocationCategoryType;
 use App\Repository\LocationCategoryRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -49,10 +48,8 @@ class LocationCategoryController extends AbstractController implements Paginator
      * @Route("/search", name="location_category_search", methods={"GET"})
      *
      * @Template
-     *
-     * @return array
      */
-    public function search(Request $request, LocationCategoryRepository $locationCategoryRepository) {
+    public function search(Request $request, LocationCategoryRepository $locationCategoryRepository) : array {
         $q = $request->query->get('q');
         if ($q) {
             $query = $locationCategoryRepository->searchQuery($q);
@@ -69,10 +66,8 @@ class LocationCategoryController extends AbstractController implements Paginator
 
     /**
      * @Route("/typeahead", name="location_category_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, LocationCategoryRepository $locationCategoryRepository) {
+    public function typeahead(Request $request, LocationCategoryRepository $locationCategoryRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -129,10 +124,8 @@ class LocationCategoryController extends AbstractController implements Paginator
     /**
      * @Route("/{id}", name="location_category_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(LocationCategory $locationCategory) {
+    public function show(LocationCategory $locationCategory) : array {
         return [
             'location_category' => $locationCategory,
         ];
@@ -166,10 +159,8 @@ class LocationCategoryController extends AbstractController implements Paginator
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="location_category_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, LocationCategory $locationCategory) {
+    public function delete(Request $request, LocationCategory $locationCategory) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $locationCategory->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($locationCategory);

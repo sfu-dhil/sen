@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\Location;
 use App\Form\LocationType;
 use App\Repository\LocationRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -47,10 +46,8 @@ class LocationController extends AbstractController implements PaginatorAwareInt
 
     /**
      * @Route("/typeahead", name="location_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, LocationRepository $locationRepository) {
+    public function typeahead(Request $request, LocationRepository $locationRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -107,10 +104,8 @@ class LocationController extends AbstractController implements PaginatorAwareInt
     /**
      * @Route("/{id}", name="location_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(Location $location) {
+    public function show(Location $location) : array {
         return [
             'location' => $location,
         ];
@@ -144,10 +139,8 @@ class LocationController extends AbstractController implements PaginatorAwareInt
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="location_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, Location $location) {
+    public function delete(Request $request, Location $location) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $location->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($location);

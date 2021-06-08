@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\Ledger;
 use App\Form\LedgerType;
 use App\Repository\LedgerRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -47,10 +46,8 @@ class LedgerController extends AbstractController implements PaginatorAwareInter
 
     /**
      * @Route("/typeahead", name="ledger_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, LedgerRepository $ledgerRepository) {
+    public function typeahead(Request $request, LedgerRepository $ledgerRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -107,10 +104,8 @@ class LedgerController extends AbstractController implements PaginatorAwareInter
     /**
      * @Route("/{id}", name="ledger_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(Ledger $ledger) {
+    public function show(Ledger $ledger) : array {
         return [
             'ledger' => $ledger,
         ];
@@ -144,10 +139,8 @@ class LedgerController extends AbstractController implements PaginatorAwareInter
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="ledger_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, Ledger $ledger) {
+    public function delete(Request $request, Ledger $ledger) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $ledger->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($ledger);

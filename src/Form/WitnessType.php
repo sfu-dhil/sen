@@ -14,7 +14,6 @@ use App\Entity\Event;
 use App\Entity\Person;
 use App\Entity\Witness;
 use App\Entity\WitnessCategory;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

@@ -17,22 +17,18 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method null|Transaction find($id, $lockMode = null, $lockVersion = null)
- * @method null|Transaction findOneBy(array $criteria, array $orderBy = null)
  * @method Transaction[] findAll()
  * @method Transaction[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method null|Transaction findOneBy(array $criteria, array $orderBy = null)
  */
 class TransactionRepository extends ServiceEntityRepository {
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Transaction::class);
     }
 
-    /**
-     * @return Query
-     */
-    public function indexQuery() {
+    public function indexQuery() : Query {
         return $this->createQueryBuilder('transaction')
             ->orderBy('transaction.date')
-            ->getQuery()
-        ;
+            ->getQuery();
     }
 }

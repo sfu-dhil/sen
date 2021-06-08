@@ -10,10 +10,8 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\City;
 use App\Entity\Person;
 use App\Entity\Race;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;

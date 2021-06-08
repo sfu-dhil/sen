@@ -18,31 +18,25 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method null|City find($id, $lockMode = null, $lockVersion = null)
- * @method null|City findOneBy(array $criteria, array $orderBy = null)
  * @method City[] findAll()
  * @method City[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method null|City findOneBy(array $criteria, array $orderBy = null)
  */
 class CityRepository extends ServiceEntityRepository {
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, City::class);
     }
 
-    /**
-     * @return Query
-     */
-    public function indexQuery() {
+    public function indexQuery() : Query {
         return $this->createQueryBuilder('city')
             ->orderBy('city.name')
-            ->getQuery()
-        ;
+            ->getQuery();
     }
 
     /**
-     * @param string $q
-     *
      * @return City[]|Collection
      */
-    public function typeaheadQuery($q) {
+    public function typeaheadQuery(string $q) {
         $qb = $this->createQueryBuilder('city');
         $qb->andWhere('city.name LIKE :q');
         $qb->orderBy('city.name', 'ASC');
@@ -52,11 +46,9 @@ class CityRepository extends ServiceEntityRepository {
     }
 
     /**
-     * @param string $q
-     *
-     * @return Query
+     * @return City[]|Collection|Query
      */
-    public function searchQuery($q) {
+    public function searchQuery(string $q) {
         $qb = $this->createQueryBuilder('city');
         $qb->addSelect('MATCH (city.name) AGAINST(:q BOOLEAN) as HIDDEN score');
         $qb->andHaving('score > 0');

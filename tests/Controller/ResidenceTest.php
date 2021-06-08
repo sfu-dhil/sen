@@ -16,6 +16,10 @@ use Nines\UserBundle\DataFixtures\UserFixtures;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class ResidenceTest extends ControllerBaseCase {
     // Change this to HTTP_OK when the site is public.
     private const ANON_RESPONSE_CODE = Response::HTTP_FOUND;
@@ -33,19 +37,19 @@ class ResidenceTest extends ControllerBaseCase {
      */
     public function testAnonIndex() : void {
         $crawler = $this->client->request('GET', '/residence/');
-        $this->assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('New')->count());
+        static::assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('New')->count());
     }
 
     /**
-     * @group user
      * @group index
+     * @group user
      */
     public function testUserIndex() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/residence/');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('New')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('New')->count());
     }
 
     /**
@@ -55,8 +59,8 @@ class ResidenceTest extends ControllerBaseCase {
     public function testAdminIndex() : void {
         $this->login('user.admin');
         $crawler = $this->client->request('GET', '/residence/');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->selectLink('New')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $crawler->selectLink('New')->count());
     }
 
     /**
@@ -65,19 +69,19 @@ class ResidenceTest extends ControllerBaseCase {
      */
     public function testAnonShow() : void {
         $crawler = $this->client->request('GET', '/residence/1');
-        $this->assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('Edit')->count());
+        static::assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('Edit')->count());
     }
 
     /**
-     * @group user
      * @group show
+     * @group user
      */
     public function testUserShow() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/residence/1');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('Edit')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('Edit')->count());
     }
 
     /**
@@ -87,8 +91,8 @@ class ResidenceTest extends ControllerBaseCase {
     public function testAdminShow() : void {
         $this->login('user.admin');
         $crawler = $this->client->request('GET', '/residence/1');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->selectLink('Edit')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $crawler->selectLink('Edit')->count());
     }
 
     /**
@@ -97,18 +101,18 @@ class ResidenceTest extends ControllerBaseCase {
      */
     public function testAnonEdit() : void {
         $crawler = $this->client->request('GET', '/residence/1/edit');
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
-     * @group user
      * @group edit
+     * @group user
      */
     public function testUserEdit() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/residence/1/edit');
-        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+        static::assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -118,17 +122,17 @@ class ResidenceTest extends ControllerBaseCase {
     public function testAdminEdit() : void {
         $this->login('user.admin');
         $formCrawler = $this->client->request('GET', '/residence/1/edit');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
             'residence[date]' => 'Updated Date',
         ]);
 
         $this->client->submit($form);
-        $this->assertTrue($this->client->getResponse()->isRedirect('/residence/1'));
+        static::assertTrue($this->client->getResponse()->isRedirect('/residence/1'));
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Date")')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $responseCrawler->filter('td:contains("Updated Date")')->count());
     }
 
     /**
@@ -137,8 +141,8 @@ class ResidenceTest extends ControllerBaseCase {
      */
     public function testAnonNew() : void {
         $crawler = $this->client->request('GET', '/residence/new');
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
@@ -147,28 +151,28 @@ class ResidenceTest extends ControllerBaseCase {
      */
     public function testAnonNewPopup() : void {
         $crawler = $this->client->request('GET', '/residence/new_popup');
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
-     * @group user
      * @group new
+     * @group user
      */
     public function testUserNew() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/residence/new');
-        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+        static::assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
-     * @group user
      * @group new
+     * @group user
      */
     public function testUserNewPopup() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/residence/new_popup');
-        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+        static::assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -178,7 +182,7 @@ class ResidenceTest extends ControllerBaseCase {
     public function testAdminNew() : void {
         $this->login('user.admin');
         $formCrawler = $this->client->request('GET', '/residence/new');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
             'residence[date]' => 'New Date',
@@ -187,10 +191,10 @@ class ResidenceTest extends ControllerBaseCase {
         $form['residence[city]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Date")')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New Date")')->count());
     }
 
     /**
@@ -200,7 +204,7 @@ class ResidenceTest extends ControllerBaseCase {
     public function testAdminNewPopup() : void {
         $this->login('user.admin');
         $formCrawler = $this->client->request('GET', '/residence/new_popup');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
             'residence[date]' => 'New Date',
@@ -209,10 +213,10 @@ class ResidenceTest extends ControllerBaseCase {
         $form['residence[city]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Date")')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New Date")')->count());
     }
 
     /**
@@ -228,13 +232,13 @@ class ResidenceTest extends ControllerBaseCase {
         $form = $crawler->selectButton('Delete')->form();
         $this->client->submit($form);
 
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $this->entityManager->clear();
         $postCount = count($repo->findAll());
-        $this->assertSame($preCount - 1, $postCount);
+        static::assertSame($preCount - 1, $postCount);
     }
 }

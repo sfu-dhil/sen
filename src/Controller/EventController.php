@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Form\EventType;
 use App\Repository\EventRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -47,10 +46,8 @@ class EventController extends AbstractController implements PaginatorAwareInterf
 
     /**
      * @Route("/typeahead", name="event_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, EventRepository $eventRepository) {
+    public function typeahead(Request $request, EventRepository $eventRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -107,10 +104,8 @@ class EventController extends AbstractController implements PaginatorAwareInterf
     /**
      * @Route("/{id}", name="event_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(Event $event) {
+    public function show(Event $event) : array {
         return [
             'event' => $event,
         ];
@@ -144,10 +139,8 @@ class EventController extends AbstractController implements PaginatorAwareInterf
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="event_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, Event $event) {
+    public function delete(Request $request, Event $event) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($event);

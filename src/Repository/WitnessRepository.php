@@ -17,22 +17,18 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method null|Witness find($id, $lockMode = null, $lockVersion = null)
- * @method null|Witness findOneBy(array $criteria, array $orderBy = null)
  * @method Witness[] findAll()
  * @method Witness[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method null|Witness findOneBy(array $criteria, array $orderBy = null)
  */
 class WitnessRepository extends ServiceEntityRepository {
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Witness::class);
     }
 
-    /**
-     * @return Query
-     */
-    public function indexQuery() {
+    public function indexQuery() : Query {
         return $this->createQueryBuilder('witness')
             ->orderBy('witness.id')
-            ->getQuery()
-        ;
+            ->getQuery();
     }
 }

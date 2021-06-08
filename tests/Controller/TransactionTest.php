@@ -16,6 +16,10 @@ use Nines\UserBundle\DataFixtures\UserFixtures;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class TransactionTest extends ControllerBaseCase {
     // Change this to HTTP_OK when the site is public.
     private const ANON_RESPONSE_CODE = Response::HTTP_FOUND;
@@ -35,19 +39,19 @@ class TransactionTest extends ControllerBaseCase {
      */
     public function testAnonIndex() : void {
         $crawler = $this->client->request('GET', '/transaction/');
-        $this->assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('New')->count());
+        static::assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('New')->count());
     }
 
     /**
-     * @group user
      * @group index
+     * @group user
      */
     public function testUserIndex() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/transaction/');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('New')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('New')->count());
     }
 
     /**
@@ -57,8 +61,8 @@ class TransactionTest extends ControllerBaseCase {
     public function testAdminIndex() : void {
         $this->login('user.admin');
         $crawler = $this->client->request('GET', '/transaction/');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->selectLink('New')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $crawler->selectLink('New')->count());
     }
 
     /**
@@ -67,19 +71,19 @@ class TransactionTest extends ControllerBaseCase {
      */
     public function testAnonShow() : void {
         $crawler = $this->client->request('GET', '/transaction/1');
-        $this->assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('Edit')->count());
+        static::assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('Edit')->count());
     }
 
     /**
-     * @group user
      * @group show
+     * @group user
      */
     public function testUserShow() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/transaction/1');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('Edit')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('Edit')->count());
     }
 
     /**
@@ -89,8 +93,8 @@ class TransactionTest extends ControllerBaseCase {
     public function testAdminShow() : void {
         $this->login('user.admin');
         $crawler = $this->client->request('GET', '/transaction/1');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->selectLink('Edit')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $crawler->selectLink('Edit')->count());
     }
 
     /**
@@ -99,18 +103,18 @@ class TransactionTest extends ControllerBaseCase {
      */
     public function testAnonEdit() : void {
         $crawler = $this->client->request('GET', '/transaction/1/edit');
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
-     * @group user
      * @group edit
+     * @group user
      */
     public function testUserEdit() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/transaction/1/edit');
-        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+        static::assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -120,7 +124,7 @@ class TransactionTest extends ControllerBaseCase {
     public function testAdminEdit() : void {
         $this->login('user.admin');
         $formCrawler = $this->client->request('GET', '/transaction/1/edit');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
             'transaction[date]' => '2020-02-02',
@@ -132,15 +136,15 @@ class TransactionTest extends ControllerBaseCase {
         ]);
 
         $this->client->submit($form);
-        $this->assertTrue($this->client->getResponse()->isRedirect('/transaction/1'));
+        static::assertTrue($this->client->getResponse()->isRedirect('/transaction/1'));
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("2020-02-02")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Notes")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated FirstPartyNote")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Conjunction")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated SecondPartyNote")')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $responseCrawler->filter('td:contains("2020-02-02")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("Updated Notes")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("Updated FirstPartyNote")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("Updated Conjunction")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("Updated SecondPartyNote")')->count());
     }
 
     /**
@@ -149,8 +153,8 @@ class TransactionTest extends ControllerBaseCase {
      */
     public function testAnonNew() : void {
         $crawler = $this->client->request('GET', '/transaction/new');
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
@@ -159,28 +163,28 @@ class TransactionTest extends ControllerBaseCase {
      */
     public function testAnonNewPopup() : void {
         $crawler = $this->client->request('GET', '/transaction/new_popup');
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
-     * @group user
      * @group new
+     * @group user
      */
     public function testUserNew() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/transaction/new');
-        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+        static::assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
-     * @group user
      * @group new
+     * @group user
      */
     public function testUserNewPopup() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/transaction/new_popup');
-        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+        static::assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -190,7 +194,7 @@ class TransactionTest extends ControllerBaseCase {
     public function testAdminNew() : void {
         $this->login('user.admin');
         $formCrawler = $this->client->request('GET', '/transaction/new');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
             'transaction[date]' => '2020-02-02',
@@ -206,15 +210,15 @@ class TransactionTest extends ControllerBaseCase {
         $form['transaction[ledger]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("2020-02-02")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Notes")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New FirstPartyNote")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Conjunction")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New SecondPartyNote")')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $responseCrawler->filter('td:contains("2020-02-02")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New Notes")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New FirstPartyNote")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New Conjunction")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New SecondPartyNote")')->count());
     }
 
     /**
@@ -224,7 +228,7 @@ class TransactionTest extends ControllerBaseCase {
     public function testAdminNewPopup() : void {
         $this->login('user.admin');
         $formCrawler = $this->client->request('GET', '/transaction/new_popup');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
             'transaction[date]' => '2020-02-02',
@@ -240,15 +244,15 @@ class TransactionTest extends ControllerBaseCase {
         $form['transaction[ledger]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("2020-02-02")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Notes")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New FirstPartyNote")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Conjunction")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New SecondPartyNote")')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $responseCrawler->filter('td:contains("2020-02-02")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New Notes")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New FirstPartyNote")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New Conjunction")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New SecondPartyNote")')->count());
     }
 
     /**
@@ -264,13 +268,13 @@ class TransactionTest extends ControllerBaseCase {
         $form = $crawler->selectButton('Delete')->form();
         $this->client->submit($form);
 
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $this->entityManager->clear();
         $postCount = count($repo->findAll());
-        $this->assertSame($preCount - 1, $postCount);
+        static::assertSame($preCount - 1, $postCount);
     }
 }

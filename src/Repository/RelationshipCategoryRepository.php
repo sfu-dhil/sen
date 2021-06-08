@@ -16,9 +16,9 @@ use Nines\UtilBundle\Repository\TermRepository;
 
 /**
  * @method null|RelationshipCategory find($id, $lockMode = null, $lockVersion = null)
- * @method null|RelationshipCategory findOneBy(array $criteria, array $orderBy = null)
  * @method RelationshipCategory[] findAll()
  * @method RelationshipCategory[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method null|RelationshipCategory findOneBy(array $criteria, array $orderBy = null)
  */
 class RelationshipCategoryRepository extends TermRepository {
     public function __construct(ManagerRegistry $registry) {

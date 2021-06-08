@@ -16,9 +16,9 @@ use Nines\UtilBundle\Repository\TermRepository;
 
 /**
  * @method null|LocationCategory find($id, $lockMode = null, $lockVersion = null)
- * @method null|LocationCategory findOneBy(array $criteria, array $orderBy = null)
  * @method LocationCategory[] findAll()
  * @method LocationCategory[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method null|LocationCategory findOneBy(array $criteria, array $orderBy = null)
  */
 class LocationCategoryRepository extends TermRepository {
     public function __construct(ManagerRegistry $registry) {

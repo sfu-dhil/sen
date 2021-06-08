@@ -21,30 +21,26 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  */
 class Residence extends AbstractEntity {
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=true)
      */
-    private $date;
+    private string $date;
 
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=true)
      */
-    private $address;
+    private string $address;
 
     /**
-     * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="residences")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $person;
+    private Person $person;
 
     /**
-     * @var City
      * @ORM\ManyToOne(targetEntity="City")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $city;
+    private City $city;
 
     public function __toString() : string {
         return $this->date . ' ' . $this->city;

@@ -16,9 +16,9 @@ use Nines\UtilBundle\Repository\TermRepository;
 
 /**
  * @method null|EventCategory find($id, $lockMode = null, $lockVersion = null)
- * @method null|EventCategory findOneBy(array $criteria, array $orderBy = null)
  * @method EventCategory[] findAll()
  * @method EventCategory[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method null|EventCategory findOneBy(array $criteria, array $orderBy = null)
  */
 class EventCategoryRepository extends TermRepository {
     public function __construct(ManagerRegistry $registry) {

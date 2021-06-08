@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\EventCategory;
 use App\Form\EventCategoryType;
 use App\Repository\EventCategoryRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -49,10 +48,8 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
      * @Route("/search", name="event_category_search", methods={"GET"})
      *
      * @Template
-     *
-     * @return array
      */
-    public function search(Request $request, EventCategoryRepository $eventCategoryRepository) {
+    public function search(Request $request, EventCategoryRepository $eventCategoryRepository) : array {
         $q = $request->query->get('q');
         if ($q) {
             $query = $eventCategoryRepository->searchQuery($q);
@@ -69,10 +66,8 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
 
     /**
      * @Route("/typeahead", name="event_category_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, EventCategoryRepository $eventCategoryRepository) {
+    public function typeahead(Request $request, EventCategoryRepository $eventCategoryRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -129,10 +124,8 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
     /**
      * @Route("/{id}", name="event_category_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(EventCategory $eventCategory) {
+    public function show(EventCategory $eventCategory) : array {
         return [
             'event_category' => $eventCategory,
         ];
@@ -166,10 +159,8 @@ class EventCategoryController extends AbstractController implements PaginatorAwa
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="event_category_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, EventCategory $eventCategory) {
+    public function delete(Request $request, EventCategory $eventCategory) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $eventCategory->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($eventCategory);

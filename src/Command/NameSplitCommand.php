@@ -33,8 +33,7 @@ class NameSplitCommand extends Command {
             ->setDescription('Split names in CSV files.')
             ->addArgument('file', InputArgument::REQUIRED, 'File with columns to split')
             ->addArgument('cols', InputArgument::IS_ARRAY, 'List of column numbers to split.')
-            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Number of header rows to skip', 1)
-        ;
+            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Number of header rows to skip', 1);
     }
 
     protected function split($file, $cols, $skip) : void {
@@ -67,10 +66,10 @@ class NameSplitCommand extends Command {
     /**
      * Execute the command.
      *
-     * @param InputInterface $input
-     *                              Command input, as defined in the configure() method.
-     * @param OutputInterface $output
-     *                                Output destination.
+     * @param inputInterface $input
+     *                              Command input, as defined in the configure() method
+     * @param outputInterface $output
+     *                                Output destination
      */
     protected function execute(InputInterface $input, OutputInterface $output) : void {
         $file = $input->getArgument('file');

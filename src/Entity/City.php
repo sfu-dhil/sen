@@ -23,10 +23,9 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  */
 class City extends AbstractEntity {
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=false)
      */
-    private $name;
+    private string $name;
 
     public function __toString() : string {
         return $this->name;

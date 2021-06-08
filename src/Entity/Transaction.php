@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
@@ -24,54 +25,46 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  */
 class Transaction extends AbstractEntity {
     /**
-     * @var DateTimeImmutable
      * @ORM\Column(type="date", nullable=false)
      */
-    private $date;
+    private DateTime $date;
 
     /**
-     * @var int
      * @ORM\Column(type="integer")
      */
-    private $page;
+    private int $page;
 
     /**
-     * @var string
      * @ORM\Column(type="string", nullable=true)
      */
-    private $notes;
+    private string $notes;
 
     /**
-     * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="firstPartyTransactions")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $firstParty;
+    private Person $firstParty;
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
-    private $firstPartyNote;
+    private string $firstPartyNote;
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
-    private $conjunction;
+    private string $conjunction;
 
     /**
-     * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="secondPartyTransactions")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $secondParty;
+    private Person $secondParty;
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
-    private $secondPartyNote;
+    private string $secondPartyNote;
 
     /**
      * @var Collection|TransactionCategory[]

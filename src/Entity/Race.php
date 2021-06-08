@@ -24,40 +24,34 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  */
 class Race extends AbstractTerm {
     /**
-     * @var string
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private $spanishUngendered;
+    private string $spanishUngendered;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private $spanishMale;
+    private string $spanishMale;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private $spanishFemale;
+    private string $spanishFemale;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private $frenchUngendered;
+    private string $frenchUngendered;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private $frenchMale;
+    private string $frenchMale;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private $frenchFemale;
+    private string $frenchFemale;
 
     /**
      * @var Collection|Person[]

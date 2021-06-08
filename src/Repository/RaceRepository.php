@@ -16,9 +16,9 @@ use Nines\UtilBundle\Repository\TermRepository;
 
 /**
  * @method null|Race find($id, $lockMode = null, $lockVersion = null)
- * @method null|Race findOneBy(array $criteria, array $orderBy = null)
  * @method Race[] findAll()
  * @method Race[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method null|Race findOneBy(array $criteria, array $orderBy = null)
  */
 class RaceRepository extends TermRepository {
     public function __construct(ManagerRegistry $registry) {

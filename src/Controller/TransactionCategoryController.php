@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\TransactionCategory;
 use App\Form\TransactionCategoryType;
 use App\Repository\TransactionCategoryRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -49,10 +48,8 @@ class TransactionCategoryController extends AbstractController implements Pagina
      * @Route("/search", name="transaction_category_search", methods={"GET"})
      *
      * @Template
-     *
-     * @return array
      */
-    public function search(Request $request, TransactionCategoryRepository $transactionCategoryRepository) {
+    public function search(Request $request, TransactionCategoryRepository $transactionCategoryRepository) : array {
         $q = $request->query->get('q');
         if ($q) {
             $query = $transactionCategoryRepository->searchQuery($q);
@@ -69,10 +66,8 @@ class TransactionCategoryController extends AbstractController implements Pagina
 
     /**
      * @Route("/typeahead", name="transaction_category_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, TransactionCategoryRepository $transactionCategoryRepository) {
+    public function typeahead(Request $request, TransactionCategoryRepository $transactionCategoryRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -129,10 +124,8 @@ class TransactionCategoryController extends AbstractController implements Pagina
     /**
      * @Route("/{id}", name="transaction_category_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(TransactionCategory $transactionCategory) {
+    public function show(TransactionCategory $transactionCategory) : array {
         return [
             'transaction_category' => $transactionCategory,
         ];
@@ -166,10 +159,8 @@ class TransactionCategoryController extends AbstractController implements Pagina
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="transaction_category_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, TransactionCategory $transactionCategory) {
+    public function delete(Request $request, TransactionCategory $transactionCategory) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $transactionCategory->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($transactionCategory);

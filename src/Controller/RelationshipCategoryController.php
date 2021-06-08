@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\RelationshipCategory;
 use App\Form\RelationshipCategoryType;
 use App\Repository\RelationshipCategoryRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -49,10 +48,8 @@ class RelationshipCategoryController extends AbstractController implements Pagin
      * @Route("/search", name="relationship_category_search", methods={"GET"})
      *
      * @Template
-     *
-     * @return array
      */
-    public function search(Request $request, RelationshipCategoryRepository $relationshipCategoryRepository) {
+    public function search(Request $request, RelationshipCategoryRepository $relationshipCategoryRepository) : array {
         $q = $request->query->get('q');
         if ($q) {
             $query = $relationshipCategoryRepository->searchQuery($q);
@@ -69,10 +66,8 @@ class RelationshipCategoryController extends AbstractController implements Pagin
 
     /**
      * @Route("/typeahead", name="relationship_category_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, RelationshipCategoryRepository $relationshipCategoryRepository) {
+    public function typeahead(Request $request, RelationshipCategoryRepository $relationshipCategoryRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -129,10 +124,8 @@ class RelationshipCategoryController extends AbstractController implements Pagin
     /**
      * @Route("/{id}", name="relationship_category_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(RelationshipCategory $relationshipCategory) {
+    public function show(RelationshipCategory $relationshipCategory) : array {
         return [
             'relationship_category' => $relationshipCategory,
         ];
@@ -166,10 +159,8 @@ class RelationshipCategoryController extends AbstractController implements Pagin
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="relationship_category_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, RelationshipCategory $relationshipCategory) {
+    public function delete(Request $request, RelationshipCategory $relationshipCategory) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $relationshipCategory->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($relationshipCategory);

@@ -23,23 +23,20 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  */
 class Ledger extends AbstractEntity {
     /**
-     * @var string
      * @ORM\Column(type="string", length=24, nullable=false)
      */
-    private $volume;
+    private string $volume;
 
     /**
-     * @var int
      * @ORM\Column(type="integer", nullable=false)
      */
-    private $year;
+    private int $year;
 
     /**
-     * @var Notary
      * @ORM\ManyToOne(targetEntity="Notary", inversedBy="ledgers")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $notary;
+    private Notary $notary;
 
     /**
      * @var Collection|Transaction[]

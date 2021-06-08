@@ -20,15 +20,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportWitnessCategories extends Command {
-    /**
-     * @var WitnessCategoryRepository
-     */
-    private $repo;
+    private WitnessCategoryRepository $repo;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
     protected static $defaultName = 'sen:import:witness-categories';
 
@@ -38,8 +32,7 @@ class ImportWitnessCategories extends Command {
         $this
             ->setDescription(self::$defaultDescription)
             ->addArgument('files', InputArgument::IS_ARRAY, 'List of files to import')
-            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Rows of data to skip', 1)
-        ;
+            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Rows of data to skip', 1);
     }
 
     protected function import($file, $skip) : void {
@@ -53,7 +46,7 @@ class ImportWitnessCategories extends Command {
             if ( ! $category) {
                 $category = new WitnessCategory();
                 $category->setName($standard);
-                $category->setLabel(mb_convert_case($standard, MB_CASE_TITLE));
+                $category->setLabel(mb_convert_case($standard, \MB_CASE_TITLE));
                 $this->em->persist($category);
                 $this->em->flush();
             }

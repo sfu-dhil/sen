@@ -14,7 +14,6 @@ use App\Entity\Ledger;
 use App\Entity\Person;
 use App\Entity\Transaction;
 use App\Entity\TransactionCategory;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

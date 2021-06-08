@@ -21,24 +21,21 @@ use Nines\UtilBundle\Entity\AbstractEntity;
  */
 class Witness extends AbstractEntity {
     /**
-     * @var WitnessCategory
      * @ORM\ManyToOne(targetEntity="WitnessCategory", inversedBy="witnesses")
      */
-    private $category;
+    private WitnessCategory $category;
 
     /**
-     * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="witnesses")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $person;
+    private Person $person;
 
     /**
-     * @var Event
      * @ORM\ManyToOne(targetEntity="Event", inversedBy="witnesses")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $event;
+    private Event $event;
 
     public function __construct() {
         parent::__construct();

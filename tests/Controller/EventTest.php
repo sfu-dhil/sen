@@ -16,6 +16,10 @@ use Nines\UserBundle\DataFixtures\UserFixtures;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class EventTest extends ControllerBaseCase {
     // Change this to HTTP_OK when the site is public.
     private const ANON_RESPONSE_CODE = Response::HTTP_FOUND;
@@ -33,19 +37,19 @@ class EventTest extends ControllerBaseCase {
      */
     public function testAnonIndex() : void {
         $crawler = $this->client->request('GET', '/event/');
-        $this->assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('New')->count());
+        static::assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('New')->count());
     }
 
     /**
-     * @group user
      * @group index
+     * @group user
      */
     public function testUserIndex() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/event/');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('New')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('New')->count());
     }
 
     /**
@@ -55,8 +59,8 @@ class EventTest extends ControllerBaseCase {
     public function testAdminIndex() : void {
         $this->login('user.admin');
         $crawler = $this->client->request('GET', '/event/');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->selectLink('New')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $crawler->selectLink('New')->count());
     }
 
     /**
@@ -65,19 +69,19 @@ class EventTest extends ControllerBaseCase {
      */
     public function testAnonShow() : void {
         $crawler = $this->client->request('GET', '/event/1');
-        $this->assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('Edit')->count());
+        static::assertSame(self::ANON_RESPONSE_CODE, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('Edit')->count());
     }
 
     /**
-     * @group user
      * @group show
+     * @group user
      */
     public function testUserShow() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/event/1');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(0, $crawler->selectLink('Edit')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(0, $crawler->selectLink('Edit')->count());
     }
 
     /**
@@ -87,8 +91,8 @@ class EventTest extends ControllerBaseCase {
     public function testAdminShow() : void {
         $this->login('user.admin');
         $crawler = $this->client->request('GET', '/event/1');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->selectLink('Edit')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $crawler->selectLink('Edit')->count());
     }
 
     /**
@@ -97,18 +101,18 @@ class EventTest extends ControllerBaseCase {
      */
     public function testAnonEdit() : void {
         $crawler = $this->client->request('GET', '/event/1/edit');
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
-     * @group user
      * @group edit
+     * @group user
      */
     public function testUserEdit() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/event/1/edit');
-        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+        static::assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -118,7 +122,7 @@ class EventTest extends ControllerBaseCase {
     public function testAdminEdit() : void {
         $this->login('user.admin');
         $formCrawler = $this->client->request('GET', '/event/1/edit');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
             'event[writtenDate]' => 'Updated WrittenDate',
@@ -127,12 +131,12 @@ class EventTest extends ControllerBaseCase {
         ]);
 
         $this->client->submit($form);
-        $this->assertTrue($this->client->getResponse()->isRedirect('/event/1'));
+        static::assertTrue($this->client->getResponse()->isRedirect('/event/1'));
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated WrittenDate")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Date")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Note")')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $responseCrawler->filter('td:contains("Updated WrittenDate")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("Updated Date")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("Updated Note")')->count());
     }
 
     /**
@@ -141,8 +145,8 @@ class EventTest extends ControllerBaseCase {
      */
     public function testAnonNew() : void {
         $crawler = $this->client->request('GET', '/event/new');
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
@@ -151,28 +155,28 @@ class EventTest extends ControllerBaseCase {
      */
     public function testAnonNewPopup() : void {
         $crawler = $this->client->request('GET', '/event/new_popup');
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
     }
 
     /**
-     * @group user
      * @group new
+     * @group user
      */
     public function testUserNew() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/event/new');
-        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+        static::assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
-     * @group user
      * @group new
+     * @group user
      */
     public function testUserNewPopup() : void {
         $this->login('user.user');
         $crawler = $this->client->request('GET', '/event/new_popup');
-        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+        static::assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -182,7 +186,7 @@ class EventTest extends ControllerBaseCase {
     public function testAdminNew() : void {
         $this->login('user.admin');
         $formCrawler = $this->client->request('GET', '/event/new');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
             'event[writtenDate]' => 'New WrittenDate',
@@ -192,12 +196,12 @@ class EventTest extends ControllerBaseCase {
         $form['event[category]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New WrittenDate")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Date")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Note")')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New WrittenDate")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New Date")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New Note")')->count());
     }
 
     /**
@@ -207,7 +211,7 @@ class EventTest extends ControllerBaseCase {
     public function testAdminNewPopup() : void {
         $this->login('user.admin');
         $formCrawler = $this->client->request('GET', '/event/new_popup');
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $form = $formCrawler->selectButton('Save')->form([
             'event[writtenDate]' => 'New WrittenDate',
@@ -217,12 +221,12 @@ class EventTest extends ControllerBaseCase {
         $form['event[category]']->disableValidation()->setValue(1);
 
         $this->client->submit($form);
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New WrittenDate")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Date")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Note")')->count());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New WrittenDate")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New Date")')->count());
+        static::assertSame(1, $responseCrawler->filter('td:contains("New Note")')->count());
     }
 
     /**
@@ -238,13 +242,13 @@ class EventTest extends ControllerBaseCase {
         $form = $crawler->selectButton('Delete')->form();
         $this->client->submit($form);
 
-        $this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        static::assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        static::assertTrue($this->client->getResponse()->isRedirect());
         $responseCrawler = $this->client->followRedirect();
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $this->entityManager->clear();
         $postCount = count($repo->findAll());
-        $this->assertSame($preCount - 1, $postCount);
+        static::assertSame($preCount - 1, $postCount);
     }
 }

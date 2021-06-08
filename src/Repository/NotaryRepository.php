@@ -18,31 +18,25 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method null|Notary find($id, $lockMode = null, $lockVersion = null)
- * @method null|Notary findOneBy(array $criteria, array $orderBy = null)
  * @method Notary[] findAll()
  * @method Notary[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method null|Notary findOneBy(array $criteria, array $orderBy = null)
  */
 class NotaryRepository extends ServiceEntityRepository {
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Notary::class);
     }
 
-    /**
-     * @return Query
-     */
-    public function indexQuery() {
+    public function indexQuery() : Query {
         return $this->createQueryBuilder('notary')
             ->orderBy('notary.name')
-            ->getQuery()
-        ;
+            ->getQuery();
     }
 
     /**
-     * @param string $q
-     *
      * @return Collection|Notary[]
      */
-    public function typeaheadQuery($q) {
+    public function typeaheadQuery(string $q) {
         $qb = $this->createQueryBuilder('notary');
         $qb->andWhere('notary.name LIKE :q');
         $qb->orderBy('notary.name', 'ASC');

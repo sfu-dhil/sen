@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\Race;
-
 use Nines\UtilBundle\Form\TermType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;

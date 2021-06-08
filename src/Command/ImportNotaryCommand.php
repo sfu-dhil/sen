@@ -25,15 +25,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  * AppImportNotaryCommand command.
  */
 class ImportNotaryCommand extends Command {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
-    /**
-     * @var ImportService
-     */
-    private $importer;
+    private ImportService $importer;
 
     public function __construct(EntityManagerInterface $em, ImportService $importer, $name = null) {
         parent::__construct($name);
@@ -49,8 +43,7 @@ class ImportNotaryCommand extends Command {
             ->setName('app:import:notary')
             ->setDescription('Import notarial data from one or more CSV files')
             ->addArgument('files', InputArgument::IS_ARRAY, 'List of CSV files to import')
-            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Number of header rows to skip', 1)
-        ;
+            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Number of header rows to skip', 1);
     }
 
     /**

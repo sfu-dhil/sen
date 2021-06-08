@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\Person;
 use App\Form\PersonType;
 use App\Repository\PersonRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -49,10 +48,8 @@ class PersonController extends AbstractController implements PaginatorAwareInter
      * @Route("/search", name="person_search", methods={"GET"})
      *
      * @Template
-     *
-     * @return array
      */
-    public function search(Request $request, PersonRepository $personRepository) {
+    public function search(Request $request, PersonRepository $personRepository) : array {
         $q = $request->query->get('q');
         if ($q) {
             $query = $personRepository->searchQuery($q);
@@ -69,10 +66,8 @@ class PersonController extends AbstractController implements PaginatorAwareInter
 
     /**
      * @Route("/typeahead", name="person_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, PersonRepository $personRepository) {
+    public function typeahead(Request $request, PersonRepository $personRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -129,10 +124,8 @@ class PersonController extends AbstractController implements PaginatorAwareInter
     /**
      * @Route("/{id}", name="person_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(Person $person) {
+    public function show(Person $person) : array {
         return [
             'person' => $person,
         ];
@@ -166,10 +159,8 @@ class PersonController extends AbstractController implements PaginatorAwareInter
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="person_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, Person $person) {
+    public function delete(Request $request, Person $person) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $person->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($person);

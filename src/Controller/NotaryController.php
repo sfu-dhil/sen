@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\Notary;
 use App\Form\NotaryType;
 use App\Repository\NotaryRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -47,10 +46,8 @@ class NotaryController extends AbstractController implements PaginatorAwareInter
 
     /**
      * @Route("/typeahead", name="notary_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, NotaryRepository $notaryRepository) {
+    public function typeahead(Request $request, NotaryRepository $notaryRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -107,10 +104,8 @@ class NotaryController extends AbstractController implements PaginatorAwareInter
     /**
      * @Route("/{id}", name="notary_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(Notary $notary) {
+    public function show(Notary $notary) : array {
         return [
             'notary' => $notary,
         ];
@@ -144,10 +139,8 @@ class NotaryController extends AbstractController implements PaginatorAwareInter
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="notary_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, Notary $notary) {
+    public function delete(Request $request, Notary $notary) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $notary->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($notary);

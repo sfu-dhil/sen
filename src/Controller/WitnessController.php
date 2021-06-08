@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\Witness;
 use App\Form\WitnessType;
 use App\Repository\WitnessRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -85,10 +84,8 @@ class WitnessController extends AbstractController implements PaginatorAwareInte
     /**
      * @Route("/{id}", name="witness_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(Witness $witness) {
+    public function show(Witness $witness) : array {
         return [
             'witness' => $witness,
         ];
@@ -122,10 +119,8 @@ class WitnessController extends AbstractController implements PaginatorAwareInte
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="witness_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, Witness $witness) {
+    public function delete(Request $request, Witness $witness) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $witness->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($witness);

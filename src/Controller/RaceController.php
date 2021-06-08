@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\Entity\Race;
 use App\Form\RaceType;
 use App\Repository\RaceRepository;
-
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -49,10 +48,8 @@ class RaceController extends AbstractController implements PaginatorAwareInterfa
      * @Route("/search", name="race_search", methods={"GET"})
      *
      * @Template
-     *
-     * @return array
      */
-    public function search(Request $request, RaceRepository $raceRepository) {
+    public function search(Request $request, RaceRepository $raceRepository) : array {
         $q = $request->query->get('q');
         if ($q) {
             $query = $raceRepository->searchQuery($q);
@@ -69,10 +66,8 @@ class RaceController extends AbstractController implements PaginatorAwareInterfa
 
     /**
      * @Route("/typeahead", name="race_typeahead", methods={"GET"})
-     *
-     * @return JsonResponse
      */
-    public function typeahead(Request $request, RaceRepository $raceRepository) {
+    public function typeahead(Request $request, RaceRepository $raceRepository) : JsonResponse {
         $q = $request->query->get('q');
         if ( ! $q) {
             return new JsonResponse([]);
@@ -129,10 +124,8 @@ class RaceController extends AbstractController implements PaginatorAwareInterfa
     /**
      * @Route("/{id}", name="race_show", methods={"GET"})
      * @Template
-     *
-     * @return array
      */
-    public function show(Race $race) {
+    public function show(Race $race) : array {
         return [
             'race' => $race,
         ];
@@ -166,10 +159,8 @@ class RaceController extends AbstractController implements PaginatorAwareInterfa
     /**
      * @IsGranted("ROLE_CONTENT_ADMIN")
      * @Route("/{id}", name="race_delete", methods={"DELETE"})
-     *
-     * @return RedirectResponse
      */
-    public function delete(Request $request, Race $race) {
+    public function delete(Request $request, Race $race) : RedirectResponse {
         if ($this->isCsrfTokenValid('delete' . $race->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($race);

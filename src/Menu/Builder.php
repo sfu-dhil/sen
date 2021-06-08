@@ -23,20 +23,11 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class Builder implements ContainerAwareInterface {
     use ContainerAwareTrait;
 
-    /**
-     * @var FactoryInterface
-     */
-    private $factory;
+    private FactoryInterface $factory;
 
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authChecker;
+    private AuthorizationCheckerInterface $authChecker;
 
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
+    private TokenStorageInterface $tokenStorage;
 
     /**
      * Build the menu builder.
@@ -49,12 +40,8 @@ class Builder implements ContainerAwareInterface {
 
     /**
      * Check if the current user has the given role.
-     *
-     * @param string $role
-     *
-     * @return bool
      */
-    private function hasRole($role) {
+    private function hasRole(string $role) : bool {
         if ( ! $this->tokenStorage->getToken()) {
             return false;
         }
@@ -64,10 +51,8 @@ class Builder implements ContainerAwareInterface {
 
     /**
      * Build the navigation menu and return it.
-     *
-     * @return ItemInterface
      */
-    public function mainMenu() {
+    public function mainMenu() : ItemInterface {
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttributes([
             'class' => 'nav navbar-nav',
@@ -147,10 +132,8 @@ class Builder implements ContainerAwareInterface {
 
     /**
      * Build a menu for the footer.
-     *
-     * @return ItemInterface
      */
-    public function footerMenu(array $options) {
+    public function footerMenu(array $options) : ItemInterface {
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttributes([
             'class' => 'nav',
