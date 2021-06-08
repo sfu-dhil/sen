@@ -114,7 +114,7 @@ class ImportServiceTest extends ServiceBaseCase {
      * @param mixed $status
      */
     public function testFindPerson($given, $family, $raceName, $status) : void {
-        $found = $this->importer->findPerson($given, $family, $raceName, $status);
+        $found = $this->importer->findPerson($given, $family, $raceName);
         $this->assertInstanceOf(Person::class, $found);
         $this->assertNotNull($found->getId());
         $this->assertSame(\mb_convert_case($family, \MB_CASE_TITLE), $found->getLastName());
@@ -138,7 +138,7 @@ class ImportServiceTest extends ServiceBaseCase {
      * @param mixed $status
      */
     public function testFindNewPerson($given, $family, $raceName, $status) : void {
-        $found = $this->importer->findPerson($given, $family, $raceName, $status);
+        $found = $this->importer->findPerson($given, $family, $raceName);
         $this->assertInstanceOf(Person::class, $found);
 
         $this->assertSame(mb_convert_case($family, MB_CASE_TITLE), $found->getLastName());

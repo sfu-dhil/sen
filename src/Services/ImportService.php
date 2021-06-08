@@ -142,12 +142,11 @@ class ImportService {
      * @param string $given
      * @param string $family
      * @param string $raceName
-     * @param string $status
      * @param mixed $sex
      *
      * @return Person
      */
-    public function findPerson($given, $family, $raceName = '', $status = '', $sex = '') {
+    public function findPerson($given, $family, $raceName = '', $sex = '') {
         $repo = $this->em->getRepository(Person::class);
         $person = $repo->findOneBy([
             'firstName' => $given,

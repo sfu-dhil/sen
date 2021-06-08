@@ -74,7 +74,6 @@ class ImportNotaryCommand extends Command {
                 $row[N::first_party_first_name],
                 $row[N::first_party_last_name],
                 $row[N::first_party_race],
-                $row[N::first_party_status],
                 $row[N::first_party_sex]
             );
 
@@ -82,7 +81,6 @@ class ImportNotaryCommand extends Command {
                 $row[N::second_party_first_name],
                 $row[N::second_party_last_name],
                 $row[N::second_party_race],
-                $row[N::second_party_status],
                 $row[N::second_party_sex]
             );
 

@@ -76,26 +76,6 @@ class Person extends AbstractEntity {
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", length=10, nullable=true)
-     */
-    private $birthDate;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=24, nullable=true)
-     */
-    private $writtenBirthDate;
-
-    /**
-     * @var City
-     * @ORM\ManyToOne(targetEntity="City")
-     */
-    private $birthPlace;
-
-    /**
-     * @var string
      * @ORM\Column(type="string", nullable=true)
      */
     private $birthStatus;
@@ -267,26 +247,6 @@ class Person extends AbstractEntity {
         return $this;
     }
 
-    public function getBirthDate() : ?string {
-        return $this->birthDate;
-    }
-
-    public function setBirthDate(?string $birthDate) : self {
-        $this->birthDate = $birthDate;
-
-        return $this;
-    }
-
-    public function getWrittenBirthDate() : ?string {
-        return $this->writtenBirthDate;
-    }
-
-    public function setWrittenBirthDate(?string $writtenBirthDate) : self {
-        $this->writtenBirthDate = $writtenBirthDate;
-
-        return $this;
-    }
-
     public function getBirthStatus() : ?string {
         return $this->birthStatus;
     }
@@ -303,16 +263,6 @@ class Person extends AbstractEntity {
 
     public function setStatus(?string $status) : self {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getBirthPlace() : ?City {
-        return $this->birthPlace;
-    }
-
-    public function setBirthPlace(?City $birthPlace) : self {
-        $this->birthPlace = $birthPlace;
 
         return $this;
     }
