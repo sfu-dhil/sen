@@ -168,6 +168,12 @@
                 {% endif %}
             </td>
         </tr>
+        {% if is_granted('ROLE_USER') %}
+            <tr>
+                <th>Notes</th>
+                <td>{{ person.notes|raw }}</td>
+            </tr>
+        {% endif %}
         <tr>
             <th>Created</th>
             <td>{{ person.created|date }}</td>

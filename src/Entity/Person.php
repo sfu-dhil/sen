@@ -53,7 +53,7 @@ class Person extends AbstractEntity {
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private string $native;
+    private ?string $native;
 
     /**
      * @ORM\Column(type="array", nullable=true)
@@ -76,6 +76,11 @@ class Person extends AbstractEntity {
      * @ORM\Column(type="string", nullable=true)
      */
     private ?string $status;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private ?string $notes;
 
     /**
      * @var Collection|Residence[]
@@ -128,7 +133,6 @@ class Person extends AbstractEntity {
         parent::__construct();
         $this->alias = [];
         $this->occupation = [];
-        $this->transactions = new ArrayCollection();
         $this->relationships = new ArrayCollection();
         $this->witnesses = new ArrayCollection();
         $this->events = new ArrayCollection();
@@ -160,7 +164,7 @@ class Person extends AbstractEntity {
     }
 
     public function setLastName(string $lastName) : self {
-        $this->lastName = mb_convert_case($lastName, \MB_CASE_TITLE);
+        $this->lastName = (string) mb_convert_case($lastName, MB_CASE_TITLE);
 
         return $this;
     }
@@ -210,7 +214,7 @@ class Person extends AbstractEntity {
         return $this->occupation;
     }
 
-    public function setOccupation(?array $occupation) : self {
+    public function setOccupation(array $occupation) : self {
         $this->occupation = $occupation;
 
         return $this;
@@ -449,6 +453,18 @@ class Person extends AbstractEntity {
                 $secondPartyTransaction->setSecondParty(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    public function setNotes(?string $notes): self
+    {
+        $this->notes = $notes;
 
         return $this;
     }

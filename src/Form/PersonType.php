@@ -15,6 +15,7 @@ use App\Entity\Race;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -113,6 +114,14 @@ class PersonType extends AbstractType {
                 'help_block' => '',
                 'add_path' => 'race_new_popup',
                 'add_label' => 'Add Race',
+            ],
+        ]);
+        $builder->add('notes', TextareaType::class, [
+            'label' => 'Notes',
+            'required' => false,
+            'attr' => [
+                'help_block' => 'Private research notes',
+                'class' => 'tinymce'
             ],
         ]);
     }

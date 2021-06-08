@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\Entity\Transaction;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -23,7 +24,7 @@ class TransactionFixtures extends Fixture implements DependentFixtureInterface {
     public function load(ObjectManager $em) : void {
         for ($i = 1; $i <= 4; $i++) {
             $fixture = new Transaction();
-            $fixture->setDate(new DateTimeImmutable("2020-{$i}-{$i}"));
+            $fixture->setDate(new DateTime("2020-{$i}-{$i}"));
             $fixture->setPage($i);
             $fixture->setNotes('Notes ' . $i);
             $fixture->setFirstPartyNote('FirstPartyNote ' . $i);
