@@ -25,7 +25,7 @@ class ResidenceFixtures extends Fixture implements DependentFixtureInterface {
             $fixture->setDate('Date ' . $i);
 
             $fixture->setPerson($this->getReference('person.' . $i));
-            $fixture->setCity($this->getReference('city.' . $i));
+            $fixture->setAddress($this->getReference('city.' . $i));
             $em->persist($fixture);
             $this->setReference('residence.' . $i, $fixture);
         }

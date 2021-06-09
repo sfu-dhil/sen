@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Entity\RelationshipCategory;
 use App\Entity\WitnessCategory;
+use App\Repository\RelationshipCategoryRepository;
 use App\Repository\WitnessCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -19,14 +21,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ImportWitnessCategories extends Command {
-    private WitnessCategoryRepository $repo;
+class ImportRelationshipCategories extends Command {
 
     private EntityManagerInterface $em;
 
-    protected static $defaultName = 'sen:import:witness-categories';
+    protected static $defaultName = 'sen:import:relationship-categories';
 
-    protected static $defaultDescription = 'Import the witness categories';
+    protected static $defaultDescription = 'Import relationship categories';
+
+    private RelationshipCategoryRepository $repo;
 
     protected function configure() : void {
         $this
@@ -44,7 +47,7 @@ class ImportWitnessCategories extends Command {
             $standard = $row[0];
             $category = $this->repo->findOneBy(['name' => $standard]);
             if ( ! $category) {
-                $category = new WitnessCategory();
+                $category = new RelationshipCategory();
                 $category->setName($standard);
                 $category->setLabel(mb_convert_case($standard, \MB_CASE_TITLE));
                 $this->em->persist($category);
@@ -74,7 +77,7 @@ class ImportWitnessCategories extends Command {
     /**
      * @required
      */
-    public function setTransactionCategoryRepository(WitnessCategoryRepository $repo) : void {
+    public function setRelationshipCategoryRepository(RelationshipCategoryRepository $repo) : void {
         $this->repo = $repo;
     }
 }

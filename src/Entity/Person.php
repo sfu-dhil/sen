@@ -227,7 +227,9 @@ class Person extends AbstractEntity {
     }
 
     public function setSex(?string $sex) : self {
-        $this->sex = $sex;
+        if($sex === self::FEMALE || $sex === self::MALE) {
+            $this->sex = $sex;
+        }
 
         return $this;
     }

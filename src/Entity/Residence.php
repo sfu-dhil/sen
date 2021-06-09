@@ -28,7 +28,7 @@ class Residence extends AbstractEntity {
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private string $address;
+    private ?string $address;
 
     /**
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="residences")
@@ -50,7 +50,7 @@ class Residence extends AbstractEntity {
         return $this->date;
     }
 
-    public function setDate(?string $date) : self {
+    public function setDate(string $date) : self {
         $this->date = $date;
 
         return $this;
@@ -60,7 +60,7 @@ class Residence extends AbstractEntity {
         return $this->person;
     }
 
-    public function setPerson(?Person $person) : self {
+    public function setPerson(Person $person) : self {
         $this->person = $person;
 
         return $this;
@@ -70,9 +70,23 @@ class Residence extends AbstractEntity {
         return $this->city;
     }
 
-    public function setCity(?City $city) : self {
+    public function setCity(City $city) : self {
         $this->city = $city;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress() : ?string {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress(?string $address) : void {
+        $this->address = $address;
     }
 }

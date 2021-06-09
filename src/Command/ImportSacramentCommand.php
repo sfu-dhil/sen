@@ -13,6 +13,7 @@ namespace App\Command;
 use App\Services\ImportService;
 use App\Util\SacramentColumnDefinitions as S;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -44,30 +45,35 @@ class ImportSacramentCommand extends Command {
             ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Number of header rows to skip', 1);
     }
 
-    protected function import($file, $skip) : void {
-        $handle = fopen($file, 'r');
+    function preprocess(array $row) : array {
+        return array_map(function($d) {
+            $s = mb_convert_encoding($d, 'UTF-8', 'UTF-8');
+            return preg_replace("/^\s+|\s+$/u", '', $s);
+        }, $row);
+    }
 
-        for ($i = 1; $i <= $skip; $i++) {
-            fgetcsv($handle);
-        }
-        while ($row = fgetcsv($handle)) {
-            $row = array_map(static fn($data) => mb_convert_encoding($data, 'UTF-8', 'UTF-8'), $row);
-            $person = $this->importer->findPerson($row[S::first_name], $row[S::last_name], $row[S::race_id], $row[S::sex]);
-
-            $this->importer->setNative($person, $row);
-            $this->importer->addAliases($person, $row);
-            $this->importer->addOccupations($person, $row);
-
-            $this->importer->addBirth($person, $row);
-            $this->importer->addDeath($person, $row);
-            $this->importer->addBaptism($person, $row);
-            $this->importer->addManumission($person, $row);
-            $this->importer->addMarriage($person, $row);
-
-            $this->importer->addResidences($person, $row);
-
-            $this->em->flush();
-        }
+    /**
+     * @throws Exception
+     */
+    protected function process($row) {
+        $person = $this->importer->findPerson($row[S::first_name], $row[S::last_name], $row[S::race_id], $row[S::sex]);
+        $this->importer->setWrittenRace($person, $row); // includes race_id;
+        $this->importer->setStatus($person, $row);
+        $this->importer->addManumission($person, $row);
+        $this->importer->addAliases($person, $row);
+        $this->importer->addOccupations($person, $row);
+        $this->importer->setNative($person, $row);
+        $this->importer->addBirth($person, $row);
+        $this->importer->setBirthStatus($person, $row);
+        $baptism = $this->importer->addBaptism($person, $row);
+        $this->importer->addParents($person, $row);
+        $this->importer->addGodParents($person, $row, $baptism);
+        $marriage = $this->importer->addMarriage($person, $row);
+        $this->importer->addSpouse($person, $row);
+        $this->importer->addMarriageWitnesses($person, $row, $marriage);
+        $this->importer->addDeath($person, $row);
+        $this->importer->addResidences($person, $row);
+        $person->setNotes($row[S::notes]);
     }
 
     /**
@@ -83,7 +89,25 @@ class ImportSacramentCommand extends Command {
         $skip = $input->getOption('skip');
 
         foreach ($files as $file) {
-            $this->import($file, $skip);
+            $handle = fopen($file, 'r');
+
+            for ($i = 1; $i <= $skip; $i++) {
+                fgetcsv($handle);
+            }
+            for(; $row = fgetcsv($handle); $i++) {
+                $row = array_map(static fn($data) => mb_convert_encoding($data, 'UTF-8', 'UTF-8'), $row);
+
+                try {
+                    $this->process($row);
+                    $this->em->beginTransaction();
+                    $this->em->flush();
+                    $this->em->commit();
+                } catch (Exception $e) {
+                    $output->writeln("{$file}:{$i} - {$e->getMessage()}");
+                    $this->em->rollback();
+                    $this->em->clear();
+                }
+            }
         }
     }
 }
