@@ -26,7 +26,7 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface {
             $fixture->setLastName('LastName ' . $i);
             $fixture->setAliases(['Alias ' . $i]);
             $fixture->setNative('Native ' . $i);
-            $fixture->setOccupations(['Occupation ' . $i]);
+            $fixture->setOccupations([['date' => 1600+$i, 'occupation' => 'occupation 1']]);
             $fixture->setSex($i % 2 ? 'M' : 'F');
             $fixture->setBirthStatus($this->getReference('birthstatus.' . $i));
 

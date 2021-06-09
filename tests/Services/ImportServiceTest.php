@@ -117,7 +117,6 @@ class ImportServiceTest extends ServiceBaseCase {
         $found = $this->importer->findPerson($given, $family, $raceName);
         static::assertInstanceOf(Person::class, $found);
         static::assertNotNull($found->getId());
-        static::assertSame(\mb_convert_case($family, \MB_CASE_TITLE), $found->getLastName());
     }
 
     public function findPersonData() {
@@ -141,6 +140,7 @@ class ImportServiceTest extends ServiceBaseCase {
         static::assertInstanceOf(Person::class, $found);
 
         static::assertSame(mb_convert_case($family, \MB_CASE_TITLE), $found->getLastName());
+        static::assertSame(mb_convert_case($given, \MB_CASE_TITLE), $found->getFirstName());
     }
 
     public function findNewPersonData() {
@@ -335,19 +335,19 @@ class ImportServiceTest extends ServiceBaseCase {
 
     public function testAddNullAliases() : void {
         $person = $this->getReference('person.1');
-        $aliases = count($person->getAlias());
+        $aliases = count($person->getAliases());
         $this->importer->addAliases($person, []);
-        static::assertSame($aliases, count($person->getAlias()));
+        static::assertSame($aliases, count($person->getAliases()));
     }
 
     public function testAddAliases() : void {
         $person = $this->getReference('person.1');
-        $aliases = count($person->getAlias());
+        $aliases = count($person->getAliases());
         $row = [
-            11 => 'Driver, cheese maker',
+            11 => 'Driver; cheese maker',
         ];
         $this->importer->addAliases($person, $row);
-        static::assertSame($aliases + 2, count($person->getAlias()));
+        static::assertSame($aliases + 2, count($person->getAliases()));
     }
 
     public function testSetNullNative() : void {
@@ -368,19 +368,30 @@ class ImportServiceTest extends ServiceBaseCase {
 
     public function testAddNullOccupations() : void {
         $person = $this->getReference('person.1');
-        $occupations = count($person->getOccupation());
+        $occupations = count($person->getOccupations());
         $this->importer->addOccupations($person, []);
-        static::assertSame($occupations, count($person->getOccupation()));
+        static::assertSame($occupations, count($person->getOccupations()));
     }
 
     public function testAddOccupations() : void {
         $person = $this->getReference('person.1');
-        $occupations = count($person->getOccupation());
+        $occupations = count($person->getOccupations());
         $row = [
             13 => 'Driver; cheese maker',
         ];
         $this->importer->addOccupations($person, $row);
-        static::assertSame($occupations + 2, count($person->getOccupation()));
+        static::assertSame($occupations + 2, count($person->getOccupations()));
+    }
+
+    public function testAddDatedOccupations() : void {
+        $person = $this->getReference('person.1');
+        $occupations = count($person->getOccupations());
+        $row = [
+            13 => '1900 Driver; 2001 cheese maker',
+        ];
+        $this->importer->addOccupations($person, $row);
+        static::assertSame($occupations + 2, count($person->getOccupations()));
+        $this->assertContains(['date' => '1900', 'occupation' => 'Driver'], $person->getOccupations());
     }
 
     protected function setUp() : void {

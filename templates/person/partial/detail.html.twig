@@ -27,15 +27,19 @@
         <tr>
             <th>Occupation</th>
             <td>
-                {% for job in person.occupations %}
-                    {{ job[date] }} - {{ job['occupation'] }}
-                {% endfor %}
+                {% if person.occupations|length %}
+                <ul>
+                    {% for job in person.occupations %}
+                    <li>{{ job['date'] }} {{ job['occupation'] }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
             </td>
         </tr>
         <tr>
             <th>Sex</th>
             <td>
-                {{ person.sex }}
+                {{ include('person/partial/gender.html.twig', {'person': person}) }}
             </td>
         </tr>
         <tr>

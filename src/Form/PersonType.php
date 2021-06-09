@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\Person;
+use App\Entity\BirthStatus;
 use App\Entity\Race;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
@@ -31,21 +31,37 @@ class PersonType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) : void {
         $builder->add('firstName', TextType::class, [
             'label' => 'First Name',
-            'required' => true,
+            'required' => false,
             'attr' => [
                 'help_block' => '',
             ],
         ]);
         $builder->add('lastName', TextType::class, [
             'label' => 'Last Name',
-            'required' => true,
+            'required' => false,
             'attr' => [
                 'help_block' => '',
             ],
         ]);
-        $builder->add('alias', CollectionType::class, [
+        $builder->add('titles', CollectionType::class, [
+            'label' => 'Titles',
+            'required' => false,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'delete_empty' => true,
+            'entry_type' => TextType::class,
+            'entry_options' => [
+                'label' => false,
+            ],
+            'by_reference' => false,
+            'attr' => [
+                'class' => 'collection collection-simple',
+                'help_block' => '',
+            ],
+        ]);
+        $builder->add('aliases', CollectionType::class, [
             'label' => 'Aliases',
-            'required' => true,
+            'required' => false,
             'allow_add' => true,
             'allow_delete' => true,
             'delete_empty' => true,
@@ -66,8 +82,33 @@ class PersonType extends AbstractType {
                 'help_block' => '',
             ],
         ]);
-        $builder->add('occupation', CollectionType::class, [
+
+        $builder->add('occupations', CollectionType::class, [
             'label' => 'Occupations',
+            'required' => false,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'delete_empty' => true,
+            'entry_type' => OccupationType::class,
+            'entry_options' => [
+                'label' => false,
+            ],
+            'by_reference' => false,
+            'attr' => [
+                'class' => 'collection collection-simple',
+                'help_block' => '',
+            ],
+        ]);
+
+        $builder->add('sex', TextType::class, [
+            'label' => 'Sex',
+            'required' => false,
+            'attr' => [
+                'help_block' => '',
+            ],
+        ]);
+        $builder->add('statuses', CollectionType::class, [
+            'label' => 'Statuses',
             'required' => false,
             'allow_add' => true,
             'allow_delete' => true,
@@ -79,34 +120,42 @@ class PersonType extends AbstractType {
             'by_reference' => false,
             'attr' => [
                 'class' => 'collection collection-simple',
-                'help_block' => 'Format: Year (if known); Occupation',
-            ],
-        ]);
-        $builder->add('sex', ChoiceType::class, [
-            'expanded' => true,
-            'multiple' => false,
-            'choices' => [
-                'Female' => Person::FEMALE,
-                'Male' => Person::MALE,
-                'Unknown' => null,
-            ],
-        ]);
-        $builder->add('birthStatus', TextType::class, [
-            'label' => 'Birth Status',
-            'required' => false,
-            'attr' => [
                 'help_block' => '',
             ],
         ]);
-        $builder->add('status', TextType::class, [
-            'label' => 'Status',
+        $builder->add('writtenRaces', CollectionType::class, [
+            'label' => 'Written Races',
             'required' => false,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'delete_empty' => true,
+            'entry_type' => TextType::class,
+            'entry_options' => [
+                'label' => false,
+            ],
+            'by_reference' => false,
             'attr' => [
+                'class' => 'collection collection-simple',
                 'help_block' => '',
             ],
         ]);
+
+        $builder->add('birthStatus', Select2EntityType::class, [
+            'label' => 'BirthStatus',
+            'required' => false,
+            'class' => BirthStatus::class,
+            'remote_route' => 'birth_status_typeahead',
+            'allow_clear' => true,
+            'attr' => [
+                'help_block' => '',
+                'add_path' => 'birth_status_new_popup',
+                'add_label' => 'Add BirthStatus',
+            ],
+        ]);
+
         $builder->add('race', Select2EntityType::class, [
             'label' => 'Race',
+            'required' => false,
             'class' => Race::class,
             'remote_route' => 'race_typeahead',
             'allow_clear' => true,

@@ -126,7 +126,7 @@ class ImportService {
         $repo = $this->em->getRepository(Person::class);
         $person = $repo->findOneBy([
             'firstName' => $given,
-            'lastName' => mb_convert_case($family, \MB_CASE_TITLE),
+            'lastName' => $family,
         ]);
         $race = $this->findRace($raceName);
         $s = null;
@@ -149,8 +149,8 @@ class ImportService {
         }
         if ( ! $person) {
             $person = new Person();
-            $person->setFirstName($given);
-            $person->setLastName($family);
+            $person->setFirstName(mb_convert_case($given, MB_CASE_TITLE));
+            $person->setLastName(mb_convert_case($family, MB_CASE_TITLE));
             $person->setRace($race);
             $person->setSex($s);
             $this->em->persist($person);
@@ -385,8 +385,8 @@ class ImportService {
         if ( ! isset($row[11]) || ! $row[11]) {
             return;
         }
-        $aliases = preg_split('/[,;]/', $row[11]);
-        $person->addAlias($aliases);
+        $aliases = preg_split('/[;]/', $row[11]);
+        $person->setAliases(array_merge($person->getAliases(), $aliases));
     }
 
     public function setNative(Person $person, $row) : void {
@@ -400,7 +400,16 @@ class ImportService {
         if ( ! isset($row[13]) || ! $row[13]) {
             return;
         }
-        $occupations = explode(';', $row[13]);
-        $person->addOccupation($occupations);
+        $occupations = [];
+        $list = explode(';', $row[13]);
+        foreach($list as $data) {
+            $m = [];
+            if(preg_match('/^(\d{4})\s*(.*)\s*$/u', $data, $m)) {
+                $occupations[] = ['date' => $m[1], 'occupation' => $m[2]];
+            } else {
+                $occupations[] = $data;
+            }
+        }
+        $person->setOccupations(array_merge($person->getOccupations(), $occupations));
     }
 }
