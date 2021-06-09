@@ -223,7 +223,7 @@ class Person extends AbstractEntity {
     }
 
     public function getSex() : ?string {
-        return $this->sex;
+        return $this->sex ?? null;
     }
 
     public function setSex(?string $sex) : self {

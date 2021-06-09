@@ -47,6 +47,10 @@ use Psr\Log\LoggerInterface;
  * Description of AbstractImportService.
  */
 class ImportService {
+    private const SPLIT = '/\s*;\s*/';
+
+    private const TRIM = '/^\s*|\s*$/';
+
     private EntityManagerInterface $em;
 
     private LoggerInterface $logger;
@@ -122,10 +126,9 @@ class ImportService {
     /**
      * Find or create a race record by name.
      *
-     * @return ?Race
+     * @throws Exception
      */
-    public function findRace(?string $name) {
-        $this->logger->warning('ImportService->findRace() needs to be rewritten.');
+    public function findRace(?string $name) : ?Race {
         if ( ! $name) {
             return null;
         }
@@ -133,10 +136,7 @@ class ImportService {
             'name' => $name,
         ]);
         if ( ! $race) {
-            $race = new Race();
-            $race->setName($name);
-            $race->setLabel(ucwords($name));
-            $this->em->persist($race);
+            throw new Exception("Race ID {$name} not found.");
         }
 
         return $race;
@@ -146,26 +146,23 @@ class ImportService {
      * Find or create a record for a person.
      *
      * @param mixed $sex
+     *
+     * @throws Exception
      */
     public function findPerson(?string $given, ?string $family, ?string $raceName = '', $sex = '') : Person {
-        $normGiven = mb_convert_case($given, \MB_CASE_TITLE);
-        $normFamily = mb_convert_case($family, \MB_CASE_TITLE);
-        $person = $this->personRepository->findOneBy([
-            'firstName' => $normGiven,
-            'lastName' => $normFamily,
-        ]);
+        $person = $this->personRepository->findByName($given, $family);
         $race = $this->findRace($raceName);
         if ($person) {
             if ($person->getRace() && $person->getRace()->getName() !== $raceName) {
-                $this->logger->warn("Possible duplicate person: {$person} with races {$person->getRace()->getName()} and {$raceName}");
+                $this->logger->warning("Possible duplicate person: {$person} with races {$person->getRace()->getName()} and {$raceName}");
             }
         } else {
             $person = new Person();
-            $person->setFirstName($normGiven);
-            $person->setLastName($normFamily);
+            $person->setFirstName(mb_convert_case($given, \MB_CASE_TITLE));
+            $person->setLastName(mb_convert_case($family, \MB_CASE_TITLE));
             $person->setRace($race);
             if ($sex) {
-                $person->setSex($sex[0]);
+                $person->setSex(mb_strtoupper($sex[0]));
             }
             $this->em->persist($person);
         }
@@ -194,7 +191,7 @@ class ImportService {
             'label' => $label,
         ]);
         if ( ! $category) {
-            $short = preg_replace('/[^a-z0-9]/u', '-', mb_convert_case($label, \MB_CASE_LOWER));
+            $short = preg_replace('/[^a-z0-9]+/u', '-', mb_convert_case($label, \MB_CASE_LOWER));
             $category = new TransactionCategory();
             $category->setName($short);
             $category->setLabel($label);
@@ -214,7 +211,7 @@ class ImportService {
         if ( ! $category) {
             $category = new RelationshipCategory();
             $category->setName($name);
-            $category->setLabel(ucwords($name));
+            $category->setLabel(mb_convert_case($name, \MB_CASE_TITLE));
             $this->em->persist($category);
         }
 
@@ -259,7 +256,7 @@ class ImportService {
     }
 
     public function parseDate($string) : ?string {
-        $string = preg_replace('/(^\\s*)|(\\s*$)/', '', $string);
+        $string = preg_replace(self::TRIM, '', $string);
         if (preg_match('/^\\d{4}-\\d{2}-\\d{2}$/', $string)) {
             return $string;
         }
@@ -346,7 +343,9 @@ class ImportService {
         $event->setDate($this->parseDate($row[S::event_baptism_date]));
         $event->setWrittenDate($row[S::event_written_baptism_date]);
         $event->setLocation($this->findLocation($row[S::event_baptism_place], 'church'));
-        $event->setRecordSource($row[S::event_baptism_source]);
+        if (isset($row[S::event_baptism_source])) {
+            $event->setRecordSource($row[S::event_baptism_source]);
+        }
         $this->em->persist($event);
 
         return $event;
@@ -356,7 +355,7 @@ class ImportService {
         if ( ! isset($row[S::alias]) || ! $row[S::alias]) {
             return;
         }
-        $aliases = preg_split('/[;]/', $row[S::alias]);
+        $aliases = preg_split(self::SPLIT, $row[S::alias]);
         $person->setAliases(array_merge($person->getAliases(), $aliases));
     }
 
@@ -372,13 +371,13 @@ class ImportService {
             return;
         }
         $occupations = [];
-        $list = explode(';', $row[13]);
+        $list = preg_split(self::SPLIT, $row[S::occupation]);
         foreach ($list as $data) {
             $m = [];
-            if (preg_match('/^(\d{4})\s*(.*)\s*$/u', $data, $m)) {
+            if (preg_match('/^\s*(\d{4})\s*(.*)\s*$/u', $data, $m)) {
                 $occupations[] = ['date' => $m[1], 'occupation' => $m[2]];
             } else {
-                $occupations[] = $data;
+                $occupations[] = ['date' => null, 'occupation' => preg_replace(self::TRIM, '', $data)];
             }
         }
         $person->setOccupations(array_merge($person->getOccupations(), $occupations));
@@ -389,7 +388,7 @@ class ImportService {
             return;
         }
 
-        $races = array_map(static fn($s) => trim($s), explode(';', $row[S::written_race]));
+        $races = preg_split(self::SPLIT, $row[S::written_race]);
         $person->setWrittenRaces(array_merge($person->getWrittenRaces(), $races));
     }
 
@@ -400,12 +399,17 @@ class ImportService {
         $person->setStatuses(array_merge($person->getStatuses(), [$row[S::status]]));
     }
 
-    public function addBirth(Person $person, array $row) : ?Event {
+    /**
+     * @param mixed $name
+     *
+     * @throws Exception
+     */
+    public function addBirth(Person $person, array $row, $name = 'birth') : ?Event {
         if ( ! isset($row[S::birth_date]) || ! $row[S::birth_date]) {
             return null;
         }
 
-        $category = $this->eventCategoryRepository->findOneBy(['name' => 'birth']);
+        $category = $this->eventCategoryRepository->findOneBy(['name' => $name]);
         if ( ! $category) {
             throw new Exception('Birth event category is missing.');
         }
@@ -420,13 +424,16 @@ class ImportService {
         return $event;
     }
 
+    /**
+     * @throws Exception
+     */
     public function setBirthStatus(Person $person, array $row) : void {
         if ( ! isset($row[S::birth_status]) || ! $row[S::birth_status]) {
             return;
         }
         $status = $this->birthStatusRepository->findOneBy(['name' => $row[S::birth_status]]);
         if ( ! $status) {
-            throw new Exception('Birth status record is missing for ' . $row[S::birth_status]);
+            throw new Exception('Birth status is missing for ' . $row[S::birth_status]);
         }
         $person->setBirthStatus($status);
     }
@@ -597,8 +604,8 @@ class ImportService {
         if ( ! $row[S::residence_dates] || ! $row[S::residence_places]) {
             return;
         }
-        $dates = array_map(static fn($d) => preg_replace('/^\\s+|\\s+$/u', '', $d), explode(';', $row[S::residence_dates]));
-        $addresses = array_map(static fn($d) => preg_replace('/^\\s+|\\s+$/u', '', $d), explode(';', $row[S::residence_places]));
+        $dates = preg_split(self::SPLIT, $row[S::residence_dates]);
+        $addresses = preg_split(self::SPLIT, $row[S::residence_places]);
 
         if (count($dates) !== count($addresses)) {
             throw new Exception('Residence date count ' . count($dates) . ' does not match residence place count ' . count($addresses) . '.');
@@ -623,6 +630,13 @@ class ImportService {
     /**
      * @required
      */
+    public function setPersonRepository(PersonRepository $personRepository) : void {
+        $this->personRepository = $personRepository;
+    }
+
+    /**
+     * @required
+     */
     public function setNotaryRepository(NotaryRepository $notaryRepository) : void {
         $this->notaryRepository = $notaryRepository;
     }
@@ -639,13 +653,6 @@ class ImportService {
      */
     public function setRaceRepository(RaceRepository $raceRepository) : void {
         $this->raceRepository = $raceRepository;
-    }
-
-    /**
-     * @required
-     */
-    public function setPersonRepository(PersonRepository $personRepository) : void {
-        $this->personRepository = $personRepository;
     }
 
     /**

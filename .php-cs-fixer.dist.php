@@ -181,6 +181,16 @@ return $config->setRiskyAllowed(true)
             // PHP Tag
 
             // PHPUnit
+            'php_unit_dedicate_assert' => ['target' => 'newest'],
+            'php_unit_dedicate_assert_internal_type' => ['target' => 'newest'],
+            'php_unit_expectation' => ['target' => 'newest'],
+            'php_unit_internal_class' => ['types' => []],
+            'php_unit_mock' => ['target' => 'newest'],
+            'php_unit_namespaced' => ['target' => 'newest'],
+            'php_unit_no_expectation_annotation' => ['target' => 'newest'],
+            'php_unit_test_annotation' => ['style' => 'annotation'],
+            'php_unit_test_case_static_method_calls' => ['call_type' => 'this'],
+            'php_unit_test_class_requires_covers' => false,
 
             // PHPDoc
             'align_multiline_comment' => [

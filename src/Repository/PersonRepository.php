@@ -13,8 +13,10 @@ namespace App\Repository;
 use App\Entity\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use PHPUnit\Framework\MockObject\BadMethodCallException;
 
 /**
  * @method null|Person find($id, $lockMode = null, $lockVersion = null)
@@ -32,6 +34,21 @@ class PersonRepository extends ServiceEntityRepository {
             ->orderBy('person.lastName', 'asc')
             ->addOrderBy('person.firstName', 'asc')
             ->getQuery();
+    }
+
+    public function findByName(string $given, string $family) : ?Person {
+        $query = $this->createQueryBuilder('person')
+            ->where('upper(person.firstName) = upper(:given)')
+            ->andWhere('upper(person.lastName) = upper(:family)')
+            ->setParameters([
+                'given' => $given,
+                'family' => $family,
+            ])->getQuery();
+        try {
+            return $query->getSingleResult();
+        } catch (NoResultException $e) {
+            return null;
+        }
     }
 
     /**
