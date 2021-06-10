@@ -438,146 +438,157 @@ class ImportService {
         $person->setBirthStatus($status);
     }
 
+    public function createRelationship(Person $person, Person $related, string $categoryName) {
+        $category = $this->relationshipCategoryRepository->findOneBy(['name' => $categoryName]);
+        if ( ! $category) {
+            throw new Exception("Relationship category {$categoryName} is missing.");
+        }
+        $relationship = new Relationship();
+        $relationship->setPerson($person);
+        $relationship->setRelation($related);
+        $relationship->setCategory($category);
+        $this->em->persist($relationship);
+
+        return $relationship;
+    }
+
     /**
      * @throws Exception
      */
-    public function addParents(Person $person, array $row) : void {
-        if ($row[S::father_first_name] || $row[S::father_last_name]) {
-            $father = $this->findPerson($row[S::father_first_name], $row[S::father_last_name], null, 'Male');
-            $fatherCategory = $this->relationshipCategoryRepository->findOneBy(['name' => 'father']);
-            if ( ! $fatherCategory) {
-                throw new Exception("Relationship category 'father' is missing.");
-            }
-            $relationship = new Relationship();
-            $relationship->setPerson($person);
-            $relationship->setRelation($father);
-            $relationship->setCategory($fatherCategory);
-            $this->em->persist($relationship);
+    public function addRelationship(Person $person, array $row, int $firstNameIdx, int $lastNameIdx, string $sex, string $relationshipName, string $relationName) : ?array {
+        if ($row[$firstNameIdx] || $row[$lastNameIdx]) {
+            $related = $this->findPerson($row[$firstNameIdx], $row[$lastNameIdx], null, $sex);
+            $relationship = $this->createRelationship($person, $related, $relationshipName);
+            $inverse = $this->createRelationship($related, $person, $relationName);
 
-            $childCategory = $this->relationshipCategoryRepository->findOneBy(['name' => 'child']);
-            if ( ! $childCategory) {
-                throw new Exception("Relationship category 'child' is missing.");
-            }
-            $relation = new Relationship();
-            $relation->setPerson($father);
-            $relation->setRelation($person);
-            $relation->setCategory($childCategory);
-            $this->em->persist($relation);
+            return [$relationship, $inverse];
+        }
+
+        return null;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addParents(Person $person, array $row, string $fatherCategory = 'father', string $motherCategory = 'mother', string $childCategory = 'child') : array {
+        $relationships = [];
+        if ($row[S::father_first_name] || $row[S::father_last_name]) {
+            $added = $this->addRelationship($person, $row, S::father_first_name, S::father_last_name, 'Male', $fatherCategory, $childCategory);
+            $relationships = array_merge($relationships, $added);
         }
 
         if ($row[S::mother_first_name] || $row[S::mother_last_name]) {
-            $mother = $this->findPerson($row[S::mother_first_name], $row[S::mother_last_name], null, 'Male');
-            $motherCategory = $this->relationshipCategoryRepository->findOneBy(['name' => 'mother']);
-            if ( ! $motherCategory) {
-                throw new Exception("Relationship category 'mother' is missing.");
-            }
-            $relationship = new Relationship();
-            $relationship->setPerson($person);
-            $relationship->setRelation($mother);
-            $relationship->setCategory($motherCategory);
-            $this->em->persist($relationship);
-
-            $childCategory = $this->relationshipCategoryRepository->findOneBy(['name' => 'child']);
-            if ( ! $childCategory) {
-                throw new Exception("Relationship category 'child' is missing.");
-            }
-            $relation = new Relationship();
-            $relation->setPerson($mother);
-            $relation->setRelation($person);
-            $relation->setCategory($childCategory);
-            $this->em->persist($relation);
+            $added = $this->addRelationship($person, $row, S::mother_first_name, S::mother_last_name, 'Female', $motherCategory, $childCategory);
+            $relationships = array_merge($relationships, $added);
         }
+
+        return $relationships;
     }
 
     /**
      * @throws Exception
      */
-    public function addGodParents(Person $person, array $row, Event $baptism) : void {
+    public function addGodParents(Person $person, array $row, string $godfatherCategory = 'godfather', string $godmotherCategory = 'godmother', string $godchildCategory = 'godchild') : array {
+        $relationships = [];
         if ($row[S::godfather_first_name] || $row[S::godfather_last_name]) {
-            $godfather = $this->findPerson($row[S::godfather_first_name], $row[S::godfather_last_name], null, 'Male');
-            $godfatherCategory = $this->relationshipCategoryRepository->findOneBy(['name' => 'godfather']);
-            if ( ! $godfatherCategory) {
-                throw new Exception("Relationship category 'godfather' is missing.");
-            }
-            $relationship = new Relationship();
-            $relationship->setPerson($person);
-            $relationship->setRelation($godfather);
-            $relationship->setCategory($godfatherCategory);
-            $this->em->persist($relationship);
-
-            $childCategory = $this->relationshipCategoryRepository->findOneBy(['name' => 'child']);
-            if ( ! $childCategory) {
-                throw new Exception("Relationship category 'godchild' is missing.");
-            }
-            $relation = new Relationship();
-            $relation->setPerson($godfather);
-            $relation->setRelation($person);
-            $relation->setCategory($childCategory);
-            $this->em->persist($relation);
-
-            $witness = new Witness();
-            $category = $this->witnessCategoryRepository->findOneBy(['name' => 'godparent']);
-            if ( ! $category) {
-                throw new Exception("Witness category 'godparent' is missing.");
-            }
-            $witness->setCategory($category);
-            $witness->setPerson($godfather);
-            $witness->setEvent($baptism);
+            $added = $this->addRelationship($person, $row, S::godfather_first_name, S::godfather_last_name, 'Male', $godfatherCategory, $godchildCategory);
+            $relationships = array_merge($relationships, $added);
         }
 
         if ($row[S::godmother_first_name] || $row[S::godmother_last_name]) {
-            $godmother = $this->findPerson($row[S::godmother_first_name], $row[S::godmother_last_name], null, 'Male');
-            $godmotherCategory = $this->relationshipCategoryRepository->findOneBy(['name' => 'godmother']);
-            if ( ! $godmotherCategory) {
-                throw new Exception("Relationship category 'godmother' is missing.");
-            }
-            $relationship = new Relationship();
-            $relationship->setPerson($person);
-            $relationship->setRelation($godmother);
-            $relationship->setCategory($godmotherCategory);
-            $this->em->persist($relationship);
-
-            $childCategory = $this->relationshipCategoryRepository->findOneBy(['name' => 'child']);
-            if ( ! $childCategory) {
-                throw new Exception("Relationship category 'godchild' is missing.");
-            }
-            $relation = new Relationship();
-            $relation->setPerson($godmother);
-            $relation->setRelation($person);
-            $relation->setCategory($childCategory);
-            $this->em->persist($relation);
+            $added = $this->addRelationship($person, $row, S::godmother_first_name, S::godmother_last_name, 'Male', $godmotherCategory, $godchildCategory);
+            $relationships = array_merge($relationships, $added);
         }
+
+        return $relationships;
     }
 
-    public function addMarriage(Person $person, array $row) : Event {
-        return new Event();
+    /**
+     * @throws Exception
+     *
+     * @return Witness[]
+     */
+    public function addEventWitnesses(Event $event, string $categoryName, Person ...$people) : array {
+        $category = $this->witnessCategoryRepository->findOneBy(['name' => $categoryName]);
+        if ( ! $category) {
+            throw new Exception("Event category {$categoryName} is missing.");
+        }
+        $witnesses = [];
+        foreach ($people as $person) {
+            $witness = new Witness();
+            $witness->setPerson($person);
+            $witness->setEvent($event);
+            $witness->setCategory($category);
+            $this->em->persist($witness);
+            $witnesses[] = $witness;
+        }
+
+        return $witnesses;
     }
 
     /**
      * @throws Exception
      */
-    public function addSpouse(Person $person, array $row) : void {
-        if ($row[S::spouse_first_name] || $row[S::spouse_last_name]) {
-            $spouse = $this->findPerson($row[S::spouse_first_name], $row[S::spouse_last_name]);
-            $category = $this->relationshipCategoryRepository->findOneBy(['name' => 'spouse']);
-            if ( ! $category) {
-                throw new Exception("Relationship category 'spouse' is missing.");
-            }
-            $relationship = new Relationship();
-            $relationship->setPerson($person);
-            $relationship->setCategory($category);
-            $relationship->setRelation($spouse);
-            $this->em->persist($relationship);
-
-            $relation = new Relationship();
-            $relation->setPerson($spouse);
-            $relation->setCategory($category);
-            $relation->setRelation($person);
-            $this->em->persist($relation);
+    public function addMarriage(Person $person, array $row, string $categoryName = 'wedding') : ?Event {
+        if ( ! isset($row[S::event_written_marriage_date]) || !$row[S::event_written_marriage_date]) {
+            return null;
         }
+        if ( ! $row[S::spouse_first_name] && ! $row[S::spouse_last_name]) {
+            throw new Exception('Written marriage date without spouse name');
+        }
+        $category = $this->eventCategoryRepository->findOneBy(['name' => $categoryName]);
+        if ( ! $category) {
+            throw new Exception("Marriage event category {$categoryName} is missing.");
+        }
+        $event = new Event();
+        $event->setCategory($category);
+        $event->setLocation($this->findLocation($row[S::event_marriage_place]));
+        $event->addParticipant($person);
+        $event->setWrittenDate($row[S::event_written_marriage_date]);
+        $event->setDate($row[S::event_marriage_date]);
+        $event->setNote($row[S::event_marriage_memo]);
+        $this->em->persist($event);
+
+        return $event;
     }
 
-    public function addMarriageWitnesses(Person $person, array $row, Event $marriage) : void {
+    /**
+     * @throws Exception
+     *
+     * @return ?Relationship[]
+     */
+    public function addSpouse(Person $person, array $row, string $categoryName = 'spouse') : ?array {
+        if ( ! $row[S::spouse_first_name] && ! $row[S::spouse_last_name]) {
+            return null;
+        }
+        $sex = null;
+        switch ($person->getSex()) {
+            case Person::MALE:
+                $sex = Person::FEMALE;
+                break;
+            case Person::FEMALE:
+                $sex = Person::MALE;
+                break;
+        }
+
+        return $this->addRelationship($person, $row, S::spouse_first_name, S::spouse_last_name, $sex, $categoryName, $categoryName);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addMarriageWitnesses(Event $marriage, array $row, $categoryName = 'witness') : array {
+        $created = [];
+        $people = [];
+        if( (isset($row[S::event_marriage_witness1_first_name]) && $row[S::event_marriage_witness1_first_name])
+            || isset($row[S::event_marriage_witness1_last_name]) && $row[S::event_marriage_witness1_last_name]) {
+            $people[] = $this->findPerson($row[S::event_marriage_witness1_first_name], $row[S::event_marriage_witness1_last_name]);
+        }
+        if( (isset($row[S::event_marriage_witness2_first_name]) && $row[S::event_marriage_witness2_first_name])
+            || isset($row[S::event_marriage_witness2_last_name]) && $row[S::event_marriage_witness2_last_name]) {
+            $people[] = $this->findPerson($row[S::event_marriage_witness2_first_name], $row[S::event_marriage_witness2_last_name]);
+        }
+        return $this->addEventWitnesses($marriage, $categoryName, ...$people);
     }
 
     public function addDeath(Person $person, array $row) : ?Event {

@@ -21,15 +21,19 @@ use App\DataFixtures\PersonFixtures;
 use App\DataFixtures\RaceFixtures;
 use App\DataFixtures\RelationshipCategoryFixtures;
 use App\DataFixtures\TransactionCategoryFixtures;
+use App\DataFixtures\WitnessCategoryFixtures;
 use App\Entity\City;
+use App\Entity\Event;
 use App\Entity\Ledger;
 use App\Entity\Location;
 use App\Entity\Notary;
 use App\Entity\Person;
 use App\Entity\Race;
+use App\Entity\Relationship;
 use App\Entity\RelationshipCategory;
 use App\Entity\Transaction;
 use App\Entity\TransactionCategory;
+use App\Entity\Witness;
 use App\Services\ImportService;
 use App\Util\NotaryColumnDefinitions as N;
 use App\Util\SacramentColumnDefinitions as S;
@@ -53,7 +57,17 @@ class ImportServiceTest extends ServiceBaseCase {
             LocationFixtures::class,
             EventCategoryFixtures::class,
             EventFixtures::class,
+            WitnessCategoryFixtures::class,
         ];
+    }
+
+    protected function getRow($data = []) : array {
+        $row = array_fill(0, S::notes + 1, '');
+        foreach ($data as $k => $v) {
+            $row[$k] = $v;
+        }
+
+        return $row;
     }
 
     /**
@@ -85,6 +99,8 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function findRace() : void {
         $race = $this->importer->findRace('Name 1');
@@ -253,6 +269,8 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function createTransaction() : void {
         /** @var Ledger $ledger */
@@ -261,7 +279,7 @@ class ImportServiceTest extends ServiceBaseCase {
         $first = $this->getReference('person.1');
         /** @var Person $second */
         $second = $this->getReference('person.2');
-        $row = [
+        $row = $this->getRow([
             N::first_party_spouse => null,
             N::first_party_notes => 'and wife',
             N::transaction_conjunction => 'from',
@@ -271,7 +289,7 @@ class ImportServiceTest extends ServiceBaseCase {
             N::transaction_date => '1790-04-20',
             N::ledger_page => 3,
             N::transaction_notes => 'Test transaction',
-        ];
+        ]);
 
         $transaction = $this->importer->createTransaction($ledger, $first, $second, $row);
         $this->assertInstanceOf(Transaction::class, $transaction);
@@ -347,6 +365,8 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addNullManumission() : void {
         /** @var Person $person */
@@ -357,15 +377,17 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addManumission() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::manumission_date_written => '5 Jun 1771',
             S::manumission_date => '1771-06-05',
             S::manumission_place => 'Name 1',
-        ];
+        ]);
         $event = $this->importer->addManumission($person, $row, 'Name 1');
         $this->assertNotNull($event);
         $this->assertSame('1771-06-05', $event->getDate());
@@ -374,30 +396,34 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addManumissionException() : void {
         $this->expectException(Exception::class);
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::manumission_date_written => '5 Jun 1771',
             S::manumission_date => '1771-06-05',
             S::manumission_place => 'Name 1',
-        ];
+        ]);
         $this->importer->addManumission($person, $row, 'Not a name 1');
     }
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addBaptism() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::event_written_baptism_date => '5 Jun 1771',
             S::event_baptism_date => '1771-06-05',
             S::event_baptism_place => 'Name 1',
-        ];
+        ]);
         $event = $this->importer->addBaptism($person, $row, 'Name 1');
         $this->assertNotNull($event);
         $this->assertSame('1771-06-05', $event->getDate());
@@ -406,55 +432,63 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addBaptismException() : void {
         $this->expectException(Exception::class);
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::event_written_baptism_date => '5 Jun 1771',
             S::event_baptism_date => '1771-06-05',
             S::event_baptism_place => 'Name 1',
             S::event_baptism_source => 'SLC something',
-        ];
+        ]);
         $this->importer->addBaptism($person, $row, 'Not a name 1');
     }
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addAliases() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::alias => 'abc; def ; pdq;dre',
-        ];
+        ]);
         $this->importer->addAliases($person, $row);
         $this->assertSame(['Alias 1', 'abc', 'def', 'pdq', 'dre'], $person->getAliases());
     }
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function setNative() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::native => 'abc, def',
-        ];
+        ]);
         $this->importer->setNative($person, $row);
         $this->assertSame('abc, def', $person->getNative());
     }
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addOccupations() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::occupation => '1900 fisherman; 1901 other thing; and another',
-        ];
+        ]);
         $this->importer->addOccupations($person, $row);
         $this->assertCount(4, $person->getOccupations());
         $this->assertSame(['date' => 1601, 'occupation' => 'occupation 1'], $person->getOccupations()[0]);
@@ -465,41 +499,47 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function setWrittenRace() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::written_race => 'abc; def ; ghi',
-        ];
+        ]);
         $this->importer->setWrittenRace($person, $row);
         $this->assertSame(['abc', 'def', 'ghi'], $person->getWrittenRaces());
     }
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function setStatus() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::status => 'abc',
-        ];
+        ]);
         $this->importer->setStatus($person, $row);
         $this->assertSame(['abc'], $person->getStatuses());
     }
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addBirth() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::birth_date => '1900-01',
             S::written_birth_date => 'abt Jan 1900',
             S::birth_place => 'Chatanooga',
-        ];
+        ]);
         $event = $this->importer->addBirth($person, $row, 'Name 1');
         $this->assertSame($person, $event->getParticipants()[0]);
         $this->assertSame('1900-01', $event->getDate());
@@ -511,43 +551,257 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addBirthException() : void {
         $this->expectException(Exception::class);
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::birth_date => '1900-01',
             S::written_birth_date => 'abt Jan 1900',
             S::birth_place => 'Chatanooga',
-        ];
+        ]);
         $event = $this->importer->addBirth($person, $row, 'Not a category');
     }
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function setBirthStatus() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::birth_status => 'Name 1',
-        ];
+        ]);
         $this->importer->setBirthStatus($person, $row);
         $this->assertSame('Name 1', $person->getBirthStatus()->getName());
     }
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function setBirthStatusException() : void {
         $this->expectException(Exception::class);
         /** @var Person $person */
         $person = $this->getReference('person.1');
-        $row = [
+        $row = $this->getRow([
             S::birth_status => 'Label 45841',
-        ];
+        ]);
         $this->importer->setBirthStatus($person, $row);
+    }
+
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
+    public function createRelationship() : void {
+        /** @var Person $person */
+        $person = $this->getReference('person.1');
+        /** @var Person $relation */
+        $relation = $this->getReference('person.2');
+
+        $relationship = $this->importer->createRelationship($person, $relation, 'Name 1');
+        $this->assertNotNull($relationship);
+    }
+
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
+    public function createRelationshipException() : void {
+        $this->expectException(Exception::class);
+        /** @var Person $person */
+        $person = $this->getReference('person.1');
+        /** @var Person $relation */
+        $relation = $this->getReference('person.2');
+
+        $relationship = $this->importer->createRelationship($person, $relation, 'Phony baloney');
+    }
+
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
+    public function addRelationship() : void {
+        /** @var Person $person */
+        $person = $this->getReference('person.1');
+        /** @var Person $relation */
+        $relation = $this->getReference('person.2');
+
+        $row = $this->getRow([
+            S::father_first_name => $relation->getFirstName(),
+            S::father_last_name => $relation->getLastName(),
+        ]);
+
+        list($r, $i) = $this->importer->addRelationship($person, $row, S::father_first_name, S::father_last_name, 'Male', 'Name 1', 'Name 2');
+        $this->assertNotNull($r);
+        $this->assertInstanceOf(Relationship::class, $r);
+        $this->assertSame($person, $r->getPerson());
+        $this->assertSame($relation, $r->getRelation());
+        $this->assertSame('Name 1', $r->getCategory()->getName());
+
+        $this->assertNotNull($i);
+        $this->assertInstanceOf(Relationship::class, $i);
+        $this->assertSame($relation, $i->getPerson());
+        $this->assertSame($person, $i->getRelation());
+        $this->assertSame('Name 2', $i->getCategory()->getName());
+    }
+
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
+    public function addParents() : void {
+        /** @var Person $person */
+        $person = $this->getReference('person.1');
+
+        $row = $this->getRow([
+            S::father_first_name => 'Joe',
+            S::father_last_name => 'Quimby',
+            S::mother_first_name => 'Clara',
+            S::mother_last_name => 'Quimby',
+        ]);
+
+        $added = $this->importer->addParents($person, $row, 'Name 1', 'Name 2', 'Name 3');
+        $this->assertCount(4, $added);
+    }
+
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
+    public function addGodParents() : void {
+        /** @var Person $person */
+        $person = $this->getReference('person.1');
+
+        $row = $this->getRow([
+            S::godfather_first_name => 'Joe',
+            S::godfather_last_name => 'Quimby',
+            S::godmother_first_name => 'Clara',
+            S::godmother_last_name => 'Quimby',
+        ]);
+
+        $added = $this->importer->addGodParents($person, $row, 'Name 1', 'Name 2', 'Name 3');
+        $this->assertCount(4, $added);
+    }
+
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
+    public function addEventWitnesses() : void {
+        /** @var Person $person */
+        $person = $this->getReference('person.1');
+        /** @var Event $event */
+        $event = $this->getReference('event.1');
+        $witnesses = $this->importer->addEventWitnesses($event, 'Name 1', $person);
+        $this->assertCount(1, $witnesses);
+        $this->assertSame($person, $witnesses[0]->getPerson());
+    }
+
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
+    public function addEventWitnessesException() : void {
+        $this->expectException(Exception::class);
+        /** @var Person $person */
+        $person = $this->getReference('person.1');
+        /** @var Event $event */
+        $event = $this->getReference('event.1');
+        $witnesses = $this->importer->addEventWitnesses($event, 'Cheese Party Witness', $person);
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @test
+     */
+    public function addMarriage() : void {
+        /** @var Person $person */
+        $person = $this->getReference('person.1');
+        $row = $this->getRow([
+            S::spouse_first_name => 'Jane',
+            S::spouse_last_name => 'Quimby',
+            S::event_marriage_place => 'St Swithens',
+            S::event_marriage_date => '1900-01-01',
+            S::event_written_marriage_date => 'abt 1900',
+            S::event_marriage_memo => 'In a records',
+        ]);
+
+        $event = $this->importer->addMarriage($person, $row, 'Name 1');
+        $this->assertNotNull($event);
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @test
+     */
+    public function addMarriageMissingSpouseException() : void {
+        $this->expectException(Exception::class);
+        /** @var Person $person */
+        $person = $this->getReference('person.1');
+        $row = $this->getRow([
+            S::event_marriage_place => 'St Swithens',
+            S::event_marriage_date => '1900-01-01',
+            S::event_written_marriage_date => 'abt 1900',
+            S::event_marriage_memo => 'In a records',
+        ]);
+        $event = $this->importer->addMarriage($person, $row, 'Name 1');
+    }
+
+    /**
+     * @test
+     * @throws Exception
+     */
+    public function addSpouse() : void {
+        /** @var Person $person */
+        $person = $this->getReference('person.1');
+
+        $row = $this->getRow([
+            S::spouse_first_name => 'Jane',
+            S::spouse_last_name => 'Quimby',
+        ]);
+
+        list($r, $i) = $this->importer->addSpouse($person, $row, 'Name 1');
+        $this->assertNotNull($r);
+        $this->assertSame($person, $r->getPerson());
+        $this->assertNotNull($i);
+        $this->assertNotNull($i->getPerson());
+        $this->assertSame('Jane', $i->getPerson()->getFirstName());
+    }
+
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
+    public function addMarriageWitnesses() : void {
+        /** @var Event $event */
+        $event = $this->getReference('event.1');
+        $row = $this->getRow([
+            S::event_marriage_witness1_first_name => 'Homer',
+            S::event_marriage_witness1_last_name => 'Simpson',
+        ]);
+        $witnesses = $this->importer->addMarriageWitnesses($event, $row, 'Name 1');
+        $this->assertCount(1, $witnesses);
+        $this->assertInstanceOf(Witness::class, $witnesses[0]);
+        $this->assertSame($event, $witnesses[0]->getEvent());
+        $this->assertSame('Homer', $witnesses[0]->getPerson()->getFirstName());
     }
 
     protected function setUp() : void {
