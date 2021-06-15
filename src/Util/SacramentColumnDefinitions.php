@@ -104,4 +104,6 @@ class SacramentColumnDefinitions {
     public const residence_places = 45;
 
     public const notes = 46;
+
+    public const row_count = self::notes + 1;
 }

@@ -10,86 +10,41 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Services\ImportService;
 use App\Util\NotaryColumnDefinitions as N;
 use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * AppImportNotaryCommand command.
  */
-class ImportNotaryCommand extends Command {
-    private EntityManagerInterface $em;
-
-    private ImportService $importer;
-
-    public function __construct(EntityManagerInterface $em, ImportService $importer, $name = null) {
-        parent::__construct($name);
-        $this->importer = $importer;
-        $this->em = $em;
-    }
+class ImportNotaryCommand extends AbstractImportCommand {
+    protected static $defaultName = 'sen:import:notary';
 
     /**
-     * Configure the command.
-     */
-    protected function configure() : void {
-        $this
-            ->setName('app:import:notary')
-            ->setDescription('Import notarial data from one or more CSV files')
-            ->addArgument('files', InputArgument::IS_ARRAY, 'List of CSV files to import')
-            ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Number of header rows to skip', 1);
-    }
-
-    /**
-     * @param $file
-     * @param $skip
+     * @param mixed $row
      *
      * @throws Exception
      */
-    protected function import($file, $skip) : void {
-        $handle = fopen($file, 'r');
+    protected function process($row) : void {
+        $date = new DateTimeImmutable($row[N::transaction_date]);
+        $notary = $this->importer->findNotary($row[N::notary_name]);
+        $ledger = $this->importer->findLedger($notary, $row[N::ledger_volume], (int) $date->format('Y'));
 
-        for ($i = 1; $i <= $skip; $i++) {
-            fgetcsv($handle);
-        }
-        while ($row = fgetcsv($handle)) {
-            $date = new DateTimeImmutable($row[N::transaction_date]);
-            $notary = $this->importer->findNotary($row[N::notary_name]);
-            $ledger = $this->importer->findLedger($notary, $row[N::ledger_volume], (int) $date->format('Y'));
+        $firstParty = $this->importer->findPerson(
+            $row[N::first_party_first_name],
+            $row[N::first_party_last_name],
+            $row[N::first_party_race],
+            $row[N::first_party_sex]
+        );
 
-            $firstParty = $this->importer->findPerson(
-                $row[N::first_party_first_name],
-                $row[N::first_party_last_name],
-                $row[N::first_party_race],
-                $row[N::first_party_sex]
-            );
+        $secondParty = $this->importer->findPerson(
+            $row[N::second_party_first_name],
+            $row[N::second_party_last_name],
+            $row[N::second_party_race],
+            $row[N::second_party_sex]
+        );
 
-            $secondParty = $this->importer->findPerson(
-                $row[N::second_party_first_name],
-                $row[N::second_party_last_name],
-                $row[N::second_party_race],
-                $row[N::second_party_sex]
-            );
-
-            $transaction = $this->importer->createTransaction($ledger, $firstParty, $secondParty, $row);
-            $this->em->flush();
-        }
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output) : int {
-        $files = $input->getArgument('files');
-        $skip = $input->getOption('skip');
-
-        foreach ($files as $file) {
-            $this->import($file, $skip);
-        }
-
-        return 0;
+        $this->importer->createTransaction($ledger, $firstParty, $secondParty, $row);
     }
 }

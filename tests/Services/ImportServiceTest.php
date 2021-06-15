@@ -347,7 +347,7 @@ class ImportServiceTest extends ServiceBaseCase {
             N::transaction_notes => 'Test transaction',
         ]);
 
-        $transaction = $this->importer->createTransaction($ledger, $first, $second, $row);
+        $transaction = $this->importer->createTransaction($ledger, $first, $second, $row, 'Name 1');
         $this->assertInstanceOf(Transaction::class, $transaction);
         $this->assertSame('from', $transaction->getConjunction());
     }

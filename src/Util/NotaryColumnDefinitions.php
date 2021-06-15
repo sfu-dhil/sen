@@ -52,4 +52,6 @@ class NotaryColumnDefinitions {
     public const transaction_category = 19;
 
     public const transaction_notes = 20;
+
+    public const row_count = self::transaction_notes + 1;
 }

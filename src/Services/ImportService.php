@@ -48,9 +48,9 @@ use Psr\Log\LoggerInterface;
  * Description of AbstractImportService.
  */
 class ImportService {
-    private const SPLIT = '/\s*;\s*/';
+    private const SPLIT = '/\s*;\s*/u';
 
-    private const TRIM = '/^\s*|\s*$/';
+    private const TRIM = '/^\s*|\s*$/u';
 
     private EntityManagerInterface $em;
 
@@ -222,31 +222,22 @@ class ImportService {
     /**
      * Create a transaction.
      *
+     * @param mixed $categoryName
+     *
      * @throws Exception
-     * @todo make this use addSpouse() isntead of doing it manually.
      */
-    public function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, array $row) : Transaction {
+    public function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, array $row, $categoryName = 'spouse') : Transaction {
         $transaction = new Transaction();
         $transaction->setLedger($ledger);
         $transaction->setFirstParty($firstParty);
         $transaction->setFirstPartyNote($row[N::first_party_notes]);
         if ($row[N::first_party_spouse]) {
-            $firstSpouse = $this->findPerson($row[N::first_party_spouse], $firstParty->getLastName());
-            $firstRelationship = new Relationship();
-            $firstRelationship->setCategory($this->findRelationshipCategory('spouse'));
-            $firstRelationship->setPerson($firstParty);
-            $firstRelationship->setRelation($firstSpouse);
-            $this->em->persist($firstRelationship);
+            $this->addSpouse($firstParty, $row, N::first_party_spouse, N::first_party_last_name, $categoryName);
         }
         $transaction->setConjunction($row[N::transaction_conjunction]);
         $transaction->setSecondParty($secondParty);
         if ($row[N::second_party_spouse]) {
-            $secondSpouse = $this->findPerson($row[N::second_party_spouse], $secondParty->getLastName());
-            $secondRelationship = new Relationship();
-            $secondRelationship->setCategory($this->findRelationshipCategory('spouse'));
-            $secondRelationship->setPerson($secondParty);
-            $secondRelationship->setRelation($secondSpouse);
-            $this->em->persist($secondRelationship);
+            $this->addSpouse($secondParty, $row, N::second_party_spouse, N::second_party_last_name, $categoryName);
         }
         $transaction->setSecondPartyNote($row[N::second_party_notes]);
         $transaction->setCategory($this->findTransactionCategory($row[N::transaction_category]));
@@ -308,7 +299,24 @@ class ImportService {
         return $location;
     }
 
+    public function createEvent(Person $person, array $row, EventCategory $category, $dateIdx, $writtenDateIdx, $placeIdx = null, $placeCategory = 'city') : Event {
+        $event = new Event();
+        $event->setCategory($category);
+        $event->addParticipant($person);
+        $event->setDate($this->parseDate($row[$dateIdx]));
+        $event->setWrittenDate($row[$writtenDateIdx]);
+        if (isset($row[$placeIdx]) && $row[$placeIdx]) {
+            $event->setLocation($this->findLocation($row[$placeIdx], $placeCategory));
+        }
+        $this->em->persist($event);
+
+        return $event;
+    }
+
     /**
+     * @param mixed $row
+     * @param mixed $name
+     *
      * @throws Exception
      */
     public function addManumission(Person $person, $row, $name = 'manumission') : ?Event {
@@ -326,6 +334,9 @@ class ImportService {
     }
 
     /**
+     * @param mixed $row
+     * @param mixed $name
+     *
      * @throws Exception
      */
     public function addBaptism(Person $person, $row, $name = 'baptism') : ?Event {
@@ -338,7 +349,8 @@ class ImportService {
         if ( ! $category) {
             throw new Exception('Baptism event category is missing.');
         }
-        $event = $this->createEvent($person, $row, $category, S::event_baptism_date, S::event_written_baptism_date, S::event_baptism_place, 'church');        if (isset($row[S::event_baptism_source])) {
+        $event = $this->createEvent($person, $row, $category, S::event_baptism_date, S::event_written_baptism_date, S::event_baptism_place, 'church');
+        if (isset($row[S::event_baptism_source])) {
             $event->setRecordSource($row[S::event_baptism_source]);
         }
         $this->em->persist($event);
@@ -538,13 +550,9 @@ class ImportService {
         if ( ! $category) {
             throw new Exception("Marriage event category {$categoryName} is missing.");
         }
-        $event = new Event();
-        $event->setCategory($category);
-        $event->setLocation($this->findLocation($row[S::event_marriage_place]));
-        $event->addParticipant($person);
-        $event->setWrittenDate($row[S::event_written_marriage_date]);
-        $event->setDate($row[S::event_marriage_date]);
+        $event = $this->createEvent($person, $row, $category, S::event_marriage_date, S::event_written_marriage_date, S::event_marriage_place, 'church');
         $event->setNote($row[S::event_marriage_memo]);
+        $event->setRecordSource($row[S::event_marriage_source]);
         $this->em->persist($event);
 
         return $event;
@@ -554,11 +562,9 @@ class ImportService {
      * @throws Exception
      *
      * @return Relationship[]
-     *
-     * @todo make S::spouse_first_name etc parameters.
      */
     public function addSpouse(Person $person, array $row, int $firstNameIdx, int $lastNameIdx, string $categoryName = 'spouse') : array {
-        if ( ! $row[S::spouse_first_name] && ! $row[S::spouse_last_name]) {
+        if ( ! $row[$firstNameIdx] && ! $row[$lastNameIdx]) {
             return [];
         }
         $sex = null;
@@ -594,6 +600,8 @@ class ImportService {
     }
 
     /**
+     * @param mixed $categoryName
+     *
      * @throws Exception
      */
     public function addDeath(Person $person, array $row, $categoryName = 'death') : ?Event {
@@ -605,6 +613,7 @@ class ImportService {
         if ( ! $category) {
             throw new Exception("event category {$categoryName} is missing.");
         }
+
         return $this->createEvent($person, $row, $category, S::event_death_date, S::event_written_death_date, S::event_death_place);
     }
 
@@ -724,18 +733,5 @@ class ImportService {
      */
     public function setWitnessCategoryRepository(WitnessCategoryRepository $witnessCategoryRepository) : void {
         $this->witnessCategoryRepository = $witnessCategoryRepository;
-    }
-
-    public function createEvent(Person $person, array $row, EventCategory $category, $dateIdx, $writtenDateIdx, $placeIdx = null, $placeCategory = 'city') : Event {
-        $event = new Event();
-        $event->setCategory($category);
-        $event->addParticipant($person);
-        $event->setDate($this->parseDate($row[$dateIdx]));
-        $event->setWrittenDate($row[$writtenDateIdx]);
-        if(isset($row[$placeIdx]) && $row[$placeIdx]) {
-            $event->setLocation($this->findLocation($row[$placeIdx], $placeCategory));
-        }
-        $this->em->persist($event);
-        return $event;
     }
 }
