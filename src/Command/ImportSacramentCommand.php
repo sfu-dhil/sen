@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Repository\EventRepository;
 use App\Repository\RelationshipRepository;
 use App\Util\SacramentColumnDefinitions as S;
 use Exception;
@@ -21,6 +22,8 @@ use Symfony\Component\Console\Command\Command;
 class ImportSacramentCommand extends AbstractImportCommand {
     private RelationshipRepository $relationshipRepo;
 
+    private EventRepository $eventRepository;
+
     protected static $defaultName = 'sen:import:sacrament';
 
     /**
@@ -29,7 +32,8 @@ class ImportSacramentCommand extends AbstractImportCommand {
      * @throws Exception
      */
     protected function process($row) : void {
-        $person = $this->importer->findPerson($row[S::first_name], $row[S::last_name]);
+        $person = $this->importer->findPerson($row[S::first_name], $row[S::last_name], $row[S::race_id], $row[S::sex]);
+        $this->importer->addTitles($person, $row);
         $this->importer->setWrittenRace($person, $row); // includes race_id;
         $this->importer->setStatus($person, $row);
         $this->importer->addManumission($person, $row);
@@ -38,19 +42,33 @@ class ImportSacramentCommand extends AbstractImportCommand {
         $this->importer->setNative($person, $row);
         $this->importer->addBirth($person, $row);
         $this->importer->setBirthStatus($person, $row);
-        $this->importer->addBaptism($person, $row);
+        // @todo make add parents and add godparents return the people so they can be added as participants in the baptism.
         $this->importer->addParents($person, $row);
         $this->importer->addGodParents($person, $row);
+        $this->importer->addBaptism($person, $row);
+
         $spouse = $this->importer->findPerson($row[S::spouse_first_name], $row[S::spouse_last_name]);
-        if($spouse &&  ! $this->relationshipRepo->findRelationship($person, $spouse, 'spouse', 'spouse')) {
-            $this->importer->addSpouse($person, $row, $person);
+        if ($spouse && ! $this->relationshipRepo->findRelationship($person, $spouse, 'spouse', 'spouse')) {
+            $this->importer->addSpouse($person, $row, $spouse);
         }
-        // check for a marriage event with participants $person and S::spouse_first_name, S::spouse_last_name
-//        $this->importer->addMarriage($person, $row);
-//        $this->importer->addMarriageWitnesses($person, $row);
+
+        // @todo check for an existing marriage for $person, $spouse.
+        // @todo update the definition of addMarriage() to take the two people.
+        // $marriage = $this->importer->addMarriage($person, $spouse, $row);
+
+        // @todo update the definition of addMarriageWitnesses() to take the event.
+        // $this->importer->addMarriageWitnesses($marriage, $row);
+
         $this->importer->addDeath($person, $row);
         $this->importer->addResidences($person, $row);
         $person->setNotes($row[S::notes]);
+    }
+
+    /**
+     * @required
+     */
+    public function setEventRepository(EventRepository $eventRepository) : void {
+        $this->eventRepository = $eventRepository;
     }
 
     /**

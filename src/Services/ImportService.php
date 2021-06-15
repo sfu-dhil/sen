@@ -332,6 +332,14 @@ class ImportService {
         return $event;
     }
 
+    public function addTitles(Person $person, array $row) : void {
+        if( ! $row[S::title]) {
+            return;
+        }
+        $titles = array_merge($person->getTitles(), preg_split(self::SPLIT, $row[S::title]));
+        $person->setTitles($titles);
+    }
+
     /**
      * @param mixed $row
      * @param mixed $name

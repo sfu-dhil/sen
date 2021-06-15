@@ -788,19 +788,6 @@ class ImportServiceTest extends ServiceBaseCase {
      *
      * @throws Exception
      */
-    public function addNullRelationship() : void {
-        /** @var Person $person */
-        $person = $this->getReference('person.1');
-        $row = $this->getRow();
-        $result = $this->importer->addRelationship($person, $row, 1, 1, 'M', 'foo', 'bar');
-        $this->assertCount(0, $result);
-    }
-
-    /**
-     * @test
-     *
-     * @throws Exception
-     */
     public function createRelationship() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
@@ -836,13 +823,9 @@ class ImportServiceTest extends ServiceBaseCase {
         $person = $this->getReference('person.1');
         /** @var Person $relation */
         $relation = $this->getReference('person.2');
+        $row = $this->getRow([]);
 
-        $row = $this->getRow([
-            S::father_first_name => $relation->getFirstName(),
-            S::father_last_name => $relation->getLastName(),
-        ]);
-
-        list($r, $i) = $this->importer->addRelationship($person, $row, S::father_first_name, S::father_last_name, 'Male', 'Name 1', 'Name 2');
+        list($r, $i) = $this->importer->addRelationship($person, $row, $relation, 'Name 1', 'Name 2');
         $this->assertNotNull($r);
         $this->assertInstanceOf(Relationship::class, $r);
         $this->assertSame($person, $r->getPerson());
@@ -1013,18 +996,17 @@ class ImportServiceTest extends ServiceBaseCase {
     public function addMaleSpouse() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
+        /** @var Person $spouse */
+        $spouse = $this->getReference('person.2');
 
-        $row = $this->getRow([
-            S::spouse_first_name => 'Jane',
-            S::spouse_last_name => 'Quimby',
-        ]);
+        $row = $this->getRow();
 
-        list($r, $i) = $this->importer->addSpouse($person, $row, S::spouse_first_name, S::spouse_last_name, 'Name 1');
+        list($r, $i) = $this->importer->addSpouse($person, $row, $spouse, 'Name 1');
         $this->assertNotNull($r);
         $this->assertSame($person, $r->getPerson());
         $this->assertNotNull($i);
         $this->assertNotNull($i->getPerson());
-        $this->assertSame('Jane', $i->getPerson()->getFirstName());
+        $this->assertSame('FirstName 2', $i->getPerson()->getFirstName());
     }
 
     /**
@@ -1035,36 +1017,17 @@ class ImportServiceTest extends ServiceBaseCase {
     public function addFemaleSpouse() : void {
         /** @var Person $person */
         $person = $this->getReference('person.2');
+        /** @var Person $spouse */
+        $spouse = $this->getReference('person.3');
 
-        $row = $this->getRow([
-            S::spouse_first_name => 'Joe',
-            S::spouse_last_name => 'Quimby',
-        ]);
+        $row = $this->getRow();
 
-        list($r, $i) = $this->importer->addSpouse($person, $row, S::spouse_first_name, S::spouse_last_name, 'Name 1');
+        list($r, $i) = $this->importer->addSpouse($person, $row, $spouse, 'Name 1');
         $this->assertNotNull($r);
         $this->assertSame($person, $r->getPerson());
         $this->assertNotNull($i);
         $this->assertNotNull($i->getPerson());
-        $this->assertSame('Joe', $i->getPerson()->getFirstName());
-    }
-
-    /**
-     * @test
-     *
-     * @throws Exception
-     */
-    public function addNullSpouse() : void {
-        /** @var Person $person */
-        $person = $this->getReference('person.2');
-
-        $row = $this->getRow([
-            S::spouse_first_name => '',
-            S::spouse_last_name => '',
-        ]);
-
-        $returned = $this->importer->addSpouse($person, $row, S::spouse_first_name, S::spouse_last_name, 'Name 1');
-        $this->assertCount(0, $returned);
+        $this->assertSame('FirstName 3', $i->getPerson()->getFirstName());
     }
 
     /**

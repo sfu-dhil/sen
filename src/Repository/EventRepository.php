@@ -39,4 +39,5 @@ class EventRepository extends ServiceEntityRepository {
             ->orderBy('event.id')
             ->getQuery();
     }
+
 }

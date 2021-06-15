@@ -60,6 +60,9 @@
                 {% if person.race %}
                     <a href='{{ path("race_show", {"id": person.race.id}) }}'>{{ person.race }}</a>
                 {% endif %}
+                {% if person.writtenRaces|length > 0 %}
+                    Recorded as {{ person.writtenRaces|join('; ') }}
+                {% endif %}
             </td>
         </tr>
         <tr>
