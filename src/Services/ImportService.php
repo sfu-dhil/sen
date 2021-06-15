@@ -151,21 +151,29 @@ class ImportService {
      * @throws Exception
      */
     public function findPerson(?string $given, ?string $family, ?string $raceName = '', $sex = '') : Person {
-        $person = $this->personRepository->findByName($given, $family);
-        $race = $this->findRace($raceName);
-        if ($person) {
-            if ($person->getRace() && $person->getRace()->getName() !== $raceName) {
-                $this->logger->warning("Possible duplicate person: {$person} with races {$person->getRace()->getName()} and {$raceName}");
-            }
-        } else {
+        $first = mb_convert_case($given, MB_CASE_TITLE);
+        $last = mb_convert_case($family, MB_CASE_TITLE);
+        $person = $this->personRepository->findByName($first, $last);
+        if( ! $person) {
             $person = new Person();
-            $person->setFirstName(mb_convert_case($given, MB_CASE_TITLE));
-            $person->setLastName(mb_convert_case($family, MB_CASE_TITLE));
-            $person->setRace($race);
-            if ($sex) {
-                $person->setSex(mb_strtoupper($sex[0]));
-            }
+            $person->setFirstName($first);
+            $person->setLastName($last);
             $this->em->persist($person);
+        }
+        $race = $this->raceRepository->findOneBy(['name' => $raceName]);
+        if($race) {
+            if($person->getRace() && $person->getRace() !== $race) {
+                $this->logger->warning("Person {$person} has multiple races {$race} and {$person->getRace()}");
+            }
+            $person->setRace($race);
+        }
+
+        if($sex) {
+            $s = mb_convert_case($sex[0], MB_CASE_UPPER);
+            if($person->getSex() && $person->getSex() !== $s) {
+                $this->logger->warning("Person {$person} has multiple sexes {$s} and {$person->getSex()}");
+            }
+            $person->setSex($s);
         }
 
         return $person;
@@ -231,14 +239,8 @@ class ImportService {
         $transaction->setLedger($ledger);
         $transaction->setFirstParty($firstParty);
         $transaction->setFirstPartyNote($row[N::first_party_notes]);
-        if ($row[N::first_party_spouse]) {
-            $this->addSpouse($firstParty, $row, N::first_party_spouse, N::first_party_last_name, $categoryName);
-        }
         $transaction->setConjunction($row[N::transaction_conjunction]);
         $transaction->setSecondParty($secondParty);
-        if ($row[N::second_party_spouse]) {
-            $this->addSpouse($secondParty, $row, N::second_party_spouse, N::second_party_last_name, $categoryName);
-        }
         $transaction->setSecondPartyNote($row[N::second_party_notes]);
         $transaction->setCategory($this->findTransactionCategory($row[N::transaction_category]));
         $date = new DateTime($row[N::transaction_date]);

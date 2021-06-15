@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Repository\RelationshipRepository;
 use App\Util\NotaryColumnDefinitions as N;
 use DateTimeImmutable;
 use Exception;
@@ -19,6 +20,8 @@ use Symfony\Component\Console\Command\Command;
  * AppImportNotaryCommand command.
  */
 class ImportNotaryCommand extends AbstractImportCommand {
+    private RelationshipRepository $relationshipRepository;
+
     protected static $defaultName = 'sen:import:notary';
 
     /**
@@ -45,6 +48,25 @@ class ImportNotaryCommand extends AbstractImportCommand {
             $row[N::second_party_sex]
         );
 
+        if ($row[N::first_party_spouse]) {
+            $firstSpouse = $this->importer->findPerson($row[N::first_party_spouse], $row[N::first_party_last_name]);
+            if( ! $this->relationshipRepository->findRelationship($firstParty, $firstSpouse, 'spouse', 'spouse')) {
+//                $this->importer->addSpouse($firstParty, $row, N::first_party_spouse, N::first_party_last_name);
+            }
+        }
+        if ($row[N::second_party_spouse]) {
+            $secondSpouse = $this->importer->findPerson($row[N::second_party_spouse], $row[N::second_party_last_name]);
+            if( ! $this->relationshipRepository->findRelationship($secondParty, $secondSpouse, 'spouse', 'spouse')) {
+//                $this->importer->addSpouse($secondParty, $row, N::second_party_spouse, N::second_party_last_name);
+            }
+        }
         $this->importer->createTransaction($ledger, $firstParty, $secondParty, $row);
+    }
+
+    /**
+     * @required
+     */
+    public function setRelationshipRepository(RelationshipRepository $repo) : void {
+        $this->relationshipRepository = $repo;
     }
 }
