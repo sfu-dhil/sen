@@ -26,32 +26,32 @@ class Race extends AbstractTerm {
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private string $spanishUngendered;
+    private ?string $spanishUngendered = null;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private string $spanishMale;
+    private ?string $spanishMale = null;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private string $spanishFemale;
+    private ?string $spanishFemale = null;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private string $frenchUngendered;
+    private ?string $frenchUngendered = null;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private string $frenchMale;
+    private ?string $frenchMale = null;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private string $frenchFemale;
+    private ?string $frenchFemale = null;
 
     /**
      * @var Collection|Person[]

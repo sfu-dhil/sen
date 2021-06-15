@@ -465,7 +465,7 @@ class ImportService {
     /**
      * @throws Exception
      */
-    public function addRelationship(Person $person, array $row, int $firstNameIdx, int $lastNameIdx, string $sex, string $relationshipName, string $relationName) : array {
+    public function addRelationship(Person $person, array $row, int $firstNameIdx, int $lastNameIdx, ?string $sex, string $relationshipName, string $relationName) : array {
         if ($row[$firstNameIdx] || $row[$lastNameIdx]) {
             $related = $this->findPerson($row[$firstNameIdx], $row[$lastNameIdx], null, $sex);
             $relationship = $this->createRelationship($person, $related, $relationshipName);

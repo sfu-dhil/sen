@@ -18,7 +18,7 @@ class ImportRaceCommand extends AbstractImportCommand {
 
     protected static $defaultName = 'sen:import:race';
 
-    protected function append(string $s, string $t) : string {
+    protected function append(?string $s, ?string $t) : ?string {
         if ( ! $t) {
             return $s;
         }
