@@ -33,12 +33,12 @@ class Person extends AbstractEntity {
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $firstName;
+    private ?string $firstName = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $lastName;
+    private ?string $lastName = null;
 
     /**
      * @ORM\Column(type="array")
@@ -53,7 +53,7 @@ class Person extends AbstractEntity {
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $native;
+    private ?string $native = null;
 
     /**
      * {date => $date, job => $job}.
@@ -67,7 +67,7 @@ class Person extends AbstractEntity {
      *
      * @ORM\Column(type="string", length=1, nullable=true)
      */
-    private ?string $sex;
+    private ?string $sex = null;
 
     /**
      * @ORM\Column(type="array")
@@ -82,7 +82,7 @@ class Person extends AbstractEntity {
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private ?string $notes;
+    private ?string $notes = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="BirthStatus", inversedBy="people")
@@ -92,7 +92,7 @@ class Person extends AbstractEntity {
     /**
      * @ORM\ManyToOne(targetEntity="Race", inversedBy="people")
      */
-    private ?Race $race;
+    private ?Race $race = null;
 
     /**
      * @var Collection|Residence[]

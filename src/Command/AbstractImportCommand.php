@@ -84,15 +84,15 @@ abstract class AbstractImportCommand extends Command {
             fgetcsv($handle);
             $progressBar->advance();
         }
-        while ($row = fgetcsv($handle)) {
+        for(; $row = fgetcsv($handle); $i++) {
             $data = $this->preprocess($row);
             try {
-                $this->process($data);
                 $this->em->beginTransaction();
+                $this->process($data);
                 $this->em->flush();
                 $this->em->commit();
             } catch (Exception $e) {
-                $output->writeln("{$file}:{$i} - {$e->getMessage()}");
+                $output->writeln("\n{$file}:{$i} - {$e->getMessage()}");
                 $this->em->rollback();
                 $this->em->clear();
             }

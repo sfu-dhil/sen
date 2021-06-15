@@ -36,7 +36,7 @@ class Transaction extends AbstractEntity {
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private string $notes;
+    private ?string $notes = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="firstPartyTransactions")

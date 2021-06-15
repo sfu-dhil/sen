@@ -25,22 +25,22 @@ class Event extends AbstractEntity {
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private string $writtenDate;
+    private ?string $writtenDate = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $date;
+    private ?string $date = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $note;
+    private ?string $note = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $recordSource;
+    private ?string $recordSource = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="EventCategory", inversedBy="events")
@@ -64,7 +64,7 @@ class Event extends AbstractEntity {
      * @ORM\ManyToOne(targetEntity="Location", inversedBy="events")
      * @ORM\JoinColumn(nullable=true)
      */
-    private ?Location $location;
+    private ?Location $location = null;
 
     public function __construct() {
         parent::__construct();

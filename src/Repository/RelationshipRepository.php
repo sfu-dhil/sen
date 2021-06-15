@@ -10,10 +10,13 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Person;
 use App\Entity\Relationship;
+use App\Entity\RelationshipCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * @method null|Relationship find($id, $lockMode = null, $lockVersion = null)
@@ -31,4 +34,30 @@ class RelationshipRepository extends ServiceEntityRepository {
             ->orderBy('relationship.id')
             ->getQuery();
     }
+
+    /**
+     * @throws Exception
+     */
+    public function findRelationship(?Person $person, ?Person $spouse, $relationshipName, $relationName) : ?Relationship {
+        if( ! $person || ! $spouse) {
+            return null;
+        }
+        $relationshipCategory = $this->getEntityManager()->getRepository(RelationshipCategory::class)->findOneBy(['name' => $relationshipName]);
+        if(! $relationshipCategory) {
+            throw new Exception("Relationship category '{$relationshipName}' is missing.");
+        }
+        if($relationship = $this->findOneBy(['person' => $person, 'relation' => $spouse, 'category' => $relationshipCategory])) {
+            return $relationship;
+        }
+
+        $relationCategory = $this->getEntityManager()->getRepository(RelationshipCategory::class)->findOneBy(['name' => $relationName]);
+        if(! $relationCategory) {
+            throw new Exception("Relationship category '{$relationName}' is missing.");
+        }
+        if($relationship = $this->findOneBy(['person' => $spouse, 'relation' => $person, 'category' => $relationCategory])) {
+            return $relationship;
+        }
+        return null;
+    }
+
 }

@@ -3,9 +3,9 @@
         <tr>
             <th>Date</th>
             <th>First Party</th>
+            <th>Category</th>
             <th>Conj</th>
             <th>Second Party</th>
-            <th>Category</th>
         </tr>
     </thead>
     <tbody>
@@ -17,7 +17,9 @@
                     </a>
                 </td>
                 <td>
-                    {{ transaction.firstParty }}
+                    <a href='{{ path('person_show', {'id': transaction.firstParty.id}) }}'>
+                        {{ transaction.firstParty }}
+                    </a>
                 </td>
 
                 <td>
@@ -29,7 +31,9 @@
                 </td>
 
                 <td>
-                    {{ transaction.secondParty }}
+                    <a href='{{ path('person_show', {'id': transaction.secondParty.id}) }}'>
+                        {{ transaction.secondParty }}
+                    </a>
                 </td>
             </tr>
         {% endfor %}

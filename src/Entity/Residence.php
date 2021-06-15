@@ -23,7 +23,7 @@ class Residence extends AbstractEntity {
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private string $date;
+    private ?string $date = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)

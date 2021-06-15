@@ -23,12 +23,12 @@ class Relationship extends AbstractEntity {
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private string $startDate;
+    private ?string $startDate = null;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private string $endDate;
+    private ?string $endDate = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="RelationshipCategory", inversedBy="relationships")
