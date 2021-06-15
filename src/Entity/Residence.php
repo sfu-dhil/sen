@@ -28,7 +28,7 @@ class Residence extends AbstractEntity {
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $address;
+    private ?string $address = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="residences")

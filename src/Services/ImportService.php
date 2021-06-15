@@ -116,7 +116,7 @@ class ImportService {
             $ledger = new Ledger();
             $ledger->setNotary($notary);
             $ledger->setVolume($volume);
-            $ledger->setYear((int) $year);
+            $ledger->setYear($year);
             $this->em->persist($ledger);
         }
 
@@ -220,6 +220,8 @@ class ImportService {
 
     /**
      * Create a transaction.
+     *
+     * @todo make this use addSpouse() isntead of doing it manually.
      */
     public function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, array $row) {
         $transaction = new Transaction();
@@ -227,7 +229,7 @@ class ImportService {
         $transaction->setFirstParty($firstParty);
         $transaction->setFirstPartyNote($row[N::first_party_notes]);
         if ($row[N::first_party_spouse]) {
-            $firstSpouse = $this->findPerson($row[N::first_party_status], $firstParty->getLastName());
+            $firstSpouse = $this->findPerson($row[N::first_party_spouse], $firstParty->getLastName());
             $firstRelationship = new Relationship();
             $firstRelationship->setCategory($this->findRelationshipCategory('spouse'));
             $firstRelationship->setPerson($firstParty);
@@ -455,7 +457,7 @@ class ImportService {
     /**
      * @throws Exception
      */
-    public function addRelationship(Person $person, array $row, int $firstNameIdx, int $lastNameIdx, string $sex, string $relationshipName, string $relationName) : ?array {
+    public function addRelationship(Person $person, array $row, int $firstNameIdx, int $lastNameIdx, string $sex, string $relationshipName, string $relationName) : array {
         if ($row[$firstNameIdx] || $row[$lastNameIdx]) {
             $related = $this->findPerson($row[$firstNameIdx], $row[$lastNameIdx], null, $sex);
             $relationship = $this->createRelationship($person, $related, $relationshipName);
@@ -464,7 +466,7 @@ class ImportService {
             return [$relationship, $inverse];
         }
 
-        return null;
+        return [];
     }
 
     /**
@@ -555,11 +557,13 @@ class ImportService {
     /**
      * @throws Exception
      *
-     * @return ?Relationship[]
+     * @return Relationship[]
+     *
+     * @todo make S::spouse_first_name etc parameters.
      */
-    public function addSpouse(Person $person, array $row, string $categoryName = 'spouse') : ?array {
+    public function addSpouse(Person $person, array $row, string $categoryName = 'spouse') : array {
         if ( ! $row[S::spouse_first_name] && ! $row[S::spouse_last_name]) {
-            return null;
+            return [];
         }
         $sex = null;
         switch ($person->getSex()) {
@@ -591,14 +595,14 @@ class ImportService {
         return $this->addEventWitnesses($marriage, $categoryName, ...$people);
     }
 
-    public function addDeath(Person $person, array $row) : ?Event {
+    public function addDeath(Person $person, array $row, $categoryName = 'death') : ?Event {
         if ( ! isset($row[S::event_death_date]) || ! $row[S::event_death_date]) {
             return null;
         }
 
-        $category = $this->eventCategoryRepository->findOneBy(['name' => 'death']);
+        $category = $this->eventCategoryRepository->findOneBy(['name' => $categoryName]);
         if ( ! $category) {
-            throw new Exception('Death event category is missing.');
+            throw new Exception("event category {$categoryName} is missing.");
         }
         $event = new Event();
         $event->setCategory($category);
@@ -611,9 +615,17 @@ class ImportService {
         return $event;
     }
 
-    public function addResidences(Person $person, array $row) : void {
+    /**
+     * @param Person $person
+     * @param array $row
+     *
+     * @return Residence[]
+     * @throws Exception
+     */
+    public function addResidences(Person $person, array $row) : array {
+        $residences = [];
         if ( ! $row[S::residence_dates] || ! $row[S::residence_places]) {
-            return;
+            return $residences;
         }
         $dates = preg_split(self::SPLIT, $row[S::residence_dates]);
         $addresses = preg_split(self::SPLIT, $row[S::residence_places]);
@@ -621,7 +633,6 @@ class ImportService {
         if (count($dates) !== count($addresses)) {
             throw new Exception('Residence date count ' . count($dates) . ' does not match residence place count ' . count($addresses) . '.');
         }
-
         for ($i = 0; $i < count($dates); $i++) {
             $matches = [];
             $residence = new Residence();
@@ -633,9 +644,10 @@ class ImportService {
             }
             $residence->setPerson($person);
             $residence->setDate($dates[$i]);
-            $residence->setAddress($addresses[$i]);
             $this->em->persist($residence);
+            $residences[] = $residence;
         }
+        return $residences;
     }
 
     /**
