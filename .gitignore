@@ -22,7 +22,7 @@
 public/yarn
 
 # deployer
-config/deploy.yml
+config/deploy.yaml
 src/.preload.php
 
 # random other stuff
