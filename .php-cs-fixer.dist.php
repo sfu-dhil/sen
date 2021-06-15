@@ -124,6 +124,9 @@ return $config->setRiskyAllowed(true)
                 'comment_types' => ['asterisk', 'hash'],
             ],
 
+            // Constant Notation
+            'native_constant_invocation' => false,
+
             // Control Structure
             'no_unneeded_control_parentheses' => [
                 'statements' => ['break', 'clone', 'continue', 'echo_print', 'return', 'switch_case', 'yield'],

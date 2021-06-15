@@ -99,8 +99,11 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function findLedger() : void {
+        /** @var Notary $notary */
         $notary = $this->getReference('notary.1');
         $ledger = $this->importer->findLedger($notary, 'Volume 1', 1234);
         $this->assertInstanceOf(Ledger::class, $ledger);
@@ -109,15 +112,11 @@ class ImportServiceTest extends ServiceBaseCase {
     }
 
     /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @group d
-     *
+     * @throws Exception
      * @test
      */
     public function findNewLedger() : void {
+        /** @var Notary $notary */
         $notary = $this->getReference('notary.1');
         $ledger = $this->importer->findLedger($notary, 'Volume 77', 1234);
         $this->assertInstanceOf(Ledger::class, $ledger);
@@ -131,6 +130,7 @@ class ImportServiceTest extends ServiceBaseCase {
      * @throws Exception
      */
     public function findRace() : void {
+        /** @var Race $race */
         $race = $this->importer->findRace('Name 1');
         $this->assertNotNull($race);
         $this->assertInstanceOf(Race::class, $race);
@@ -142,7 +142,7 @@ class ImportServiceTest extends ServiceBaseCase {
      */
     public function findNewRace() : void {
         $this->expectException(Exception::class);
-        $race = $this->importer->findRace('Cheese and Crackers');
+        $this->importer->findRace('Cheese and Crackers');
     }
 
     /**
@@ -735,7 +735,7 @@ class ImportServiceTest extends ServiceBaseCase {
             S::written_birth_date => 'abt Jan 1900',
             S::birth_place => 'Chatanooga',
         ]);
-        $event = $this->importer->addBirth($person, $row, 'Not a category');
+        $this->importer->addBirth($person, $row, 'Not a category');
     }
 
     /**
@@ -785,6 +785,8 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addNullRelationship() : void {
         /** @var Person $person */
@@ -821,7 +823,7 @@ class ImportServiceTest extends ServiceBaseCase {
         /** @var Person $relation */
         $relation = $this->getReference('person.2');
 
-        $relationship = $this->importer->createRelationship($person, $relation, 'Phony baloney');
+        $this->importer->createRelationship($person, $relation, 'Phony baloney');
     }
 
     /**
@@ -920,7 +922,7 @@ class ImportServiceTest extends ServiceBaseCase {
         $person = $this->getReference('person.1');
         /** @var Event $event */
         $event = $this->getReference('event.1');
-        $witnesses = $this->importer->addEventWitnesses($event, 'Cheese Party Witness', $person);
+        $this->importer->addEventWitnesses($event, 'Cheese Party Witness', $person);
     }
 
     /**
@@ -980,7 +982,7 @@ class ImportServiceTest extends ServiceBaseCase {
             S::event_written_marriage_date => 'abt 1900',
             S::event_marriage_memo => 'In a records',
         ]);
-        $event = $this->importer->addMarriage($person, $row, 'Name 1');
+        $this->importer->addMarriage($person, $row, 'Name 1');
     }
 
     /**
@@ -1000,7 +1002,7 @@ class ImportServiceTest extends ServiceBaseCase {
             S::event_written_marriage_date => 'abt 1900',
             S::event_marriage_memo => 'In a records',
         ]);
-        $event = $this->importer->addMarriage($person, $row, 'Name 1235');
+        $this->importer->addMarriage($person, $row, 'Name 1235');
     }
 
     /**
@@ -1017,7 +1019,7 @@ class ImportServiceTest extends ServiceBaseCase {
             S::spouse_last_name => 'Quimby',
         ]);
 
-        list($r, $i) = $this->importer->addSpouse($person, $row, 'Name 1');
+        list($r, $i) = $this->importer->addSpouse($person, $row, S::spouse_first_name, S::spouse_last_name, 'Name 1');
         $this->assertNotNull($r);
         $this->assertSame($person, $r->getPerson());
         $this->assertNotNull($i);
@@ -1039,7 +1041,7 @@ class ImportServiceTest extends ServiceBaseCase {
             S::spouse_last_name => 'Quimby',
         ]);
 
-        list($r, $i) = $this->importer->addSpouse($person, $row, 'Name 1');
+        list($r, $i) = $this->importer->addSpouse($person, $row, S::spouse_first_name, S::spouse_last_name, 'Name 1');
         $this->assertNotNull($r);
         $this->assertSame($person, $r->getPerson());
         $this->assertNotNull($i);
@@ -1061,8 +1063,8 @@ class ImportServiceTest extends ServiceBaseCase {
             S::spouse_last_name => '',
         ]);
 
-        $result = $this->importer->addSpouse($person, $row, 'Name 1');
-        $this->assertCount(0, $result);
+        $returned = $this->importer->addSpouse($person, $row, S::spouse_first_name, S::spouse_last_name, 'Name 1');
+        $this->assertCount(0, $returned);
     }
 
     /**
@@ -1137,11 +1139,13 @@ class ImportServiceTest extends ServiceBaseCase {
             S::event_written_death_date => 'abt Jan 1900',
             S::event_death_place => 'Chatanooga',
         ]);
-        $event = $this->importer->addDeath($person, $row, 'Not a category');
+        $this->importer->addDeath($person, $row, 'Not a category');
     }
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addResidences() : void {
         /** @var Person $person */
@@ -1165,6 +1169,8 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addNullResidences() : void {
         /** @var Person $person */
@@ -1179,6 +1185,8 @@ class ImportServiceTest extends ServiceBaseCase {
 
     /**
      * @test
+     *
+     * @throws Exception
      */
     public function addResidencesException() : void {
         $this->expectException(Exception::class);
@@ -1192,8 +1200,15 @@ class ImportServiceTest extends ServiceBaseCase {
         $this->assertCount(0, $residences);
     }
 
+    /**
+     * @throws Exception
+     */
     protected function setUp() : void {
         parent::setUp();
-        $this->importer = $this->getContainer()->get(ImportService::class);
+        $service = $this->getContainer()->get(ImportService::class);
+        if ( ! $service instanceof ImportService) {
+            throw new Exception('Misconfigured service container.');
+        }
+        $this->importer = $service;
     }
 }

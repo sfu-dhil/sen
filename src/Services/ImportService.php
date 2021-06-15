@@ -12,6 +12,7 @@ namespace App\Services;
 
 use App\Entity\City;
 use App\Entity\Event;
+use App\Entity\EventCategory;
 use App\Entity\Ledger;
 use App\Entity\Location;
 use App\Entity\LocationCategory;
@@ -158,8 +159,8 @@ class ImportService {
             }
         } else {
             $person = new Person();
-            $person->setFirstName(mb_convert_case($given, \MB_CASE_TITLE));
-            $person->setLastName(mb_convert_case($family, \MB_CASE_TITLE));
+            $person->setFirstName(mb_convert_case($given, MB_CASE_TITLE));
+            $person->setLastName(mb_convert_case($family, MB_CASE_TITLE));
             $person->setRace($race);
             if ($sex) {
                 $person->setSex(mb_strtoupper($sex[0]));
@@ -191,7 +192,7 @@ class ImportService {
             'label' => $label,
         ]);
         if ( ! $category) {
-            $short = preg_replace('/[^a-z0-9]+/u', '-', mb_convert_case($label, \MB_CASE_LOWER));
+            $short = preg_replace('/[^a-z0-9]+/u', '-', mb_convert_case($label, MB_CASE_LOWER));
             $category = new TransactionCategory();
             $category->setName($short);
             $category->setLabel($label);
@@ -211,7 +212,7 @@ class ImportService {
         if ( ! $category) {
             $category = new RelationshipCategory();
             $category->setName($name);
-            $category->setLabel(mb_convert_case($name, \MB_CASE_TITLE));
+            $category->setLabel(mb_convert_case($name, MB_CASE_TITLE));
             $this->em->persist($category);
         }
 
@@ -221,9 +222,10 @@ class ImportService {
     /**
      * Create a transaction.
      *
+     * @throws Exception
      * @todo make this use addSpouse() isntead of doing it manually.
      */
-    public function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, array $row) {
+    public function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, array $row) : Transaction {
         $transaction = new Transaction();
         $transaction->setLedger($ledger);
         $transaction->setFirstParty($firstParty);
@@ -280,7 +282,7 @@ class ImportService {
         if ( ! $category) {
             $category = new LocationCategory();
             $category->setName($name);
-            $category->setLabel(mb_convert_case($name, \MB_CASE_TITLE));
+            $category->setLabel(mb_convert_case($name, MB_CASE_TITLE));
             $this->em->persist($category);
         }
 
@@ -306,6 +308,9 @@ class ImportService {
         return $location;
     }
 
+    /**
+     * @throws Exception
+     */
     public function addManumission(Person $person, $row, $name = 'manumission') : ?Event {
         if ( ! isset($row[S::manumission_date]) || ! $row[S::manumission_date]) {
             return null;
@@ -316,19 +321,13 @@ class ImportService {
         if ( ! $category) {
             throw new Exception('Manumission event category is missing.');
         }
-        $event = new Event();
-        $event->setCategory($category);
-        $event->addParticipant($person);
-        $event->setDate($this->parseDate($row[S::manumission_date]));
-        $event->setWrittenDate($row[S::manumission_date_written]);
-        if (isset($row[S::manumission_place]) && $row[S::manumission_place]) {
-            $event->setLocation($this->findLocation($row[S::manumission_place], ''));
-        }
-        $this->em->persist($event);
 
-        return $event;
+        return $this->createEvent($person, $row, $category, S::manumission_date, S::manumission_date_written, S::manumission_place);
     }
 
+    /**
+     * @throws Exception
+     */
     public function addBaptism(Person $person, $row, $name = 'baptism') : ?Event {
         if ( ! isset($row[S::event_baptism_place]) || ! $row[S::event_baptism_place]) {
             return null;
@@ -339,13 +338,7 @@ class ImportService {
         if ( ! $category) {
             throw new Exception('Baptism event category is missing.');
         }
-        $event = new Event();
-        $event->setCategory($category);
-        $event->addParticipant($person);
-        $event->setDate($this->parseDate($row[S::event_baptism_date]));
-        $event->setWrittenDate($row[S::event_written_baptism_date]);
-        $event->setLocation($this->findLocation($row[S::event_baptism_place], 'church'));
-        if (isset($row[S::event_baptism_source])) {
+        $event = $this->createEvent($person, $row, $category, S::event_baptism_date, S::event_written_baptism_date, S::event_baptism_place, 'church');        if (isset($row[S::event_baptism_source])) {
             $event->setRecordSource($row[S::event_baptism_source]);
         }
         $this->em->persist($event);
@@ -440,7 +433,10 @@ class ImportService {
         $person->setBirthStatus($status);
     }
 
-    public function createRelationship(Person $person, Person $related, string $categoryName) {
+    /**
+     * @throws Exception
+     */
+    public function createRelationship(Person $person, Person $related, string $categoryName) : Relationship {
         $category = $this->relationshipCategoryRepository->findOneBy(['name' => $categoryName]);
         if ( ! $category) {
             throw new Exception("Relationship category {$categoryName} is missing.");
@@ -561,7 +557,7 @@ class ImportService {
      *
      * @todo make S::spouse_first_name etc parameters.
      */
-    public function addSpouse(Person $person, array $row, string $categoryName = 'spouse') : array {
+    public function addSpouse(Person $person, array $row, int $firstNameIdx, int $lastNameIdx, string $categoryName = 'spouse') : array {
         if ( ! $row[S::spouse_first_name] && ! $row[S::spouse_last_name]) {
             return [];
         }
@@ -575,7 +571,7 @@ class ImportService {
                 break;
         }
 
-        return $this->addRelationship($person, $row, S::spouse_first_name, S::spouse_last_name, $sex, $categoryName, $categoryName);
+        return $this->addRelationship($person, $row, $firstNameIdx, $lastNameIdx, $sex, $categoryName, $categoryName);
     }
 
     /**
@@ -584,7 +580,6 @@ class ImportService {
      * @throws Exception
      */
     public function addMarriageWitnesses(Event $marriage, array $row, $categoryName = 'witness') : array {
-        $created = [];
         $people = [];
         if ((isset($row[S::event_marriage_witness1_first_name]) && $row[S::event_marriage_witness1_first_name])
             || isset($row[S::event_marriage_witness1_last_name]) && $row[S::event_marriage_witness1_last_name]) {
@@ -598,6 +593,9 @@ class ImportService {
         return $this->addEventWitnesses($marriage, $categoryName, ...$people);
     }
 
+    /**
+     * @throws Exception
+     */
     public function addDeath(Person $person, array $row, $categoryName = 'death') : ?Event {
         if ( ! isset($row[S::event_death_date]) || ! $row[S::event_death_date]) {
             return null;
@@ -607,15 +605,7 @@ class ImportService {
         if ( ! $category) {
             throw new Exception("event category {$categoryName} is missing.");
         }
-        $event = new Event();
-        $event->setCategory($category);
-        $event->addParticipant($person);
-        $event->setDate($this->parseDate($row[S::event_death_date]));
-        $event->setWrittenDate($row[S::event_written_death_date]);
-        $event->setLocation($this->findLocation($row[S::event_death_place]));
-        $this->em->persist($event);
-
-        return $event;
+        return $this->createEvent($person, $row, $category, S::event_death_date, S::event_written_death_date, S::event_death_place);
     }
 
     /**
@@ -734,5 +724,18 @@ class ImportService {
      */
     public function setWitnessCategoryRepository(WitnessCategoryRepository $witnessCategoryRepository) : void {
         $this->witnessCategoryRepository = $witnessCategoryRepository;
+    }
+
+    public function createEvent(Person $person, array $row, EventCategory $category, $dateIdx, $writtenDateIdx, $placeIdx = null, $placeCategory = 'city') : Event {
+        $event = new Event();
+        $event->setCategory($category);
+        $event->addParticipant($person);
+        $event->setDate($this->parseDate($row[$dateIdx]));
+        $event->setWrittenDate($row[$writtenDateIdx]);
+        if(isset($row[$placeIdx]) && $row[$placeIdx]) {
+            $event->setLocation($this->findLocation($row[$placeIdx], $placeCategory));
+        }
+        $this->em->persist($event);
+        return $event;
     }
 }
