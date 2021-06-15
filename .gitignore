@@ -14,25 +14,20 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
-# Temporary while doing the upgrade.
-/old
-
-# documentation
-/docs/src/build
-/web/docs
-
 # PHPStorm config.
 /.idea
+
+# yarn
 .yarn-integrity
 public/yarn
-config/deploy.yml
-*.sql
-config/deploy.yaml
-src/.preload.php
-data
 
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
+# deployer
+config/deploy.yml
+src/.preload.php
+
+# random other stuff
+data
+*.sql
+
+# code coverage
 /public/dev
