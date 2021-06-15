@@ -25,14 +25,14 @@ class OccupationType extends AbstractType {
             'required' => false,
             'attr' => [
                 'help_block' => '',
-            ]
+            ],
         ]);
         $builder->add('occupation', TextType::class, [
             'label' => 'Job',
             'required' => true,
             'attr' => [
                 'help_block' => '',
-            ]
+            ],
         ]);
         $builder->setDataMapper(new OccupationMapper());
     }

@@ -16,7 +16,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\MockObject\BadMethodCallException;
 
 /**
  * @method null|Person find($id, $lockMode = null, $lockVersion = null)

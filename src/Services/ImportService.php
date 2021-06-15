@@ -532,7 +532,7 @@ class ImportService {
      * @throws Exception
      */
     public function addMarriage(Person $person, array $row, string $categoryName = 'wedding') : ?Event {
-        if ( ! isset($row[S::event_written_marriage_date]) || !$row[S::event_written_marriage_date]) {
+        if ( ! isset($row[S::event_written_marriage_date]) || ! $row[S::event_written_marriage_date]) {
             return null;
         }
         if ( ! $row[S::spouse_first_name] && ! $row[S::spouse_last_name]) {
@@ -579,19 +579,22 @@ class ImportService {
     }
 
     /**
+     * @param mixed $categoryName
+     *
      * @throws Exception
      */
     public function addMarriageWitnesses(Event $marriage, array $row, $categoryName = 'witness') : array {
         $created = [];
         $people = [];
-        if( (isset($row[S::event_marriage_witness1_first_name]) && $row[S::event_marriage_witness1_first_name])
+        if ((isset($row[S::event_marriage_witness1_first_name]) && $row[S::event_marriage_witness1_first_name])
             || isset($row[S::event_marriage_witness1_last_name]) && $row[S::event_marriage_witness1_last_name]) {
             $people[] = $this->findPerson($row[S::event_marriage_witness1_first_name], $row[S::event_marriage_witness1_last_name]);
         }
-        if( (isset($row[S::event_marriage_witness2_first_name]) && $row[S::event_marriage_witness2_first_name])
+        if ((isset($row[S::event_marriage_witness2_first_name]) && $row[S::event_marriage_witness2_first_name])
             || isset($row[S::event_marriage_witness2_last_name]) && $row[S::event_marriage_witness2_last_name]) {
             $people[] = $this->findPerson($row[S::event_marriage_witness2_first_name], $row[S::event_marriage_witness2_last_name]);
         }
+
         return $this->addEventWitnesses($marriage, $categoryName, ...$people);
     }
 
@@ -616,11 +619,9 @@ class ImportService {
     }
 
     /**
-     * @param Person $person
-     * @param array $row
+     * @throws Exception
      *
      * @return Residence[]
-     * @throws Exception
      */
     public function addResidences(Person $person, array $row) : array {
         $residences = [];
@@ -647,6 +648,7 @@ class ImportService {
             $this->em->persist($residence);
             $residences[] = $residence;
         }
+
         return $residences;
     }
 

@@ -11,9 +11,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Entity\RelationshipCategory;
-use App\Entity\WitnessCategory;
 use App\Repository\RelationshipCategoryRepository;
-use App\Repository\WitnessCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,14 +20,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportRelationshipCategories extends Command {
-
     private EntityManagerInterface $em;
+
+    private RelationshipCategoryRepository $repo;
 
     protected static $defaultName = 'sen:import:relationship-categories';
 
     protected static $defaultDescription = 'Import relationship categories';
-
-    private RelationshipCategoryRepository $repo;
 
     protected function configure() : void {
         $this

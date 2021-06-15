@@ -1,8 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * (c) 2021 Michael Joyce <mjoyce@sfu.ca>
+ * This source file is subject to the GPL v2, bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace App\Form\Mapper;
-
 
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
@@ -10,12 +16,11 @@ use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
 use Symfony\Component\Form\FormInterface;
 
 class OccupationMapper extends PropertyPathMapper implements DataMapperInterface {
-
     public function mapDataToForms($viewData, $forms) : void {
-        if( ! $viewData) {
+        if ( ! $viewData) {
             return;
         }
-        if( ! is_array($viewData)) {
+        if ( ! is_array($viewData)) {
             throw new UnexpectedTypeException($viewData, 'array');
         }
 
@@ -36,5 +41,4 @@ class OccupationMapper extends PropertyPathMapper implements DataMapperInterface
             'occupation' => $formData['occupation']->getData(),
         ];
     }
-
 }

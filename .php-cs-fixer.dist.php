@@ -197,7 +197,7 @@ return $config->setRiskyAllowed(true)
                 'comment_type' => 'all_multiline',
             ],
             'general_phpdoc_annotation_remove' => [
-                'annotations' => ['author', 'package', 'subpackage', 'version'],
+                'annotations' => ['author', 'package', 'subpackage', 'version', 'coversNothing'],
             ],
             'phpdoc_align' => [
                 'tags' => ['method', 'param', 'property', 'return', 'throws', 'type', 'var'],

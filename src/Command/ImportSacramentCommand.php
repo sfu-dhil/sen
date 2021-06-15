@@ -45,17 +45,12 @@ class ImportSacramentCommand extends Command {
             ->addOption('skip', null, InputOption::VALUE_REQUIRED, 'Number of header rows to skip', 1);
     }
 
-    function preprocess(array $row) : array {
-        return array_map(function($d) {
-            $s = mb_convert_encoding($d, 'UTF-8', 'UTF-8');
-            return preg_replace("/^\s+|\s+$/u", '', $s);
-        }, $row);
-    }
-
     /**
+     * @param mixed $row
+     *
      * @throws Exception
      */
-    protected function process($row) {
+    protected function process($row) : void {
         $person = $this->importer->findPerson($row[S::first_name], $row[S::last_name], $row[S::race_id], $row[S::sex]);
         $this->importer->setWrittenRace($person, $row); // includes race_id;
         $this->importer->setStatus($person, $row);
@@ -94,7 +89,7 @@ class ImportSacramentCommand extends Command {
             for ($i = 1; $i <= $skip; $i++) {
                 fgetcsv($handle);
             }
-            for(; $row = fgetcsv($handle); $i++) {
+            for (; $row = fgetcsv($handle); $i++) {
                 $row = array_map(static fn($data) => mb_convert_encoding($data, 'UTF-8', 'UTF-8'), $row);
 
                 try {
@@ -109,5 +104,13 @@ class ImportSacramentCommand extends Command {
                 }
             }
         }
+    }
+
+    public function preprocess(array $row) : array {
+        return array_map(static function($d) {
+            $s = mb_convert_encoding($d, 'UTF-8', 'UTF-8');
+
+            return preg_replace('/^\\s+|\\s+$/u', '', $s);
+        }, $row);
     }
 }

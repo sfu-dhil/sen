@@ -1140,44 +1140,53 @@ class ImportServiceTest extends ServiceBaseCase {
         $event = $this->importer->addDeath($person, $row, 'Not a category');
     }
 
-    public function testAddResidences() {
+    /**
+     * @test
+     */
+    public function addResidences() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
         $row = $this->getRow([
             S::residence_dates => '1934; 1922',
-            S::residence_places => '123 Some St, Nola; Chatanooga'
+            S::residence_places => '123 Some St, Nola; Chatanooga',
         ]);
         $residences = $this->importer->addResidences($person, $row);
         $this->assertCount(2, $residences);
-        $this->assertEquals($person, $residences[0]->getPerson());
-        $this->assertEquals("1934", $residences[0]->getDate());
-        $this->assertEquals('123 Some St', $residences[0]->getAddress());
-        $this->assertEquals('Nola', $residences[0]->getCity()->getName());
+        $this->assertSame($person, $residences[0]->getPerson());
+        $this->assertSame('1934', $residences[0]->getDate());
+        $this->assertSame('123 Some St', $residences[0]->getAddress());
+        $this->assertSame('Nola', $residences[0]->getCity()->getName());
 
-        $this->assertEquals($person, $residences[1]->getPerson());
-        $this->assertEquals("1922", $residences[1]->getDate());
-        $this->assertEquals(null, $residences[1]->getAddress());
-        $this->assertEquals('Chatanooga', $residences[1]->getCity()->getName());
+        $this->assertSame($person, $residences[1]->getPerson());
+        $this->assertSame('1922', $residences[1]->getDate());
+        $this->assertNull($residences[1]->getAddress());
+        $this->assertSame('Chatanooga', $residences[1]->getCity()->getName());
     }
 
-    public function testAddNullResidences() {
+    /**
+     * @test
+     */
+    public function addNullResidences() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
         $row = $this->getRow([
             S::residence_dates => '',
-            S::residence_places => ''
+            S::residence_places => '',
         ]);
         $residences = $this->importer->addResidences($person, $row);
         $this->assertCount(0, $residences);
     }
 
-    public function testAddResidencesException() {
+    /**
+     * @test
+     */
+    public function addResidencesException() : void {
         $this->expectException(Exception::class);
         /** @var Person $person */
         $person = $this->getReference('person.1');
         $row = $this->getRow([
             S::residence_dates => '1900',
-            S::residence_places => '123 Some St, Nola; Chatanooga'
+            S::residence_places => '123 Some St, Nola; Chatanooga',
         ]);
         $residences = $this->importer->addResidences($person, $row);
         $this->assertCount(0, $residences);
