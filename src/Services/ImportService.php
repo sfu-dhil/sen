@@ -144,6 +144,23 @@ class ImportService {
     }
 
     /**
+     * @throws Exception
+     */
+    public function otherSex(?string $sex) : string {
+        if( ! $sex) {
+            return '';
+        }
+        switch(mb_convert_case($sex[0], MB_CASE_UPPER)) {
+            case Person::MALE:
+                return Person::FEMALE;
+            case Person::FEMALE:
+                return Person::MALE;
+            default:
+                throw new Exception("Unknown sex {$sex}.");
+        }
+    }
+
+    /**
      * Find or create a record for a person.
      *
      * @param mixed $sex
@@ -467,16 +484,11 @@ class ImportService {
     /**
      * @throws Exception
      */
-    public function addRelationship(Person $person, array $row, int $firstNameIdx, int $lastNameIdx, ?string $sex, string $relationshipName, string $relationName) : array {
-        if ($row[$firstNameIdx] || $row[$lastNameIdx]) {
-            $related = $this->findPerson($row[$firstNameIdx], $row[$lastNameIdx], null, $sex);
-            $relationship = $this->createRelationship($person, $related, $relationshipName);
-            $inverse = $this->createRelationship($related, $person, $relationName);
+    public function addRelationship(Person $person, array $row, Person $relation, string $relationshipName, string $relationName) : array {
+        $relationship = $this->createRelationship($person, $relation, $relationshipName);
+        $inverse = $this->createRelationship($relation, $person, $relationName);
 
-            return [$relationship, $inverse];
-        }
-
-        return [];
+        return [$relationship, $inverse];
     }
 
     /**
@@ -485,12 +497,14 @@ class ImportService {
     public function addParents(Person $person, array $row, string $fatherCategory = 'father', string $motherCategory = 'mother', string $childCategory = 'child') : array {
         $relationships = [];
         if ($row[S::father_first_name] || $row[S::father_last_name]) {
-            $added = $this->addRelationship($person, $row, S::father_first_name, S::father_last_name, 'Male', $fatherCategory, $childCategory);
+            $father = $this->findPerson($row[S::father_first_name], $row[S::father_last_name], null, 'Male');
+            $added = $this->addRelationship($person, $row, $father, $fatherCategory, $childCategory);
             $relationships = array_merge($relationships, $added);
         }
 
         if ($row[S::mother_first_name] || $row[S::mother_last_name]) {
-            $added = $this->addRelationship($person, $row, S::mother_first_name, S::mother_last_name, 'Female', $motherCategory, $childCategory);
+            $mother = $this->findPerson($row[S::mother_first_name], $row[S::mother_last_name], null, 'Female');
+            $added = $this->addRelationship($person, $row, $mother, $motherCategory, $childCategory);
             $relationships = array_merge($relationships, $added);
         }
 
@@ -503,12 +517,14 @@ class ImportService {
     public function addGodParents(Person $person, array $row, string $godfatherCategory = 'godfather', string $godmotherCategory = 'godmother', string $godchildCategory = 'godchild') : array {
         $relationships = [];
         if ($row[S::godfather_first_name] || $row[S::godfather_last_name]) {
-            $added = $this->addRelationship($person, $row, S::godfather_first_name, S::godfather_last_name, 'Male', $godfatherCategory, $godchildCategory);
+            $godfather = $this->findPerson($row[S::godfather_first_name], $row[S::godfather_last_name], null, 'Male');
+            $added = $this->addRelationship($person, $row, $godfather, $godfatherCategory, $godchildCategory);
             $relationships = array_merge($relationships, $added);
         }
 
         if ($row[S::godmother_first_name] || $row[S::godmother_last_name]) {
-            $added = $this->addRelationship($person, $row, S::godmother_first_name, S::godmother_last_name, 'Male', $godmotherCategory, $godchildCategory);
+            $godmother = $this->findPerson($row[S::godmother_first_name], $row[S::godmother_last_name], null, 'Male');
+            $added = $this->addRelationship($person, $row, $godmother, $godmotherCategory, $godchildCategory);
             $relationships = array_merge($relationships, $added);
         }
 
@@ -565,21 +581,8 @@ class ImportService {
      *
      * @return Relationship[]
      */
-    public function addSpouse(Person $person, array $row, int $firstNameIdx, int $lastNameIdx, string $categoryName = 'spouse') : array {
-        if ( ! $row[$firstNameIdx] && ! $row[$lastNameIdx]) {
-            return [];
-        }
-        $sex = null;
-        switch ($person->getSex()) {
-            case Person::MALE:
-                $sex = Person::FEMALE;
-                break;
-            case Person::FEMALE:
-                $sex = Person::MALE;
-                break;
-        }
-
-        return $this->addRelationship($person, $row, $firstNameIdx, $lastNameIdx, $sex, $categoryName, $categoryName);
+    public function addSpouse(Person $person, array $row, Person $spouse, string $categoryName = 'spouse') : array {
+        return $this->addRelationship($person, $row, $spouse, $categoryName, $categoryName);
     }
 
     /**

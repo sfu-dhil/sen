@@ -49,15 +49,15 @@ class ImportNotaryCommand extends AbstractImportCommand {
         );
 
         if ($row[N::first_party_spouse]) {
-            $firstSpouse = $this->importer->findPerson($row[N::first_party_spouse], $row[N::first_party_last_name]);
+            $firstSpouse = $this->importer->findPerson($row[N::first_party_spouse], $row[N::first_party_last_name], null, $this->importer->otherSex($row[N::first_party_sex]));
             if( ! $this->relationshipRepository->findRelationship($firstParty, $firstSpouse, 'spouse', 'spouse')) {
-//                $this->importer->addSpouse($firstParty, $row, N::first_party_spouse, N::first_party_last_name);
+                $this->importer->addSpouse($firstParty, $row, $firstSpouse);
             }
         }
         if ($row[N::second_party_spouse]) {
-            $secondSpouse = $this->importer->findPerson($row[N::second_party_spouse], $row[N::second_party_last_name]);
+            $secondSpouse = $this->importer->findPerson($row[N::second_party_spouse], $row[N::second_party_last_name],null, $this->importer->otherSex($row[N::second_party_sex]));
             if( ! $this->relationshipRepository->findRelationship($secondParty, $secondSpouse, 'spouse', 'spouse')) {
-//                $this->importer->addSpouse($secondParty, $row, N::second_party_spouse, N::second_party_last_name);
+                $this->importer->addSpouse($secondParty, $row, $secondSpouse);
             }
         }
         $this->importer->createTransaction($ledger, $firstParty, $secondParty, $row);
