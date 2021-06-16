@@ -147,10 +147,10 @@ class ImportService {
      * @throws Exception
      */
     public function otherSex(?string $sex) : string {
-        if( ! $sex) {
+        if ( ! $sex) {
             return '';
         }
-        switch(mb_convert_case($sex[0], MB_CASE_UPPER)) {
+        switch (mb_convert_case($sex[0], MB_CASE_UPPER)) {
             case Person::MALE:
                 return Person::FEMALE;
             case Person::FEMALE:
@@ -171,23 +171,23 @@ class ImportService {
         $first = mb_convert_case($given, MB_CASE_TITLE);
         $last = mb_convert_case($family, MB_CASE_TITLE);
         $person = $this->personRepository->findByName($first, $last);
-        if( ! $person) {
+        if ( ! $person) {
             $person = new Person();
             $person->setFirstName($first);
             $person->setLastName($last);
             $this->em->persist($person);
         }
         $race = $this->raceRepository->findOneBy(['name' => $raceName]);
-        if($race) {
-            if($person->getRace() && $person->getRace() !== $race) {
+        if ($race) {
+            if ($person->getRace() && $person->getRace() !== $race) {
                 $this->logger->warning("Person {$person} has multiple races {$race} and {$person->getRace()}");
             }
             $person->setRace($race);
         }
 
-        if($sex) {
+        if ($sex) {
             $s = mb_convert_case($sex[0], MB_CASE_UPPER);
-            if($person->getSex() && $person->getSex() !== $s) {
+            if ($person->getSex() && $person->getSex() !== $s) {
                 $this->logger->warning("Person {$person} has multiple sexes {$s} and {$person->getSex()}");
             }
             $person->setSex($s);
@@ -333,7 +333,7 @@ class ImportService {
     }
 
     public function addTitles(Person $person, array $row) : void {
-        if( ! $row[S::title]) {
+        if ( ! $row[S::title]) {
             return;
         }
         $titles = array_merge($person->getTitles(), preg_split(self::SPLIT, $row[S::title]));
@@ -501,6 +501,7 @@ class ImportService {
 
     /**
      * @throws Exception
+     *
      * @return Person[]
      */
     public function addParents(Person $person, array $row, string $fatherCategory = 'father', string $motherCategory = 'mother', string $childCategory = 'child') : array {
@@ -522,6 +523,7 @@ class ImportService {
 
     /**
      * @throws Exception
+     *
      * @return Person[]
      */
     public function addGodParents(Person $person, array $row, string $godfatherCategory = 'godfather', string $godmotherCategory = 'godmother', string $godchildCategory = 'godchild') : array {

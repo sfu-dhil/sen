@@ -38,8 +38,10 @@ class RelationshipRepositoryTest extends ServiceBaseCase {
 
     /**
      * @throws Exception
+     *
+     * @test
      */
-    public function testFindRelationship() {
+    public function findRelationship() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
         /** @var Person $relation */
@@ -49,8 +51,10 @@ class RelationshipRepositoryTest extends ServiceBaseCase {
 
     /**
      * @throws Exception
+     *
+     * @test
      */
-    public function testFindRelation() {
+    public function findRelation() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
         /** @var Person $relation */
@@ -61,8 +65,10 @@ class RelationshipRepositoryTest extends ServiceBaseCase {
 
     /**
      * @throws Exception
+     *
+     * @test
      */
-    public function testFindNoRelationship() {
+    public function findNoRelationship() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
         /** @var Person $relation */
@@ -74,8 +80,10 @@ class RelationshipRepositoryTest extends ServiceBaseCase {
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @test
      */
-    public function testFindRelationshipNameException() {
+    public function findRelationshipNameException() : void {
         $this->expectException(Exception::class);
         /** @var Person $person */
         $person = $this->getReference('person.1');
@@ -88,8 +96,10 @@ class RelationshipRepositoryTest extends ServiceBaseCase {
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @test
      */
-    public function testFindRelationNameException() {
+    public function findRelationNameException() : void {
         $this->expectException(Exception::class);
         /** @var Person $person */
         $person = $this->getReference('person.1');
@@ -100,8 +110,10 @@ class RelationshipRepositoryTest extends ServiceBaseCase {
 
     /**
      * @throws Exception
+     *
+     * @test
      */
-    public function testFindNullPersonRelationship() {
+    public function findNullPersonRelationship() : void {
         /** @var Person $relation */
         $relation = $this->getReference('person.2');
         $this->assertNull($this->repo->findRelationship(null, $relation, 'Name 1', 'Name 1'));
@@ -109,8 +121,10 @@ class RelationshipRepositoryTest extends ServiceBaseCase {
 
     /**
      * @throws Exception
+     *
+     * @test
      */
-    public function testFindNullRelationRelationship() {
+    public function findNullRelationRelationship() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
         $this->assertNull($this->repo->findRelationship($person, null, 'Name 1', 'Name 1'));

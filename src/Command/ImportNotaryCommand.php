@@ -50,13 +50,13 @@ class ImportNotaryCommand extends AbstractImportCommand {
 
         if ($row[N::first_party_spouse]) {
             $firstSpouse = $this->importer->findPerson($row[N::first_party_spouse], $row[N::first_party_last_name], null, $this->importer->otherSex($row[N::first_party_sex]));
-            if( ! $this->relationshipRepository->findRelationship($firstParty, $firstSpouse, 'spouse', 'spouse')) {
+            if ( ! $this->relationshipRepository->findRelationship($firstParty, $firstSpouse, 'spouse', 'spouse')) {
                 $this->importer->addSpouse($firstParty, $row, $firstSpouse);
             }
         }
         if ($row[N::second_party_spouse]) {
-            $secondSpouse = $this->importer->findPerson($row[N::second_party_spouse], $row[N::second_party_last_name],null, $this->importer->otherSex($row[N::second_party_sex]));
-            if( ! $this->relationshipRepository->findRelationship($secondParty, $secondSpouse, 'spouse', 'spouse')) {
+            $secondSpouse = $this->importer->findPerson($row[N::second_party_spouse], $row[N::second_party_last_name], null, $this->importer->otherSex($row[N::second_party_sex]));
+            if ( ! $this->relationshipRepository->findRelationship($secondParty, $secondSpouse, 'spouse', 'spouse')) {
                 $this->importer->addSpouse($secondParty, $row, $secondSpouse);
             }
         }

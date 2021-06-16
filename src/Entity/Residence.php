@@ -37,7 +37,7 @@ class Residence extends AbstractEntity {
     private Person $person;
 
     /**
-     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\ManyToOne(targetEntity="City", inversedBy="residences")
      * @ORM\JoinColumn(nullable=false)
      */
     private City $city;

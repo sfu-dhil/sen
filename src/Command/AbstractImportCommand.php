@@ -62,10 +62,11 @@ abstract class AbstractImportCommand extends Command {
     public function countLines($file) : int {
         $f = fopen($file, 'r');
         $lines = 0;
-        while( ! feof($f)) {
-            $lines += substr_count(fread($f, 8192), "\n");
+        while ( ! feof($f)) {
+            $lines += mb_substr_count(fread($f, 8192), "\n");
         }
         fclose($f);
+
         return $lines;
     }
 
@@ -84,7 +85,7 @@ abstract class AbstractImportCommand extends Command {
             fgetcsv($handle);
             $progressBar->advance();
         }
-        for(; $row = fgetcsv($handle); $i++) {
+        for (; $row = fgetcsv($handle); $i++) {
             $data = $this->preprocess($row);
             try {
                 $this->em->beginTransaction();
@@ -98,7 +99,7 @@ abstract class AbstractImportCommand extends Command {
             }
             $progressBar->advance();
         }
-        $output->writeln("");
+        $output->writeln('');
     }
 
     /**

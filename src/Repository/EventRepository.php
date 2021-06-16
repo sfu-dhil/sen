@@ -53,9 +53,8 @@ class EventRepository extends ServiceEntityRepository {
         $qb->setParameter('category', $category);
 
         $qb->innerJoin('event.participants', 'p', Join::WITH, 'p.id IN (:ids)');
-        $qb->setParameter('ids', array_map(fn(Person $p) => $p->getId(), $people));
+        $qb->setParameter('ids', array_map(static fn(Person $p) => $p->getId(), $people));
 
         return $qb->getQuery()->execute();
     }
-
 }

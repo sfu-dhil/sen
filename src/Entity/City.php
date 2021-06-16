@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nines\UtilBundle\Entity\AbstractEntity;
 
@@ -27,6 +29,17 @@ class City extends AbstractEntity {
      */
     private string $name;
 
+    /**
+     * @var Collection|Residence[]
+     * @ORM\OneToMany(targetEntity="Residence", mappedBy="city")
+     */
+    private $residences;
+
+    public function __construct() {
+        parent::__construct();
+        $this->residences = new ArrayCollection();
+    }
+
     public function __toString() : string {
         return $this->name;
     }
@@ -37,6 +50,33 @@ class City extends AbstractEntity {
 
     public function setName(string $name) : self {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Residence[]
+     */
+    public function getResidences() : Collection {
+        return $this->residences;
+    }
+
+    public function addResidence(Residence $residence) : self {
+        if ( ! $this->residences->contains($residence)) {
+            $this->residences[] = $residence;
+            $residence->setCity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResidence(Residence $residence) : self {
+        if ($this->residences->removeElement($residence)) {
+            // set the owning side to null (unless already changed)
+            if ($residence->getCity() === $this) {
+                $residence->setCity(null);
+            }
+        }
 
         return $this;
     }

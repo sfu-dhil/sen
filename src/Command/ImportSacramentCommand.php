@@ -58,7 +58,7 @@ class ImportSacramentCommand extends AbstractImportCommand {
 
         if ($spouse && count($this->eventRepository->findEvent('marriage', $person, $spouse)) === 0) {
             $marriage = $this->importer->addMarriage($person, $spouse, $row);
-            if($marriage) {
+            if ($marriage) {
                 $this->importer->addMarriageWitnesses($marriage, $row);
             }
         }

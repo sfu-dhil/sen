@@ -13,12 +13,8 @@ namespace App\Tests\Repository;
 use App\DataFixtures\EventCategoryFixtures;
 use App\DataFixtures\EventFixtures;
 use App\DataFixtures\PersonFixtures;
-use App\DataFixtures\RelationshipCategoryFixtures;
-use App\DataFixtures\RelationshipFixtures;
-use App\Entity\EventCategory;
 use App\Entity\Person;
 use App\Repository\EventRepository;
-use App\Repository\RelationshipRepository;
 use Exception;
 use Nines\UtilBundle\Tests\ServiceBaseCase;
 
@@ -40,15 +36,20 @@ class EventRepositoryTest extends ServiceBaseCase {
         $this->assertInstanceOf(EventRepository::class, $this->repo);
     }
 
-    public function testFindEvent() {
+    /**
+     * @test
+     */
+    public function findEvent() : void {
         /** @var Person $person */
         $person = $this->getReference('person.1');
         $events = $this->repo->findEvent('Name 1', $person);
         $this->assertCount(1, $events);
     }
 
-
-    public function testFindNoEvent() {
+    /**
+     * @test
+     */
+    public function findNoEvent() : void {
         /** @var Person $person */
         $person = $this->getReference('person.3');
         $events = $this->repo->findEvent('Name 1', $person);

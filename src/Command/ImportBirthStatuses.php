@@ -11,9 +11,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Entity\BirthStatus;
-use App\Entity\EventCategory;
 use App\Repository\BirthStatusRepository;
-use App\Repository\EventCategoryRepository;
 
 class ImportBirthStatuses extends AbstractImportCommand {
     private BirthStatusRepository $repo;

@@ -36,28 +36,31 @@ class RelationshipRepository extends ServiceEntityRepository {
     }
 
     /**
+     * @param mixed $relationshipName
+     * @param mixed $relationName
+     *
      * @throws Exception
      */
     public function findRelationship(?Person $person, ?Person $relation, $relationshipName, $relationName) : ?Relationship {
-        if( ! $person || ! $relation) {
+        if ( ! $person || ! $relation) {
             return null;
         }
         $relationshipCategory = $this->getEntityManager()->getRepository(RelationshipCategory::class)->findOneBy(['name' => $relationshipName]);
-        if(! $relationshipCategory) {
+        if ( ! $relationshipCategory) {
             throw new Exception("Relationship category '{$relationshipName}' is missing.");
         }
-        if($relationship = $this->findOneBy(['person' => $person, 'relation' => $relation, 'category' => $relationshipCategory])) {
+        if ($relationship = $this->findOneBy(['person' => $person, 'relation' => $relation, 'category' => $relationshipCategory])) {
             return $relationship;
         }
 
         $relationCategory = $this->getEntityManager()->getRepository(RelationshipCategory::class)->findOneBy(['name' => $relationName]);
-        if(! $relationCategory) {
+        if ( ! $relationCategory) {
             throw new Exception("Relationship category '{$relationName}' is missing.");
         }
-        if($relationship = $this->findOneBy(['person' => $relation, 'relation' => $person, 'category' => $relationCategory])) {
+        if ($relationship = $this->findOneBy(['person' => $relation, 'relation' => $person, 'category' => $relationCategory])) {
             return $relationship;
         }
+
         return null;
     }
-
 }
