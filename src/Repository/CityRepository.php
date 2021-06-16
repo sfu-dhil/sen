@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\City;
+use App\Entity\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Query;
@@ -37,16 +38,18 @@ class CityRepository extends ServiceEntityRepository {
      * @return City[]|Collection
      */
     public function typeaheadQuery(string $q) {
-        throw new \RuntimeException('Not implemented yet.');
         $qb = $this->createQueryBuilder('city');
-        $qb->andWhere('city.column LIKE :q');
-        $qb->orderBy('city.column', 'ASC');
+        $qb->andWhere('city.name LIKE :q');
+        $qb->orderBy('city.name', 'ASC');
         $qb->setParameter('q', "{$q}%");
 
         return $qb->getQuery()->execute();
     }
 
-    public function searchNameQuery(string $q) : Query {
+    /**
+     * @return Collection|City[]|Query
+     */
+    public function searchQuery(string $q) {
         $qb = $this->createQueryBuilder('city');
         $qb->addSelect('MATCH (city.name) AGAINST(:q BOOLEAN) as HIDDEN score');
         $qb->andHaving('score > 0');
