@@ -31,9 +31,11 @@
                 </td>
 
                 <td>
+                    {% if transaction.secondParty %}
                     <a href='{{ path('person_show', {'id': transaction.secondParty.id}) }}'>
                         {{ transaction.secondParty }}
                     </a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
