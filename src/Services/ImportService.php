@@ -167,7 +167,10 @@ class ImportService {
      *
      * @throws Exception
      */
-    public function findPerson(?string $given, ?string $family, ?string $raceName = '', $sex = '') : Person {
+    public function findPerson(?string $given, ?string $family, ?string $raceName = '', $sex = '') : ?Person {
+        if( ! $given && ! $family) {
+            return null;
+        }
         $first = mb_convert_case($given, MB_CASE_TITLE);
         $last = mb_convert_case($family, MB_CASE_TITLE);
         $person = $this->personRepository->findByName($first, $last);
@@ -251,7 +254,7 @@ class ImportService {
      *
      * @throws Exception
      */
-    public function createTransaction(Ledger $ledger, Person $firstParty, Person $secondParty, array $row, $categoryName = 'spouse') : Transaction {
+    public function createTransaction(Ledger $ledger, Person $firstParty, ?Person $secondParty, array $row) : Transaction {
         $transaction = new Transaction();
         $transaction->setLedger($ledger);
         $transaction->setFirstParty($firstParty);

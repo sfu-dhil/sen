@@ -33,6 +33,9 @@ class ImportSacramentCommand extends AbstractImportCommand {
      */
     protected function process($row) : void {
         $person = $this->importer->findPerson($row[S::first_name], $row[S::last_name], $row[S::race_id], $row[S::sex]);
+        if( ! $person) {
+            throw new Exception("No person found.");
+        }
         $this->importer->addTitles($person, $row);
         $this->importer->setWrittenRace($person, $row); // includes race_id;
         $this->importer->setStatus($person, $row);
