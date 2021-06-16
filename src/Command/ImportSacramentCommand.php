@@ -42,10 +42,14 @@ class ImportSacramentCommand extends AbstractImportCommand {
         $this->importer->setNative($person, $row);
         $this->importer->addBirth($person, $row);
         $this->importer->setBirthStatus($person, $row);
-        // @todo make add parents and add godparents return the people so they can be added as participants in the baptism.
-        $this->importer->addParents($person, $row);
-        $this->importer->addGodParents($person, $row);
-        $this->importer->addBaptism($person, $row);
+
+        $parents = $this->importer->addParents($person, $row);
+        $godparents = $this->importer->addGodParents($person, $row);
+        $baptism = $this->importer->addBaptism($person, $row);
+        if($baptism) {
+            $this->importer->addEventWitnesses($baptism, 'godparent', ...array_values($godparents));
+            $this->importer->addEventWitnesses($baptism, 'parent', ...array_values($parents));
+        }
 
         $spouse = $this->importer->findPerson($row[S::spouse_first_name], $row[S::spouse_last_name]);
         if ($spouse && ! $this->relationshipRepo->findRelationship($person, $spouse, 'spouse', 'spouse')) {

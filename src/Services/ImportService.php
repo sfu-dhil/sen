@@ -501,19 +501,20 @@ class ImportService {
 
     /**
      * @throws Exception
+     * @return Person[]
      */
     public function addParents(Person $person, array $row, string $fatherCategory = 'father', string $motherCategory = 'mother', string $childCategory = 'child') : array {
         $relationships = [];
         if ($row[S::father_first_name] || $row[S::father_last_name]) {
             $father = $this->findPerson($row[S::father_first_name], $row[S::father_last_name], null, 'Male');
-            $added = $this->addRelationship($person, $row, $father, $fatherCategory, $childCategory);
-            $relationships = array_merge($relationships, $added);
+            $this->addRelationship($person, $row, $father, $fatherCategory, $childCategory);
+            $relationships['father'] = $father;
         }
 
         if ($row[S::mother_first_name] || $row[S::mother_last_name]) {
             $mother = $this->findPerson($row[S::mother_first_name], $row[S::mother_last_name], null, 'Female');
-            $added = $this->addRelationship($person, $row, $mother, $motherCategory, $childCategory);
-            $relationships = array_merge($relationships, $added);
+            $this->addRelationship($person, $row, $mother, $motherCategory, $childCategory);
+            $relationships['mother'] = $mother;
         }
 
         return $relationships;
@@ -521,19 +522,20 @@ class ImportService {
 
     /**
      * @throws Exception
+     * @return Person[]
      */
     public function addGodParents(Person $person, array $row, string $godfatherCategory = 'godfather', string $godmotherCategory = 'godmother', string $godchildCategory = 'godchild') : array {
         $relationships = [];
         if ($row[S::godfather_first_name] || $row[S::godfather_last_name]) {
             $godfather = $this->findPerson($row[S::godfather_first_name], $row[S::godfather_last_name], null, 'Male');
-            $added = $this->addRelationship($person, $row, $godfather, $godfatherCategory, $godchildCategory);
-            $relationships = array_merge($relationships, $added);
+            $this->addRelationship($person, $row, $godfather, $godfatherCategory, $godchildCategory);
+            $relationships['godfather'] = $godfather;
         }
 
         if ($row[S::godmother_first_name] || $row[S::godmother_last_name]) {
-            $godmother = $this->findPerson($row[S::godmother_first_name], $row[S::godmother_last_name], null, 'Male');
-            $added = $this->addRelationship($person, $row, $godmother, $godmotherCategory, $godchildCategory);
-            $relationships = array_merge($relationships, $added);
+            $godmother = $this->findPerson($row[S::godmother_first_name], $row[S::godmother_last_name], null, 'Female');
+            $this->addRelationship($person, $row, $godmother, $godmotherCategory, $godchildCategory);
+            $relationships['godmother'] = $godmother;
         }
 
         return $relationships;
@@ -547,7 +549,7 @@ class ImportService {
     public function addEventWitnesses(Event $event, string $categoryName, Person ...$people) : array {
         $category = $this->witnessCategoryRepository->findOneBy(['name' => $categoryName]);
         if ( ! $category) {
-            throw new Exception("Event category {$categoryName} is missing.");
+            throw new Exception("Event witness category {$categoryName} is missing.");
         }
         $witnesses = [];
         foreach ($people as $person) {
