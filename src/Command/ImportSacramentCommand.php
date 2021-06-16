@@ -46,7 +46,7 @@ class ImportSacramentCommand extends AbstractImportCommand {
         $parents = $this->importer->addParents($person, $row);
         $godparents = $this->importer->addGodParents($person, $row);
         $baptism = $this->importer->addBaptism($person, $row);
-        if($baptism) {
+        if ($baptism) {
             $this->importer->addEventWitnesses($baptism, 'godparent', ...array_values($godparents));
             $this->importer->addEventWitnesses($baptism, 'parent', ...array_values($parents));
         }
@@ -56,12 +56,12 @@ class ImportSacramentCommand extends AbstractImportCommand {
             $this->importer->addSpouse($person, $row, $spouse);
         }
 
-        // @todo check for an existing marriage for $person, $spouse.
-        // @todo update the definition of addMarriage() to take the two people.
-        // $marriage = $this->importer->addMarriage($person, $spouse, $row);
-
-        // @todo update the definition of addMarriageWitnesses() to take the event.
-        // $this->importer->addMarriageWitnesses($marriage, $row);
+        if ($spouse && count($this->eventRepository->findEvent('marriage', $person, $spouse)) === 0) {
+            $marriage = $this->importer->addMarriage($person, $spouse, $row);
+            if($marriage) {
+                $this->importer->addMarriageWitnesses($marriage, $row);
+            }
+        }
 
         $this->importer->addDeath($person, $row);
         $this->importer->addResidences($person, $row);

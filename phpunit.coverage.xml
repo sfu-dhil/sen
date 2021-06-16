@@ -12,7 +12,7 @@
 
     Use it like so:
 
-    XDEBUG_MODE=coverage ./vendor/bin/phpunit -c phpunit.coverage.xml
+    php -d zend_extension=xdebug.so -d xdebug.mode=coverage vendor/bin/phpunit -c phpunit.coverage.xml
   -->
   <php>
     <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled"/>

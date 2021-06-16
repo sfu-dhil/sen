@@ -11,8 +11,11 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\EventCategory;
+use App\Entity\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -38,6 +41,21 @@ class EventRepository extends ServiceEntityRepository {
             ->setParameter('q', $q . '%')
             ->orderBy('event.id')
             ->getQuery();
+    }
+
+    public function findEvent(string $categoryName, Person ...$people) {
+        $category = $this->_em->getRepository(EventCategory::class)->findOneBy([
+            'name' => $categoryName,
+        ]);
+
+        $qb = $this->createQueryBuilder('event');
+        $qb->where('event.category = :category');
+        $qb->setParameter('category', $category);
+
+        $qb->innerJoin('event.participants', 'p', Join::WITH, 'p.id IN (:ids)');
+        $qb->setParameter('ids', array_map(fn(Person $p) => $p->getId(), $people));
+
+        return $qb->getQuery()->execute();
     }
 
 }

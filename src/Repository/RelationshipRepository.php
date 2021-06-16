@@ -38,15 +38,15 @@ class RelationshipRepository extends ServiceEntityRepository {
     /**
      * @throws Exception
      */
-    public function findRelationship(?Person $person, ?Person $spouse, $relationshipName, $relationName) : ?Relationship {
-        if( ! $person || ! $spouse) {
+    public function findRelationship(?Person $person, ?Person $relation, $relationshipName, $relationName) : ?Relationship {
+        if( ! $person || ! $relation) {
             return null;
         }
         $relationshipCategory = $this->getEntityManager()->getRepository(RelationshipCategory::class)->findOneBy(['name' => $relationshipName]);
         if(! $relationshipCategory) {
             throw new Exception("Relationship category '{$relationshipName}' is missing.");
         }
-        if($relationship = $this->findOneBy(['person' => $person, 'relation' => $spouse, 'category' => $relationshipCategory])) {
+        if($relationship = $this->findOneBy(['person' => $person, 'relation' => $relation, 'category' => $relationshipCategory])) {
             return $relationship;
         }
 
@@ -54,7 +54,7 @@ class RelationshipRepository extends ServiceEntityRepository {
         if(! $relationCategory) {
             throw new Exception("Relationship category '{$relationName}' is missing.");
         }
-        if($relationship = $this->findOneBy(['person' => $spouse, 'relation' => $person, 'category' => $relationCategory])) {
+        if($relationship = $this->findOneBy(['person' => $relation, 'relation' => $person, 'category' => $relationCategory])) {
             return $relationship;
         }
         return null;

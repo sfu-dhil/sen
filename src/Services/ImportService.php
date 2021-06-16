@@ -567,18 +567,17 @@ class ImportService {
     /**
      * @throws Exception
      */
-    public function addMarriage(Person $person, array $row, string $categoryName = 'wedding') : ?Event {
+    public function addMarriage(Person $person, Person $spouse, array $row, string $categoryName = 'marriage') : ?Event {
         if ( ! isset($row[S::event_written_marriage_date]) || ! $row[S::event_written_marriage_date]) {
             return null;
         }
-        if ( ! $row[S::spouse_first_name] && ! $row[S::spouse_last_name]) {
-            throw new Exception('Written marriage date without spouse name');
-        }
+
         $category = $this->eventCategoryRepository->findOneBy(['name' => $categoryName]);
         if ( ! $category) {
             throw new Exception("Marriage event category {$categoryName} is missing.");
         }
         $event = $this->createEvent($person, $row, $category, S::event_marriage_date, S::event_written_marriage_date, S::event_marriage_place, 'church');
+        $event->addParticipant($spouse);
         $event->setNote($row[S::event_marriage_memo]);
         $event->setRecordSource($row[S::event_marriage_source]);
         $this->em->persist($event);
@@ -600,7 +599,7 @@ class ImportService {
      *
      * @throws Exception
      */
-    public function addMarriageWitnesses(Event $marriage, array $row, $categoryName = 'witness') : array {
+    public function addMarriageWitnesses(Event $marriage, array $row, $categoryName = 'marriage witness') : array {
         $people = [];
         if ((isset($row[S::event_marriage_witness1_first_name]) && $row[S::event_marriage_witness1_first_name])
             || isset($row[S::event_marriage_witness1_last_name]) && $row[S::event_marriage_witness1_last_name]) {

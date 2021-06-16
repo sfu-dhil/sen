@@ -25,7 +25,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface {
             $fixture->setWrittenDate('WrittenDate ' . $i);
             $fixture->setDate('Date ' . $i);
             $fixture->setNote('Note ' . $i);
-
+            $fixture->addParticipant($this->getReference('person.' . $i));
             $fixture->setCategory($this->getReference('eventcategory.' . $i));
             $fixture->setLocation($this->getReference('location.' . $i));
             $em->persist($fixture);
@@ -41,6 +41,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface {
         return [
             EventCategoryFixtures::class,
             LocationFixtures::class,
+            PersonFixtures::class,
         ];
     }
 }
