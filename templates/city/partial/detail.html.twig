@@ -8,6 +8,21 @@
         </tr>
 
         <tr>
+            <th>Residence</th>
+            <td>
+                {% if city.residences|length > 0 %}
+                    <ul>
+                        {% for residence in city.residences %}
+                            <li>
+                                <a href='{{ path('person_show', {'id': residence.person.id}) }}'>{{ residence.person }}</a>
+                                {{ residence.address }} {{ residence.city }} {{ residence.date }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
             <th>Created</th>
             <td>{{ city.created|date }}</td>
         </tr>

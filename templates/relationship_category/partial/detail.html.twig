@@ -7,13 +7,33 @@
 
 <h2>Relationships</h2>
 {% if relationship_category.relationships|length > 0 %}
-    <ul>
-        {% for relationship in relationship_category.relationships %}
-            <li>
-                <a href='{{ path("relationship_show", {"id":relationship.id }) }}'>
-                    {{ relationship }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+    {% set relationships = relationship_category.relationships %}
+    <table class="table table-bordered table-condensed table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Person</th>
+                <th>Category</th>
+                <th>Relation</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for relationship in relationships|sort((a,b) => (a.person.lastName <=> b.person.lastName ?: a.person.firstName <=> b.person.firstName)) %}
+                <tr>
+                    <td>
+                        <a href="{{ path('person_show', { 'id': relationship.person.id }) }}">
+                            {{ relationship.person }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ relationship.category }}
+                    </td>
+                    <td>
+                        <a href="{{ path('person_show', { 'id': relationship.relation.id }) }}">
+                            {{ relationship.relation }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endif %}

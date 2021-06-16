@@ -44,7 +44,7 @@
         <h2>People</h2>
         {% if race.people|length > 0 %}
             <ul>
-                {% for person in race.people %}
+                {% for person in race.people|sort((a,b) => (a.lastName <=> b.lastName ?: a.firstName <=> b.firstName)) %}
                     <li>
                         <a href='{{ path("person_show", {"id":person.id }) }}'>
                             {{ person }}

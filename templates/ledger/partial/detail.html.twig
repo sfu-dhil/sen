@@ -21,22 +21,6 @@
             </td>
         </tr>
         <tr>
-            <th>Transactions</th>
-            <td>
-                {% if ledger.transactions|length > 0 %}
-                    <ul>
-                        {% for transaction in ledger.transactions %}
-                            <li>
-                                <a href='{{ path("transaction_show", {"id":transaction.id }) }}'>
-                                    {{ transaction }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
             <th>Created</th>
             <td>{{ ledger.created|date }}</td>
         </tr>
@@ -47,4 +31,7 @@
     </tbody>
 </table>
 
-
+<h2>Transactions</h2>
+{% if ledger.transactions|length > 0 %}
+    {% include 'transaction/partial/table.html.twig' with {'transactions': ledger.transactions} %}
+{% endif %}

@@ -15,10 +15,10 @@
                     </a>
                 </td>
                 <td>
-                    {{ residence.person }}
+                    <a href='{{ path('person_show',{'id': residence.person.id}) }}'>{{ residence.person }}</a>
                 </td>
                 <td>
-                    {{ residence.city }}
+                    <a href='{{ path('city_show', {'id': residence.city.id}) }}'>{{ residence.city }}</a>
                 </td>
             </tr>
         {% endfor %}

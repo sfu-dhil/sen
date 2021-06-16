@@ -7,13 +7,21 @@
 
 <h2>Events</h2>
 {% if event_category.events|length > 0 %}
-    <ul>
-        {% for event in event_category.events %}
-            <li>
-                <a href='{{ path("event_show", {"id":event.id }) }}'>
-                    {{ event }}
-                </a>
-            </li>
+    <table class='table table-bordered table-condensed table-hover table-striped'>
+        {% for event in event_category.events|sort((a,b) => a.date <=> b.date) %}
+            <tr>
+                <td>
+                    <a href="{{ path('event_show', { 'id': event.id }) }}">{% if event.writtenDate %}{{ event.writtenDate }}{% else %}{{ event.date }}{% endif %}</a>
+                </td>
+                <td>
+                    {% for person in event.participants %}
+                        <a href='{{ path('person_show', {'id': person.id}) }}'>{{ person }}</a>{% if not loop.last %}; {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {{ event.note }}
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% endif %}

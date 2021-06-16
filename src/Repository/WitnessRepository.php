@@ -28,7 +28,8 @@ class WitnessRepository extends ServiceEntityRepository {
 
     public function indexQuery() : Query {
         return $this->createQueryBuilder('witness')
-            ->orderBy('witness.id')
+            ->innerJoin('witness.event', 'event')
+            ->orderBy('event.date')
             ->getQuery();
     }
 }

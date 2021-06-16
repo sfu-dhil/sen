@@ -1,24 +1,27 @@
 <table class="table table-bordered table-condensed table-hover table-striped">
     <thead>
         <tr>
-            <th>Person</th>
-            <th>Category</th>
             <th>Event</th>
+            <th>Person</th>
+            <th>Role</th>
         </tr>
     </thead>
     <tbody>
-        {% for witness in witnesses %}
+        {% for witness in witnesses|sort((a,b)=>(a.event.date<=>b.event.date)) %}
             <tr>
                 <td>
-                    <a href="{{ path('witness_show', { 'id': witness.id }) }}">
+                    <a href="{{ path('event_show', { 'id': witness.event.id }) }}">
+                        {{ witness.event.date }}</a> {{ witness.event.category }}
+                </td>
+                <td>
+                    <a href='{{ path('person_show', {'id': witness.person.id}) }}'>
                         {{ witness.person }}
                     </a>
                 </td>
                 <td>
-                    {{ witness.category }}
-                </td>
-                <td>
-                    {{ witness.event }}
+                    <a href='{{ path('witness_category_show', {'id': witness.category.id}) }}'>
+                        {{ witness.category }}
+                    </a>
                 </td>
             </tr>
         {% endfor %}

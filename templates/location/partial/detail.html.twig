@@ -16,22 +16,6 @@
             </td>
         </tr>
         <tr>
-            <th>Events</th>
-            <td>
-                {% if location.events|length > 0 %}
-                    <ul>
-                        {% for event in location.events %}
-                            <li>
-                                <a href='{{ path("event_show", {"id":event.id }) }}'>
-                                    {{ event }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
             <th>Created</th>
             <td>{{ location.created|date }}</td>
         </tr>
@@ -42,4 +26,26 @@
     </tbody>
 </table>
 
-
+<h2>Events</h2>
+{% if location.events|length > 0 %}
+    <table class='table table-bordered table-condensed table-hover table-striped'>
+        {% for event in location.events|sort((a,b) => a.date <=> b.date) %}
+            <tr>
+                <td>
+                    <a href="{{ path('event_show', { 'id': event.id }) }}">{% if event.writtenDate %}{{ event.writtenDate }}{% else %}{{ event.date }}{% endif %}</a>
+                </td>
+                <td>
+                    <a href='{{ path('event_category_show', {'id': event.category.id}) }}'>{{ event.category }}</a>
+                </td>
+                <td>
+                    {% for person in event.participants %}
+                        <a href='{{ path('person_show', {'id': person.id}) }}'>{{ person }}</a>{% if not loop.last %}; {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {{ event.note }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}

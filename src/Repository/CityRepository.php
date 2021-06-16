@@ -37,18 +37,16 @@ class CityRepository extends ServiceEntityRepository {
      * @return City[]|Collection
      */
     public function typeaheadQuery(string $q) {
+        throw new \RuntimeException('Not implemented yet.');
         $qb = $this->createQueryBuilder('city');
-        $qb->andWhere('city.name LIKE :q');
-        $qb->orderBy('city.name', 'ASC');
+        $qb->andWhere('city.column LIKE :q');
+        $qb->orderBy('city.column', 'ASC');
         $qb->setParameter('q', "{$q}%");
 
         return $qb->getQuery()->execute();
     }
 
-    /**
-     * @return City[]|Collection|Query
-     */
-    public function searchQuery(string $q) {
+    public function searchNameQuery(string $q) : Query {
         $qb = $this->createQueryBuilder('city');
         $qb->addSelect('MATCH (city.name) AGAINST(:q BOOLEAN) as HIDDEN score');
         $qb->andHaving('score > 0');

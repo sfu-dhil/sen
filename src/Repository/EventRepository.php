@@ -31,7 +31,8 @@ class EventRepository extends ServiceEntityRepository {
 
     public function indexQuery() : Query {
         return $this->createQueryBuilder('event')
-            ->orderBy('event.id')
+            ->orderBy('event.date')
+            ->addOrderBy('event.writtenDate')
             ->getQuery();
     }
 

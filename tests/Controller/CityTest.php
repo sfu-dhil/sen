@@ -16,14 +16,11 @@ use Nines\UserBundle\DataFixtures\UserFixtures;
 use Nines\UtilBundle\Tests\ControllerBaseCase;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @internal
- */
 class CityTest extends ControllerBaseCase {
     // Change this to HTTP_OK when the site is public.
     private const ANON_RESPONSE_CODE = Response::HTTP_FOUND;
 
-    private const TYPEAHEAD_QUERY = 'name';
+    private const TYPEAHEAD_QUERY = 'city';
 
     protected function fixtures() : array {
         return [

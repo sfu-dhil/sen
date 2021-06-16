@@ -31,7 +31,13 @@ class RelationshipRepository extends ServiceEntityRepository {
 
     public function indexQuery() : Query {
         return $this->createQueryBuilder('relationship')
-            ->orderBy('relationship.id')
+            ->innerJoin('relationship.person', 'person')
+            ->innerJoin('relationship.relation', 'relation')
+            ->where('relationship.person < relationship.relation')
+            ->orderBy('person.lastName')
+            ->addOrderBy('person.firstName')
+            ->addorderBy('relation.lastName')
+            ->addOrderBy('relation.firstName')
             ->getQuery();
     }
 

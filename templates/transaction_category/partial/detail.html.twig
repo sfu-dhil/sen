@@ -7,13 +7,45 @@
 
 <h2>Transactions</h2>
 {% if transaction_category.transactions|length > 0 %}
-    <ul>
-        {% for transaction in transaction_category.transactions %}
-            <li>
-                <a href='{{ path("transaction_show", {"id":transaction.id }) }}'>
-                    {{ transaction }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+    <table class="table table-bordered table-condensed table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>First Party</th>
+                <th>Category</th>
+                <th>Conj</th>
+                <th>Second Party</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transaction_category.transactions|sort((a,b) => a.date <=> b.date) %}
+                <tr>
+                    <td>
+                        <a href="{{ path('transaction_show', { 'id': transaction.id }) }}">
+                            {{ transaction.date|date('Y-m-d') }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href='{{ path('person_show', {'id': transaction.firstParty.id}) }}'>
+                            {{ transaction.firstParty }}
+                        </a>
+                    </td>
+
+                    <td>
+                        {{ transaction.category }}
+                    </td>
+
+                    <td>
+                        {{ transaction.conjunction }}
+                    </td>
+
+                    <td>
+                        <a href='{{ path('person_show', {'id': transaction.secondParty.id}) }}'>
+                            {{ transaction.secondParty }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endif %}

@@ -28,11 +28,11 @@
             <th>Occupation</th>
             <td>
                 {% if person.occupations|length %}
-                <ul>
-                    {% for job in person.occupations %}
-                    <li>{{ job['date'] }} {{ job['occupation'] }}</li>
-                    {% endfor %}
-                </ul>
+                    <ul>
+                        {% for job in person.occupations %}
+                            <li>{{ job['date'] }} {{ job['occupation'] }}</li>
+                        {% endfor %}
+                    </ul>
                 {% endif %}
             </td>
         </tr>
@@ -45,7 +45,9 @@
         <tr>
             <th>Birth Status</th>
             <td>
-                {{ person.birthStatus }}
+                {% if person.birthStatus %}
+                    <a href='{{ path('birth_status_show', {'id': person.birthStatus.id}) }}'>{{ person.birthStatus }}</a>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -61,7 +63,9 @@
                     <a href='{{ path("race_show", {"id": person.race.id}) }}'>{{ person.race }}</a>
                 {% endif %}
                 {% if person.writtenRaces|length > 0 %}
-                    Recorded as {{ person.writtenRaces|join('; ') }}
+                    Recorded as
+                    {% for race in person.writtenRaces %}
+                        <i>{{ race }}</i>{% if not loop.last %}; {% endif %}{% endfor %}
                 {% endif %}
             </td>
         </tr>
@@ -88,25 +92,8 @@
                     <ul>
                         {% for relationship in person.relationships %}
                             <li>
-                                <a href='{{ path("relationship_show", {"id":relationship.id }) }}'>
-                                    {{ relationship }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>Relations</th>
-            <td>
-                {% if person.relations|length > 0 %}
-                    <ul>
-                        {% for relationship in person.relations %}
-                            <li>
-                                <a href='{{ path("relationship_show", {"id":relationship.id }) }}'>
-                                    {{ relationship }}
-                                </a>
+                                {{ relationship.category }}:
+                                <a href='{{ path('person_show', {'id': relationship.person.id}) }}'>{{ relationship.relation }}</a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -118,11 +105,19 @@
             <td>
                 {% if person.witnesses|length > 0 %}
                     <ul>
-                        {% for witness in person.witnesses %}
+                        {% for witness in person.witnesses|sort((a,b) => a.event.date <=> b.event.date) %}
+                            {% set event = witness.event %}
                             <li>
-                                <a href='{{ path("witness_show", {"id":witness.id }) }}'>
-                                    {{ witness }}
+                                <a href='{{ path('event_show', {'id': event.id}) }}'>
+                                    {% if event.writtenDate %}{{ event.writtenDate }}{% else %}{{ event.date }}{% endif %}
                                 </a>
+                                {{ event.category }} {{ witness.category }}
+                                {% for person in event.participants %}
+                                    <a href='{{ path("person_show", {"id":person.id }) }}'>
+                                        {{ person }}
+                                    </a>{% if not loop.last %}; {% endif %}
+
+                                {% endfor %}
                             </li>
                         {% endfor %}
                     </ul>
@@ -134,11 +129,12 @@
             <td>
                 {% if person.events|length > 0 %}
                     <ul>
-                        {% for event in person.events %}
+                        {% for event in person.events|sort((a,b) => a.date <=> b.date) %}
                             <li>
-                                <a href='{{ path("event_show", {"id":event.id }) }}'>
-                                    {{ event }}
+                                <a href='{{ path('event_show', {'id': event.id}) }}'>
+                                    {% if event.writtenDate %}{{ event.writtenDate }}{% else %}{{ event.date }}{% endif %}
                                 </a>
+                                {{ event.category }}
                             </li>
                         {% endfor %}
                     </ul>
@@ -150,11 +146,12 @@
             <td>
                 {% if person.firstPartyTransactions|length > 0 %}
                     <ul>
-                        {% for transaction in person.firstPartyTransactions %}
+                        {% for transaction in person.firstPartyTransactions|sort((a,b) => a.date <=> b.date) %}
                             <li>
                                 <a href='{{ path("transaction_show", {"id":transaction.id }) }}'>
-                                    {{ transaction }}
+                                    {{ transaction.date|date('Y-m-d') }}
                                 </a>
+                                {{ transaction.category }} {{ transaction.conjunction }} <a href='{{ path('person_show', {'id': transaction.secondParty.id}) }}'>{{ transaction.secondParty }}</a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -166,11 +163,13 @@
             <td>
                 {% if person.secondPartyTransactions|length > 0 %}
                     <ul>
-                        {% for transaction in person.secondPartyTransactions %}
+                        {% for transaction in person.secondPartyTransactions|sort((a,b) => a.date <=> b.date) %}
                             <li>
                                 <a href='{{ path("transaction_show", {"id":transaction.id }) }}'>
-                                    {{ transaction }}
+                                    {{ transaction.date|date('Y-m-d') }}
                                 </a>
+                                {{ transaction.category }}
+                                <a href='{{ path('person_show', {'id': transaction.firstParty.id}) }}'>{{ transaction.firstParty }}</a> {{ transaction.conjunction }} {{ person }}
                             </li>
                         {% endfor %}
                     </ul>

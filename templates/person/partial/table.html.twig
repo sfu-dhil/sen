@@ -16,10 +16,12 @@
                     </a>
                 </td>
                 <td>
-                    {{ person.race }}
+                    {% if person.race %}
+                        <a href='{{ path('race_show', {'id': person.race.id}) }}'>{{ person.race }}</a>
+                    {% endif %}
                 </td>
                 <td>
-                    {{ person.sex }}
+                    {% include 'person/partial/gender.html.twig' %}
                 </td>
                 <td>
                     {{ person.statuses|join('; ') }}

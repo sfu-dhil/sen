@@ -28,7 +28,7 @@ class ResidenceRepository extends ServiceEntityRepository {
 
     public function indexQuery() : Query {
         return $this->createQueryBuilder('residence')
-            ->orderBy('residence.id')
+            ->orderBy('residence.date')
             ->getQuery();
     }
 }
