@@ -93,7 +93,7 @@
                         {% for relationship in person.relationships %}
                             <li>
                                 {{ relationship.category }}:
-                                <a href='{{ path('person_show', {'id': relationship.person.id}) }}'>{{ relationship.relation }}</a>
+                                <a href='{{ path('person_show', {'id': relationship.relation.id}) }}'>{{ relationship.relation }}</a>
                             </li>
                         {% endfor %}
                     </ul>
