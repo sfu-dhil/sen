@@ -151,7 +151,10 @@
                                 <a href='{{ path("transaction_show", {"id":transaction.id }) }}'>
                                     {{ transaction.date|date('Y-m-d') }}
                                 </a>
-                                {{ transaction.category }} {{ transaction.conjunction }} <a href='{{ path('person_show', {'id': transaction.secondParty.id}) }}'>{{ transaction.secondParty }}</a>
+                                {{ transaction.category }} {{ transaction.conjunction }}
+                                {% if transaction.secondParty %}
+                                    <a href='{{ path('person_show', {'id': transaction.secondParty.id}) }}'>{{ transaction.secondParty }}</a>
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>

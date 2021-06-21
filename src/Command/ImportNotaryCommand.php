@@ -40,6 +40,7 @@ class ImportNotaryCommand extends AbstractImportCommand {
             $row[N::first_party_race],
             $row[N::first_party_sex]
         );
+        $firstParty->addStatus($row[N::first_party_status]);
 
         $secondParty = $this->importer->findPerson(
             $row[N::second_party_first_name],
@@ -47,6 +48,9 @@ class ImportNotaryCommand extends AbstractImportCommand {
             $row[N::second_party_race],
             $row[N::second_party_sex]
         );
+        if($secondParty) {
+            $secondParty->addStatus($row[N::second_party_status]);
+        }
 
         if ($row[N::first_party_spouse]) {
             $firstSpouse = $this->importer->findPerson('', $row[N::first_party_spouse], null, $this->importer->otherSex($row[N::first_party_sex]));

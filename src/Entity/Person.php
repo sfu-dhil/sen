@@ -244,6 +244,14 @@ class Person extends AbstractEntity {
         return $this;
     }
 
+    public function addStatus(?string $status) : self {
+        if( $status && ! in_array($status, $this->statuses)) {
+            $this->statuses[] = $status;
+        }
+
+        return $this;
+    }
+
     public function getWrittenRaces() : ?array {
         return $this->writtenRaces;
     }

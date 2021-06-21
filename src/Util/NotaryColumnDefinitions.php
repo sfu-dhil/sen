@@ -19,39 +19,39 @@ class NotaryColumnDefinitions {
 
     public const transaction_date = 3;
 
-    public const first_party_last_name = 4;
+    public const first_party_last_name = 6;
 
-    public const first_party_first_name = 5;
+    public const first_party_first_name = 7;
 
-    public const first_party_race = 6;
+    public const first_party_race = 8;
 
-    public const first_party_sex = 7;
+    public const first_party_sex = 9;
 
-    public const first_party_status = 8;
+    public const first_party_status = 10;
 
-    public const first_party_spouse = 9;
+    public const first_party_spouse = 11;
 
-    public const first_party_notes = 10;
+    public const first_party_notes = 12;
 
-    public const transaction_conjunction = 11;
+    public const transaction_conjunction = 13;
 
-    public const second_party_last_name = 12;
+    public const second_party_last_name = 14;
 
-    public const second_party_first_name = 13;
+    public const second_party_first_name = 15;
 
-    public const second_party_race = 14;
+    public const second_party_race = 16;
 
-    public const second_party_sex = 15;
+    public const second_party_sex = 17;
 
-    public const second_party_status = 16;
+    public const second_party_status = 18;
 
-    public const second_party_spouse = 17;
+    public const second_party_spouse = 19;
 
-    public const second_party_notes = 18;
+    public const second_party_notes = 20;
 
-    public const transaction_category = 19;
+    public const transaction_category = 4;
 
-    public const transaction_notes = 20;
+    public const transaction_notes = 5;
 
-    public const row_count = self::transaction_notes + 1;
+    public const row_count = 21;
 }
