@@ -245,7 +245,7 @@ class Person extends AbstractEntity {
     }
 
     public function addStatus(?string $status) : self {
-        if( $status && ! in_array($status, $this->statuses)) {
+        if ($status && ! in_array($status, $this->statuses, true)) {
             $this->statuses[] = $status;
         }
 

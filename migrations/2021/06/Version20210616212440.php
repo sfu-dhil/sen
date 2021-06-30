@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+/*
+ * (c) 2021 Michael Joyce <mjoyce@sfu.ca>
+ * This source file is subject to the GPL v2, bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
@@ -10,15 +16,12 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210616212440 extends AbstractMigration
-{
-    public function getDescription(): string
-    {
+final class Version20210616212440 extends AbstractMigration {
+    public function getDescription() : string {
         return '';
     }
 
-    public function up(Schema $schema): void
-    {
+    public function up(Schema $schema) : void {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE birth_status (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(120) NOT NULL, label VARCHAR(120) NOT NULL, description LONGTEXT DEFAULT NULL, created DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', updated DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', FULLTEXT INDEX IDX_D787BDD6EA750E8 (label), FULLTEXT INDEX IDX_D787BDD66DE44026 (description), FULLTEXT INDEX IDX_D787BDD6EA750E86DE44026 (label, description), UNIQUE INDEX UNIQ_D787BDD65E237E06 (name), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE person DROP FOREIGN KEY FK_34DCD176B4BB6BBC');
@@ -30,8 +33,7 @@ final class Version20210616212440 extends AbstractMigration
         $this->addSql('ALTER TABLE transactions CHANGE second_party_id second_party_id INT DEFAULT NULL');
     }
 
-    public function down(Schema $schema): void
-    {
+    public function down(Schema $schema) : void {
         $this->throwIrreversibleMigrationException();
     }
 }

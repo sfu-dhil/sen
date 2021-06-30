@@ -48,7 +48,7 @@ class ImportNotaryCommand extends AbstractImportCommand {
             $row[N::second_party_race],
             $row[N::second_party_sex]
         );
-        if($secondParty) {
+        if ($secondParty) {
             $secondParty->addStatus($row[N::second_party_status]);
         }
 

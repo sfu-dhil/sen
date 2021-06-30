@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\City;
-use App\Entity\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Query;
@@ -47,7 +46,7 @@ class CityRepository extends ServiceEntityRepository {
     }
 
     /**
-     * @return Collection|City[]|Query
+     * @return City[]|Collection|Query
      */
     public function searchQuery(string $q) {
         $qb = $this->createQueryBuilder('city');
