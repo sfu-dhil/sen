@@ -168,7 +168,7 @@ class ImportService {
      * @throws Exception
      */
     public function findPerson(?string $given, ?string $family, ?string $raceName = '', $sex = '') : ?Person {
-        if( ! $given && ! $family) {
+        if ( ! $given && ! $family) {
             return null;
         }
         $first = mb_convert_case($given, MB_CASE_TITLE);
