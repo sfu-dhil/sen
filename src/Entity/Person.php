@@ -96,43 +96,45 @@ class Person extends AbstractEntity {
 
     /**
      * @var Collection|Residence[]
-     * @ORM\OneToMany(targetEntity="Residence", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="Residence", mappedBy="person", cascade={"remove"})
      */
     private $residences;
 
     /**
      * @var Collection|Relationship[]
-     * @ORM\OneToMany(targetEntity="Relationship", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="Relationship", mappedBy="person", cascade={"remove"})
      */
     private $relationships;
 
     /**
      * @var Collection|Relationship[]
-     * @ORM\OneToMany(targetEntity="Relationship", mappedBy="relation")
+     * @ORM\OneToMany(targetEntity="Relationship", mappedBy="relation", cascade={"remove"})
      */
     private $relations;
 
     /**
      * @var Collection|Witness[]
-     * @ORM\OneToMany(targetEntity="Witness", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="Witness", mappedBy="person", cascade={"remove"})
      */
     private $witnesses;
 
     /**
      * @var Collection|Event[]
-     * @ORM\ManyToMany(targetEntity="Event", mappedBy="participants")
+     * @ORM\ManyToMany(targetEntity="Event", mappedBy="participants", cascade={"remove"})
      */
     private $events;
 
     /**
      * @var Collection|Transaction[]
      * @ORM\OneToMany(targetEntity="Transaction", mappedBy="firstParty")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $firstPartyTransactions;
 
     /**
      * @var Collection|Transaction[]
      * @ORM\OneToMany(targetEntity="Transaction", mappedBy="secondParty")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $secondPartyTransactions;
 

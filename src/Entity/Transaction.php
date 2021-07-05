@@ -42,7 +42,7 @@ class Transaction extends AbstractEntity {
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="firstPartyTransactions")
      * @ORM\JoinColumn(nullable=false)
      */
-    private Person $firstParty;
+    private ?Person $firstParty = null;
 
     /**
      * @ORM\Column(type="string")

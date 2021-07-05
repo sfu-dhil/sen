@@ -62,6 +62,7 @@ class EventType extends AbstractType {
             'class' => EventCategory::class,
             'remote_route' => 'event_category_typeahead',
             'allow_clear' => true,
+            'required' => true,
             'attr' => [
                 'help_block' => '',
                 'add_path' => 'event_category_new_popup',
