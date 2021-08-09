@@ -12,6 +12,7 @@ namespace App\Form;
 
 use App\Entity\RelationshipCategory;
 use Nines\UtilBundle\Form\TermType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,6 +24,12 @@ class RelationshipCategoryType extends TermType {
      * Add form fields to $builder.
      */
     public function buildForm(FormBuilderInterface $builder, array $options) : void {
+        $builder->add('weight', IntegerType::class, [
+            'empty_data' => 0,
+            'attr' => [
+                'help_block' => 'Relationship categories are sorted by weight. Heavier (larger) weights are at the bottom.',
+            ]
+        ]);
         parent::buildForm($builder, $options);
     }
 

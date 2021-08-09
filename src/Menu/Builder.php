@@ -67,6 +67,9 @@ class Builder implements ContainerAwareInterface {
         $browse->setLinkAttribute('data-toggle', 'dropdown');
         $browse->setChildrenAttribute('class', 'dropdown-menu');
 
+        $browse->addChild('Birth Statuses', [
+            'route' => 'birth_status_index',
+        ]);
         $browse->addChild('Cities', [
             'route' => 'city_index',
         ]);
@@ -87,9 +90,6 @@ class Builder implements ContainerAwareInterface {
         ]);
         $browse->addChild('Races', [
             'route' => 'race_index',
-        ]);
-        $browse->addChild('Birth Statuses', [
-            'route' => 'birth_status_index',
         ]);
         $browse->addChild('Relationships', [
             'route' => 'relationship_index',

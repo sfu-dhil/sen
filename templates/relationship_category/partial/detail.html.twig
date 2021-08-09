@@ -1,6 +1,12 @@
 <table class='table table-bordered table-condensed table-hover table-striped'>
     <tbody>
         {% embed '@NinesUtil/term/partial/show.html.twig' with {'term': relationship_category} %}
+            {% block callback %}
+                <tr>
+                    <th>Weight</th>
+                    <td>{{ relationship_category.weight }}</td>
+                </tr>
+            {% endblock %}
         {% endembed %}
     </tbody>
 </table>

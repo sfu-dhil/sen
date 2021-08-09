@@ -169,7 +169,8 @@ class Person extends AbstractEntity {
     }
 
     public function setFirstName(?string $firstName) : self {
-        $this->firstName = $firstName;
+        $name = preg_replace('/^\s+|\s+$/u', '', $firstName);
+        $this->firstName = ($name ?: null);
 
         return $this;
     }
@@ -179,7 +180,8 @@ class Person extends AbstractEntity {
     }
 
     public function setLastName(?string $lastName) : self {
-        $this->lastName = $lastName;
+        $name = preg_replace('/^\s+|\s+$/u', '', $lastName);
+        $this->lastName = ($name ?: null);
 
         return $this;
     }

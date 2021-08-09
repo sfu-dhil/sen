@@ -23,6 +23,12 @@ use Nines\UtilBundle\Entity\AbstractTerm;
  */
 class RelationshipCategory extends AbstractTerm {
     /**
+     * @var ?int
+     * @ORM\Column(type="integer", nullable=true);
+     */
+    private $weight;
+
+    /**
      * @var Collection|Relationship[]
      * @ORM\OneToMany(targetEntity="Relationship", mappedBy="category")
      */
@@ -30,6 +36,7 @@ class RelationshipCategory extends AbstractTerm {
 
     public function __construct() {
         parent::__construct();
+        $this->weight = 0;
         $this->relationships = new ArrayCollection();
     }
 
@@ -56,6 +63,16 @@ class RelationshipCategory extends AbstractTerm {
                 $relationship->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWeight() : ?int {
+        return $this->weight;
+    }
+
+    public function setWeight(?int $weight) : self {
+        $this->weight = $weight;
 
         return $this;
     }
