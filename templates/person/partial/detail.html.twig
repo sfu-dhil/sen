@@ -90,7 +90,7 @@
             <td>
                 {% if person.relationships|length > 0 %}
                     <ul>
-                        {% for relationship in person.relationships %}
+                        {% for relationship in person.relationships|sort((a,b) => a.category.weight <=> b.category.weight) %}
                             <li>
                                 {{ relationship.category }}:
                                 <a href='{{ path('person_show', {'id': relationship.relation.id}) }}'>{{ relationship.relation }}</a>

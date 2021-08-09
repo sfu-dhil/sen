@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\RelationshipCategory;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use Nines\UtilBundle\Repository\TermRepository;
 
@@ -23,5 +24,16 @@ use Nines\UtilBundle\Repository\TermRepository;
 class RelationshipCategoryRepository extends TermRepository {
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, RelationshipCategory::class);
+    }
+
+    /**
+     * @return Query
+     */
+    public function indexQuery() {
+        return $this->createQueryBuilder('v')
+            ->orderBy('v.weight')
+            ->addOrderBy('v.label')
+            ->getQuery()
+            ;
     }
 }
