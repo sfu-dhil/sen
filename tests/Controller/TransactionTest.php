@@ -148,7 +148,7 @@ class TransactionTest extends ControllerBaseCase {
             'transaction[page]' => 123,
             'transaction[notes]' => 'Updated Notes',
             'transaction[firstPartyNote]' => 'Updated FirstPartyNote',
-            'transaction[conjunction]' => 'Updated Conjunction',
+            'transaction[conjunction]' => 1,
             'transaction[secondPartyNote]' => 'Updated SecondPartyNote',
         ]);
 
@@ -160,7 +160,6 @@ class TransactionTest extends ControllerBaseCase {
         $this->assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Notes")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated FirstPartyNote")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("Updated Conjunction")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("Updated SecondPartyNote")')->count());
     }
 
@@ -228,7 +227,7 @@ class TransactionTest extends ControllerBaseCase {
             'transaction[page]' => 123,
             'transaction[notes]' => 'New Notes',
             'transaction[firstPartyNote]' => 'New FirstPartyNote',
-            'transaction[conjunction]' => 'New Conjunction',
+            'transaction[conjunction]' => 1,
             'transaction[secondPartyNote]' => 'New SecondPartyNote',
         ]);
         $form['transaction[firstParty]']->disableValidation()->setValue(1);
@@ -244,7 +243,6 @@ class TransactionTest extends ControllerBaseCase {
         $this->assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Notes")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New FirstPartyNote")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Conjunction")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New SecondPartyNote")')->count());
     }
 
@@ -264,7 +262,7 @@ class TransactionTest extends ControllerBaseCase {
             'transaction[page]' => 123,
             'transaction[notes]' => 'New Notes',
             'transaction[firstPartyNote]' => 'New FirstPartyNote',
-            'transaction[conjunction]' => 'New Conjunction',
+            'transaction[conjunction]' => 1,
             'transaction[secondPartyNote]' => 'New SecondPartyNote',
         ]);
         $form['transaction[firstParty]']->disableValidation()->setValue(1);
@@ -280,7 +278,6 @@ class TransactionTest extends ControllerBaseCase {
         $this->assertSame(1, $responseCrawler->filter('td:contains("123")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New Notes")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New FirstPartyNote")')->count());
-        $this->assertSame(1, $responseCrawler->filter('td:contains("New Conjunction")')->count());
         $this->assertSame(1, $responseCrawler->filter('td:contains("New SecondPartyNote")')->count());
     }
 
