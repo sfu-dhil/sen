@@ -631,7 +631,9 @@ class ImportService {
             throw new Exception("event category {$categoryName} is missing.");
         }
 
-        return $this->createEvent($person, $row, $category, S::event_death_date, S::event_written_death_date, S::event_death_place);
+        $death = $this->createEvent($person, $row, $category, S::event_death_date, S::event_written_death_date, S::event_death_place);
+        $death->setRecordSource($row[S::event_death_source]);
+        return $death;
     }
 
     /**
