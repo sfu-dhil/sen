@@ -178,30 +178,6 @@ class ImportServiceTest extends ServiceBaseCase {
                 'getFirstName' => 'FirstName 1',
                 'getLastName' => 'LastName 1',
             ]],
-            ['FIRSTNAME 1', 'LASTNAME 1', null, 'Female', true, [
-                'getFirstName' => 'FirstName 1',
-                'getLastName' => 'LastName 1',
-            ]],
-            ['firstname 1', 'lastname 1', null, null, true, [
-                'getFirstName' => 'FirstName 1',
-                'getLastName' => 'LastName 1',
-            ]],
-            ['New firstname', 'New lastname', null, null, false, [
-                'getFirstName' => 'New Firstname',
-                'getLastName' => 'New Lastname',
-            ]],
-            ['New firstname', 'New lastname', null, null, false, [
-                'getFirstName' => 'New Firstname',
-                'getLastName' => 'New Lastname',
-            ]],
-            ['NEW FIRSTNAME', 'NEW LASTNAME', null, null, false, [
-                'getFirstName' => 'New Firstname',
-                'getLastName' => 'New Lastname',
-            ]],
-            ['new firstname', 'new lastname', null, null, false, [
-                'getFirstName' => 'New Firstname',
-                'getLastName' => 'New Lastname',
-            ]],
 
             // tests for gender
             ['new firstname', 'new lastname', null, 'Male', false, [
