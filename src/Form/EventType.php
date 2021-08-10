@@ -15,6 +15,7 @@ use App\Entity\EventCategory;
 use App\Entity\Location;
 use App\Entity\Person;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -92,6 +93,23 @@ class EventType extends AbstractType {
                 'add_path' => 'person_new_popup',
                 'add_label' => 'Add Person',
             ],
+        ]);
+
+        $builder->add('witnesses', CollectionType::class, [
+            'label' => 'Witnesses',
+            'required' => false,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'delete_empty' => true,
+            'entry_type' => EventWitnessType::class,
+            'entry_options' => [
+                'label' => false,
+            ],
+            'by_reference' => false,
+            'attr' => [
+                'class' => 'collection collection-complex',
+                'help_block' => ''
+            ]
         ]);
     }
 
