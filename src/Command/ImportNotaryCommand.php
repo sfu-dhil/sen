@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Entity\Event;
+use App\Repository\EventCategoryRepository;
 use App\Repository\RelationshipRepository;
 use App\Util\NotaryColumnDefinitions as N;
 use DateTimeImmutable;
@@ -23,6 +25,7 @@ class ImportNotaryCommand extends AbstractImportCommand {
     private RelationshipRepository $relationshipRepository;
 
     protected static $defaultName = 'sen:import:notary';
+    private EventCategoryRepository $eventCategoryRepository;
 
     /**
      * @param mixed $row
@@ -52,19 +55,48 @@ class ImportNotaryCommand extends AbstractImportCommand {
             $secondParty->addStatus($row[N::second_party_status]);
         }
 
+        $firstSpouse = null;
         if ($row[N::first_party_spouse]) {
             $firstSpouse = $this->importer->findPerson('', $row[N::first_party_spouse], null, $this->importer->otherSex($row[N::first_party_sex]));
             if ( ! $this->relationshipRepository->findRelationship($firstParty, $firstSpouse, 'spouse', 'spouse')) {
                 $this->importer->addSpouse($firstParty, $row, $firstSpouse);
             }
         }
+        $secondSpouse = null;
         if ($row[N::second_party_spouse]) {
             $secondSpouse = $this->importer->findPerson('', $row[N::second_party_spouse], null, $this->importer->otherSex($row[N::second_party_sex]));
             if ( ! $this->relationshipRepository->findRelationship($secondParty, $secondSpouse, 'spouse', 'spouse')) {
                 $this->importer->addSpouse($secondParty, $row, $secondSpouse);
             }
         }
-        $this->importer->createTransaction($ledger, $firstParty, $secondParty, $row);
+        $transaction = $this->importer->createTransaction($ledger, $firstParty, $secondParty, $row);
+        switch($transaction->getCategory()->getName()) {
+            case 'marriage':
+                $event = new Event();
+                $category = $this->eventCategoryRepository->findOneBy(['name' => 'marriage']);
+                $event->setCategory($category);
+                $event->setDate($transaction->getDate()->format('Y-m-d'));
+                $event->addParticipant($firstParty);
+                if($firstSpouse) {
+                    $event->addParticipant($firstSpouse);
+                } else if($secondParty) {
+                    $event->addParticipant($secondParty);
+                }
+                $event->setRecordSource($ledger->__toString() . ' p. ' . $transaction->getPage());
+                $this->em->persist($event);
+                break;
+            case 'emancipation':
+                $event = new Event();
+                $category = $this->eventCategoryRepository->findOneBy(['name' => 'manumission']);
+                $event->setCategory($category);
+                $event->setDate($transaction->getDate()->format('Y-m-d'));
+                $event->addParticipant($firstParty);
+                if($secondParty) {
+                    $event->addParticipant($secondParty);
+                }
+                $this->em->persist($event);
+                break;
+        }
     }
 
     /**
@@ -72,5 +104,12 @@ class ImportNotaryCommand extends AbstractImportCommand {
      */
     public function setRelationshipRepository(RelationshipRepository $repo) : void {
         $this->relationshipRepository = $repo;
+    }
+
+    /**
+     * @required
+     */
+    public function setEventCategoryRepository(EventCategoryRepository $repo) : void {
+        $this->eventCategoryRepository = $repo;
     }
 }
