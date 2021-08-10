@@ -47,9 +47,7 @@ class TransactionType extends AbstractType {
             'choice_label' => 'label',
             'expanded' => false,
             'multiple' => false,
-            'query_builder' => function(TransactionCategoryRepository $repo) {
-                return $repo->createQueryBuilder('c')->orderBy('c.label');
-            }
+            'query_builder' => static fn(TransactionCategoryRepository $repo) => $repo->createQueryBuilder('c')->orderBy('c.label'),
         ]);
         $builder->add('ledger', Select2EntityType::class, [
             'label' => 'Ledger',

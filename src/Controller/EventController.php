@@ -80,7 +80,7 @@ class EventController extends AbstractController implements PaginatorAwareInterf
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($event);
 
-            foreach($event->getWitnesses() as $witness) {
+            foreach ($event->getWitnesses() as $witness) {
                 $witness->setEvent($event);
                 $entityManager->persist($witness);
             }
@@ -128,7 +128,7 @@ class EventController extends AbstractController implements PaginatorAwareInterf
      */
     public function edit(Request $request, Event $event) {
         $witnesses = new ArrayCollection();
-        foreach($event->getWitnesses() as $w) {
+        foreach ($event->getWitnesses() as $w) {
             $witnesses->add($w);
         }
 
@@ -139,15 +139,15 @@ class EventController extends AbstractController implements PaginatorAwareInterf
             $entityManager = $this->getDoctrine()->getManager();
 
             // delete any event witnesses that were removed in the form.
-            foreach($witnesses as $w) {
-                if( ! $event->getWitnesses()->contains($w)) {
+            foreach ($witnesses as $w) {
+                if ( ! $event->getWitnesses()->contains($w)) {
                     $entityManager->remove($w);
                 }
             }
 
             // Add any new event witnesses added in the form.
-            foreach($event->getWitnesses() as $w) {
-                if( ! $witnesses->contains($w)) {
+            foreach ($event->getWitnesses() as $w) {
+                if ( ! $witnesses->contains($w)) {
                     $w->setEvent($event);
                     $entityManager->persist($w);
                 }

@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Event;
 use App\Entity\Person;
 use App\Entity\Witness;
 use App\Entity\WitnessCategory;

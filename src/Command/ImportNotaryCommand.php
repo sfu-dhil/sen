@@ -24,8 +24,9 @@ use Symfony\Component\Console\Command\Command;
 class ImportNotaryCommand extends AbstractImportCommand {
     private RelationshipRepository $relationshipRepository;
 
-    protected static $defaultName = 'sen:import:notary';
     private EventCategoryRepository $eventCategoryRepository;
+
+    protected static $defaultName = 'sen:import:notary';
 
     /**
      * @param mixed $row
@@ -70,16 +71,16 @@ class ImportNotaryCommand extends AbstractImportCommand {
             }
         }
         $transaction = $this->importer->createTransaction($ledger, $firstParty, $secondParty, $row);
-        switch($transaction->getCategory()->getName()) {
+        switch ($transaction->getCategory()->getName()) {
             case 'marriage':
                 $event = new Event();
                 $category = $this->eventCategoryRepository->findOneBy(['name' => 'marriage']);
                 $event->setCategory($category);
                 $event->setDate($transaction->getDate()->format('Y-m-d'));
                 $event->addParticipant($firstParty);
-                if($firstSpouse) {
+                if ($firstSpouse) {
                     $event->addParticipant($firstSpouse);
-                } else if($secondParty) {
+                } elseif ($secondParty) {
                     $event->addParticipant($secondParty);
                 }
                 $event->setRecordSource($ledger->__toString() . ' p. ' . $transaction->getPage());
@@ -91,7 +92,7 @@ class ImportNotaryCommand extends AbstractImportCommand {
                 $event->setCategory($category);
                 $event->setDate($transaction->getDate()->format('Y-m-d'));
                 $event->addParticipant($firstParty);
-                if($secondParty) {
+                if ($secondParty) {
                     $event->addParticipant($secondParty);
                 }
                 $this->em->persist($event);

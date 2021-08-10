@@ -108,8 +108,8 @@ class EventType extends AbstractType {
             'by_reference' => false,
             'attr' => [
                 'class' => 'collection collection-complex',
-                'help_block' => ''
-            ]
+                'help_block' => '',
+            ],
         ]);
     }
 
