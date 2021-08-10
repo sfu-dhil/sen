@@ -41,6 +41,7 @@ class TransactionType extends AbstractType {
         $builder->add('category', Select2EntityType::class, [
             'label' => 'Category',
             'class' => TransactionCategory::class,
+            'required' => true,
             'remote_route' => 'transaction_category_typeahead',
             'allow_clear' => true,
             'attr' => [
@@ -52,6 +53,7 @@ class TransactionType extends AbstractType {
         $builder->add('ledger', Select2EntityType::class, [
             'label' => 'Ledger',
             'class' => Ledger::class,
+            'required' => true,
             'remote_route' => 'ledger_typeahead',
             'allow_clear' => true,
             'attr' => [
@@ -73,6 +75,7 @@ class TransactionType extends AbstractType {
             'class' => Person::class,
             'remote_route' => 'person_typeahead',
             'allow_clear' => true,
+            'required' => true,
             'attr' => [
                 'help_block' => '',
                 'add_path' => 'person_new_popup',
@@ -81,14 +84,14 @@ class TransactionType extends AbstractType {
         ]);
         $builder->add('firstPartyNote', TextType::class, [
             'label' => 'First Party Note',
-            'required' => true,
+            'required' => false,
             'attr' => [
                 'help_block' => '',
             ],
         ]);
         $builder->add('conjunction', TextType::class, [
             'label' => 'Conjunction',
-            'required' => true,
+            'required' => false,
             'attr' => [
                 'help_block' => '',
             ],
@@ -98,6 +101,7 @@ class TransactionType extends AbstractType {
             'class' => Person::class,
             'remote_route' => 'person_typeahead',
             'allow_clear' => true,
+            'required' => false,
             'attr' => [
                 'help_block' => '',
                 'add_path' => 'person_new_popup',
@@ -106,7 +110,7 @@ class TransactionType extends AbstractType {
         ]);
         $builder->add('secondPartyNote', TextType::class, [
             'label' => 'Second Party Note',
-            'required' => true,
+            'required' => false,
             'attr' => [
                 'help_block' => '',
             ],
