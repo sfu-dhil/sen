@@ -167,12 +167,10 @@ class ImportService {
      *
      * @throws Exception
      */
-    public function findPerson(?string $given, ?string $family, ?string $raceName = '', $sex = '') : ?Person {
-        if ( ! $given && ! $family) {
+    public function findPerson(?string $first, ?string $last, ?string $raceName = '', $sex = '') : ?Person {
+        if ( ! $first && ! $last) {
             return null;
         }
-        $first = mb_convert_case($given, MB_CASE_TITLE);
-        $last = mb_convert_case($family, MB_CASE_TITLE);
         $person = $this->personRepository->findByName($first, $last);
         if ( ! $person) {
             $person = new Person();
