@@ -28,7 +28,7 @@ class RelationshipCategoryType extends TermType {
             'empty_data' => 0,
             'attr' => [
                 'help_block' => 'Relationship categories are sorted by weight. Heavier (larger) weights are at the bottom.',
-            ]
+            ],
         ]);
         parent::buildForm($builder, $options);
     }

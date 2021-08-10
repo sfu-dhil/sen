@@ -26,14 +26,10 @@ class RelationshipCategoryRepository extends TermRepository {
         parent::__construct($registry, RelationshipCategory::class);
     }
 
-    /**
-     * @return Query
-     */
-    public function indexQuery() {
+    public function indexQuery() : Query {
         return $this->createQueryBuilder('v')
             ->orderBy('v.weight')
             ->addOrderBy('v.label')
-            ->getQuery()
-            ;
+            ->getQuery();
     }
 }

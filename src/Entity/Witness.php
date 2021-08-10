@@ -35,7 +35,7 @@ class Witness extends AbstractEntity {
      * @ORM\ManyToOne(targetEntity="Event", inversedBy="witnesses")
      * @ORM\JoinColumn(nullable=false)
      */
-    private Event $event;
+    private ?Event $event;
 
     public function __construct() {
         parent::__construct();

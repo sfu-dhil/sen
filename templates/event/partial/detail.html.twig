@@ -64,8 +64,8 @@
                         {% for witness in event.witnesses %}
                             <li>
                                 <a href='{{ path("person_show", {"id":witness.person.id }) }}'>
-                                    {{ witness.person }}
-                                </a>
+                                    {{ witness.person -}}
+                                </a>, {{ witness.category }}
                             </li>
                         {% endfor %}
                     </ul>

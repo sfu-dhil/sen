@@ -14,7 +14,10 @@ use App\Entity\Ledger;
 use App\Entity\Person;
 use App\Entity\Transaction;
 use App\Entity\TransactionCategory;
+use App\Repository\TransactionCategoryRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -38,20 +41,18 @@ class TransactionType extends AbstractType {
                 'help_block' => '',
             ],
         ]);
-        $builder->add('category', Select2EntityType::class, [
+        $builder->add('category', EntityType::class, [
             'label' => 'Category',
             'class' => TransactionCategory::class,
-            'remote_route' => 'transaction_category_typeahead',
-            'allow_clear' => true,
-            'attr' => [
-                'help_block' => '',
-                'add_path' => 'transaction_category_new_popup',
-                'add_label' => 'Add Category',
-            ],
+            'choice_label' => 'label',
+            'expanded' => false,
+            'multiple' => false,
+            'query_builder' => static fn(TransactionCategoryRepository $repo) => $repo->createQueryBuilder('c')->orderBy('c.label'),
         ]);
         $builder->add('ledger', Select2EntityType::class, [
             'label' => 'Ledger',
             'class' => Ledger::class,
+            'required' => true,
             'remote_route' => 'ledger_typeahead',
             'allow_clear' => true,
             'attr' => [
@@ -73,6 +74,7 @@ class TransactionType extends AbstractType {
             'class' => Person::class,
             'remote_route' => 'person_typeahead',
             'allow_clear' => true,
+            'required' => true,
             'attr' => [
                 'help_block' => '',
                 'add_path' => 'person_new_popup',
@@ -81,14 +83,22 @@ class TransactionType extends AbstractType {
         ]);
         $builder->add('firstPartyNote', TextType::class, [
             'label' => 'First Party Note',
-            'required' => true,
+            'required' => false,
             'attr' => [
                 'help_block' => '',
             ],
         ]);
-        $builder->add('conjunction', TextType::class, [
+        $builder->add('conjunction', ChoiceType::class, [
             'label' => 'Conjunction',
             'required' => true,
+            'multiple' => false,
+            'expanded' => false,
+            'choices' => [
+                '[Blank]' => null,
+                'And' => 'and',
+                'To' => 'to',
+            ],
+            'empty_data' => null,
             'attr' => [
                 'help_block' => '',
             ],
@@ -98,6 +108,7 @@ class TransactionType extends AbstractType {
             'class' => Person::class,
             'remote_route' => 'person_typeahead',
             'allow_clear' => true,
+            'required' => false,
             'attr' => [
                 'help_block' => '',
                 'add_path' => 'person_new_popup',
@@ -106,7 +117,7 @@ class TransactionType extends AbstractType {
         ]);
         $builder->add('secondPartyNote', TextType::class, [
             'label' => 'Second Party Note',
-            'required' => true,
+            'required' => false,
             'attr' => [
                 'help_block' => '',
             ],

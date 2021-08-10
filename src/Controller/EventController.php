@@ -13,6 +13,7 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Form\EventType;
 use App\Repository\EventRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -78,6 +79,12 @@ class EventController extends AbstractController implements PaginatorAwareInterf
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($event);
+
+            foreach ($event->getWitnesses() as $witness) {
+                $witness->setEvent($event);
+                $entityManager->persist($witness);
+            }
+
             $entityManager->flush();
             $this->addFlash('success', 'The new event has been saved.');
 
@@ -120,10 +127,32 @@ class EventController extends AbstractController implements PaginatorAwareInterf
      * @return array|RedirectResponse
      */
     public function edit(Request $request, Event $event) {
+        $witnesses = new ArrayCollection();
+        foreach ($event->getWitnesses() as $w) {
+            $witnesses->add($w);
+        }
+
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            // delete any event witnesses that were removed in the form.
+            foreach ($witnesses as $w) {
+                if ( ! $event->getWitnesses()->contains($w)) {
+                    $entityManager->remove($w);
+                }
+            }
+
+            // Add any new event witnesses added in the form.
+            foreach ($event->getWitnesses() as $w) {
+                if ( ! $witnesses->contains($w)) {
+                    $w->setEvent($event);
+                    $entityManager->persist($w);
+                }
+            }
+
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'The updated event has been saved.');
 

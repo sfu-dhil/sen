@@ -45,9 +45,9 @@ class Transaction extends AbstractEntity {
     private ?Person $firstParty = null;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
-    private string $firstPartyNote;
+    private ?string $firstPartyNote = null;
 
     /**
      * @ORM\Column(type="string")
@@ -61,9 +61,9 @@ class Transaction extends AbstractEntity {
     private ?Person $secondParty = null;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
-    private string $secondPartyNote;
+    private ?string $secondPartyNote = null;
 
     /**
      * @var Collection|TransactionCategory[]
