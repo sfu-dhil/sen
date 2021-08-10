@@ -41,6 +41,20 @@ class RelationshipRepository extends ServiceEntityRepository {
             ->getQuery();
     }
 
+    public function categoryQuery(RelationshipCategory $category) {
+        return $this->createQueryBuilder('relationship')
+            ->innerJoin('relationship.person', 'person')
+            ->innerJoin('relationship.relation', 'relation')
+            ->where('relationship.person < relationship.relation')
+            ->andWhere('relationship.category = :category')
+            ->orderBy('person.lastName')
+            ->addOrderBy('person.firstName')
+            ->addorderBy('relation.lastName')
+            ->addOrderBy('relation.firstName')
+            ->setParameter('category', $category)
+            ->getQuery();
+    }
+
     /**
      * @param mixed $relationshipName
      * @param mixed $relationName
