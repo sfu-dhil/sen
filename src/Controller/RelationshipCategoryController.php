@@ -13,6 +13,7 @@ namespace App\Controller;
 use App\Entity\RelationshipCategory;
 use App\Form\RelationshipCategoryType;
 use App\Repository\RelationshipCategoryRepository;
+use App\Repository\RelationshipRepository;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Nines\UtilBundle\Controller\PaginatorTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -125,9 +126,14 @@ class RelationshipCategoryController extends AbstractController implements Pagin
      * @Route("/{id}", name="relationship_category_show", methods={"GET"})
      * @Template
      */
-    public function show(RelationshipCategory $relationshipCategory) : array {
+    public function show(Request $request, RelationshipCategory $relationshipCategory, RelationshipRepository $repository) : array {
+        $pageSize = (int) $this->getParameter('page_size');
+        $page = $request->query->getint('page', 1);
+        $query = $repository->categoryQuery($relationshipCategory);
+
         return [
             'relationship_category' => $relationshipCategory,
+            'relationships' => $this->paginator->paginate($query, $page, $pageSize),
         ];
     }
 

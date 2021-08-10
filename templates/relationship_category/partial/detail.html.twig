@@ -12,8 +12,7 @@
 </table>
 
 <h2>Relationships</h2>
-{% if relationship_category.relationships|length > 0 %}
-    {% set relationships = relationship_category.relationships %}
+{% if relationships|length > 0 %}
     <table class="table table-bordered table-condensed table-hover table-striped">
         <thead>
             <tr>
@@ -23,23 +22,28 @@
             </tr>
         </thead>
         <tbody>
-            {% for relationship in relationships|sort((a,b) => (a.person.lastName <=> b.person.lastName ?: a.person.firstName <=> b.person.firstName)) %}
+            {% for relationship in relationships %}
                 <tr>
                     <td>
-                        <a href="{{ path('person_show', { 'id': relationship.person.id }) }}">
-                            {{ relationship.person }}
+                        <a href="{{ path('person_show', { 'id': relationship.relation.id }) }}">
+                            {{ relationship.relation }}
                         </a>
                     </td>
                     <td>
                         {{ relationship.category }}
                     </td>
                     <td>
-                        <a href="{{ path('person_show', { 'id': relationship.relation.id }) }}">
-                            {{ relationship.relation }}
+                        <a href="{{ path('person_show', { 'id': relationship.person.id }) }}">
+                            {{ relationship.person }}
                         </a>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(relationships) }}
+    </div>
+
 {% endif %}

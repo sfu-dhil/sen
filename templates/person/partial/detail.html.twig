@@ -109,7 +109,7 @@
                             {% set event = witness.event %}
                             <li>
                                 <a href='{{ path('event_show', {'id': event.id}) }}'>
-                                    {% if event.writtenDate %}{{ event.writtenDate }}{% else %}{{ event.date }}{% endif %}
+                                    {% if event.writtenDate %}{{ event.writtenDate }}{% else %}{{ event.date }}{% endif -%}
                                 </a>
                                 {{ event.category }} {{ witness.category }}
                                 {% for person in event.participants %}
@@ -132,7 +132,7 @@
                         {% for event in person.events|sort((a,b) => a.date <=> b.date) %}
                             <li>
                                 <a href='{{ path('event_show', {'id': event.id}) }}'>
-                                    {% if event.writtenDate %}{{ event.writtenDate }}{% else %}{{ event.date }}{% endif %}
+                                    {% if event.writtenDate %}{{ event.writtenDate }}{% else %}{{ event.date }}{% endif -%}
                                 </a>
                                 {{ event.category }}
                             </li>
