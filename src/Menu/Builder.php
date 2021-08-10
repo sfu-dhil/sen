@@ -91,9 +91,6 @@ class Builder implements ContainerAwareInterface {
         $browse->addChild('Races', [
             'route' => 'race_index',
         ]);
-        $browse->addChild('Relationships', [
-            'route' => 'relationship_index',
-        ]);
         $browse->addChild('Residences', [
             'route' => 'residence_index',
         ]);
@@ -121,6 +118,9 @@ class Builder implements ContainerAwareInterface {
             ]);
             $browse->addChild('Relationship Categories', [
                 'route' => 'relationship_category_index',
+            ]);
+            $browse->addChild('Relationships', [
+                'route' => 'relationship_index',
             ]);
             $browse->addChild('Transaction Categories', [
                 'route' => 'transaction_category_index',
