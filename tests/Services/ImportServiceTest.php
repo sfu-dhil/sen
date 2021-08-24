@@ -1010,19 +1010,19 @@ class ImportServiceTest extends ServiceBaseCase {
         $person = $this->getReference('person.1');
         $row = $this->getRow([
             S::residence_dates => '1934; 1922',
-            S::residence_places => '123 Some St, Nola; Chatanooga',
+            S::residence_places => '123 Some St, Nola, Asparta; Chatanooga, Louise',
         ]);
         $residences = $this->importer->addResidences($person, $row);
         $this->assertCount(2, $residences);
         $this->assertSame($person, $residences[0]->getPerson());
         $this->assertSame('1934', $residences[0]->getDate());
         $this->assertSame('123 Some St', $residences[0]->getAddress());
-        $this->assertSame('Nola', $residences[0]->getCity()->getName());
+        $this->assertSame('Nola, Asparta', $residences[0]->getCity()->getName());
 
         $this->assertSame($person, $residences[1]->getPerson());
         $this->assertSame('1922', $residences[1]->getDate());
         $this->assertNull($residences[1]->getAddress());
-        $this->assertSame('Chatanooga', $residences[1]->getCity()->getName());
+        $this->assertSame('Chatanooga, Louise', $residences[1]->getCity()->getName());
     }
 
     /**
