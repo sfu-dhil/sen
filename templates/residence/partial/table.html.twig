@@ -3,6 +3,7 @@
         <tr>
             <th>Date</th>
             <th>Person</th>
+            <th>Address</th>
             <th>City</th>
         </tr>
     </thead>
@@ -16,6 +17,9 @@
                 </td>
                 <td>
                     <a href='{{ path('person_show',{'id': residence.person.id}) }}'>{{ residence.person }}</a>
+                </td>
+                <td>
+                    {{ residence.address }}
                 </td>
                 <td>
                     <a href='{{ path('city_show', {'id': residence.city.id}) }}'>{{ residence.city }}</a>

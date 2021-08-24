@@ -654,13 +654,20 @@ class ImportService {
             throw new Exception('Residence date count ' . count($dates) . ' does not match residence place count ' . count($addresses) . '.');
         }
         for ($i = 0; $i < count($dates); $i++) {
-            $matches = [];
             $residence = new Residence();
-            if (preg_match('/(.*?),\\s*(.*)/u', $addresses[$i], $matches)) {
-                $residence->setAddress($matches[1]);
-                $residence->setCity($this->findCity($matches[2]));
-            } else {
-                $residence->setCity($this->findCity($addresses[$i]));
+            $parts = array_map(fn($s) => preg_replace(self::TRIM, '', $s), explode(',', $addresses[$i]));
+            switch(count($parts)) {
+                case 2:
+                    // city, state
+                    $residence->setCity($this->findCity($parts[0] . ', ' . $parts[1]));
+                    break;
+                case 3:
+                    // address, city, state
+                    $residence->setAddress($parts[0]);
+                    $residence->setCity($this->findCity($parts[1] . ', ' . $parts[2]));
+                    break;
+                default:
+                    $this->logger->error("Malformed residence_place for {$person}: {$addresses[$i]}");
             }
             $residence->setPerson($person);
             $residence->setDate($dates[$i]);
