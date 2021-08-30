@@ -655,8 +655,8 @@ class ImportService {
         }
         for ($i = 0; $i < count($dates); $i++) {
             $residence = new Residence();
-            $parts = array_map(fn($s) => preg_replace(self::TRIM, '', $s), explode(',', $addresses[$i]));
-            switch(count($parts)) {
+            $parts = array_map(static fn($s) => preg_replace(self::TRIM, '', $s), explode(',', $addresses[$i]));
+            switch (count($parts)) {
                 case 2:
                     // city, state
                     $residence->setCity($this->findCity($parts[0] . ', ' . $parts[1]));

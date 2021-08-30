@@ -43,7 +43,7 @@ class Residence extends AbstractEntity {
     private City $city;
 
     public function __toString() : string {
-        return join(', ', array_filter([$this->date, $this->address, $this->city]));
+        return implode(', ', array_filter([$this->date, $this->address, $this->city]));
     }
 
     public function getDate() : ?string {
