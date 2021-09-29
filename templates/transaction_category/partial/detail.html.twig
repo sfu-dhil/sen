@@ -22,7 +22,7 @@
                 <tr>
                     <td>
                         <a href="{{ path('transaction_show', { 'id': transaction.id }) }}">
-                            {{ transaction.date|date('Y-m-d') }}
+                            {{ transaction.date|date('Y-m-d', 'GMT') }}
                         </a>
                     </td>
                     <td>
