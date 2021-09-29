@@ -51,7 +51,7 @@
         <tr>
             <th>Date</th>
             <td>
-                {% if transaction.date %}{{ transaction.date|date('Y-m-d') }}{% endif %}
+                {% if transaction.date %}{{ transaction.date|date('Y-m-d', 'GMT') }}{% endif %}
             </td>
         </tr>
         <tr>

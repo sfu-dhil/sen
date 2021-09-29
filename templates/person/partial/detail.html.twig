@@ -149,7 +149,7 @@
                         {% for transaction in person.firstPartyTransactions|sort((a,b) => a.date <=> b.date) %}
                             <li>
                                 <a href='{{ path("transaction_show", {"id":transaction.id }) }}'>
-                                    {{ transaction.date|date('Y-m-d') -}}
+                                    {{ transaction.date|date('Y-m-d', 'GMT') -}}
                                 </a>
                                 {{ transaction.category }} {{ transaction.conjunction }}
                                 {% if transaction.secondParty %}
@@ -169,7 +169,7 @@
                         {% for transaction in person.secondPartyTransactions|sort((a,b) => a.date <=> b.date) %}
                             <li>
                                 <a href='{{ path("transaction_show", {"id":transaction.id }) }}'>
-                                    {{ transaction.date|date('Y-m-d') -}}
+                                    {{ transaction.date|date('Y-m-d', 'GMT') -}}
                                 </a>
                                 {{ transaction.category }}
                                 {% if transaction.firstParty %}
