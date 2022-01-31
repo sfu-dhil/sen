@@ -2,12 +2,12 @@
     "name": "sfu_dhil/sen",
     "description": "Social and Economic Networks",
     "type": "project",
-    "license": "GPL-2.0-or-newer",
+    "license": "GPL-2.0-or-later",
     "require": {
         "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "composer/package-versions-deprecated": "1.11.99.3",
+        "composer/package-versions-deprecated": "1.11.99.*",
         "doctrine/annotations": "^1.0",
         "doctrine/common": "^2.13",
         "doctrine/doctrine-bundle": "^2.3",
@@ -68,7 +68,11 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": true,
+            "symfony/thanks": true
+        }
     },
     "autoload": {
         "psr-4": {
