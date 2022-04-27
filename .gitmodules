@@ -4,3 +4,7 @@
 	branch = master
 [submodule "deployment/"]
 	branch = main
+[submodule "etc"]
+	path = etc
+	url = https://github.com/ubermichael/symake
+	branch = main
