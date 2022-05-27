@@ -1,0 +1,78 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+name="dhil_sen"
+
+function clear_db() {
+  mysql -e "DROP DATABASE IF EXISTS $name"
+  mysql -e "CREATE DATABASE IF NOT EXISTS $name"
+  mysql -e "CREATE USER IF NOT EXISTS ${name}@localhost"
+  mysql -e "GRANT ALL ON ${name}.* TO ${name}@localhost"
+  mysql -e "ALTER USER ${name}@localhost IDENTIFIED BY 'abc123'"
+  ./bin/console doctrine:schema:update --force
+}
+
+function create_admin() {
+  ./bin/console nines:user:create admin@example.com Admin Systems
+  ./bin/console nines:user:password admin@example.com supersecret
+  ./bin/console nines:user:activate admin@example.com
+  ./bin/console nines:user:promote admin@example.com ROLE_ADMIN
+}
+
+function load_fixtures() {
+  ./bin/console doctrine:fixtures:load -n
+}
+
+function import() {
+  ./bin/console sen:import:birth-status --skip=2 data/2021/birth-statuses.csv
+  ./bin/console sen:import:event-categories --skip=2 data/2021/event-categories.csv
+  ./bin/console sen:import:race --skip=3 data/2021/race-data.csv
+  ./bin/console sen:import:relationship-categories --skip=2 data/2021/relationship-categories.csv
+  ./bin/console sen:import:transaction-categories --skip=2 data/2021/transaction-categories.csv
+  ./bin/console sen:import:witness-categories --skip=2 data/2021/witness-categories.csv
+  ./bin/console sen:import:notary --skip=2 data/2021/NotarialRecordsV3.csv
+  ./bin/console sen:import:sacrament --skip=2 data/2021/SacramentalRecordsFinal2.csv
+}
+
+function load() {
+  mysql "$name" < "$1"
+}
+
+action=${1:-none}
+
+case "$action" in
+  "fixture")
+    clear_db
+    load_fixtures
+    ;;
+
+  "admin")
+    clear_db
+    create_admin
+    ;;
+
+  "db")
+    load "data/${name}.sql"
+    ;;
+
+  "users")
+    clear_db
+    load "data/users.sql"
+    ;;
+
+  "import")
+    clear_db
+    load "data/users.sql"
+    import
+    ;;
+
+  "none")
+    echo "Usage: ./reset [fixture|admin|db|users|import]"
+    ;;
+
+  *)
+    echo "Usage: ./reset [fixture|admin|db|users|import]"
+    ;;
+esac
